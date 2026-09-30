@@ -1,0 +1,53 @@
+{
+  "$GMProject":"v1",
+  "%Name":"Psychic Lesbian Body Horror Wizardry",
+  "AudioGroups":[
+    {"$GMAudioGroup":"v1","%Name":"audiogroup_default","exportDir":"","name":"audiogroup_default","resourceType":"GMAudioGroup","resourceVersion":"2.0","targets":-1,},
+  ],
+  "configs":{
+    "children":[],
+    "name":"Default",
+  },
+  "defaultScriptType":1,
+  "Folders":[
+    {"$GMFolder":"","%Name":"Objects","folderPath":"folders/Objects.yy","name":"Objects","resourceType":"GMFolder","resourceVersion":"2.0",},
+    {"$GMFolder":"","%Name":"Scripts","folderPath":"folders/Scripts.yy","name":"Scripts","resourceType":"GMFolder","resourceVersion":"2.0",},
+    {"$GMFolder":"","%Name":"Shaders","folderPath":"folders/Shaders.yy","name":"Shaders","resourceType":"GMFolder","resourceVersion":"2.0",},
+    {"$GMFolder":"","%Name":"Textures","folderPath":"folders/Textures.yy","name":"Textures","resourceType":"GMFolder","resourceVersion":"2.0",},
+  ],
+  "ForcedPrefabProjectReferences":[],
+  "IncludedFiles":[
+    {"$GMIncludedFile":"","%Name":"Willow_1.smf","CopyToMask":-1,"filePath":"datafiles","name":"Willow_1.smf","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+  ],
+  "isEcma":false,
+  "LibraryEmitters":[],
+  "MetaData":{
+    "IDEVersion":"2024.14.4.222",
+  },
+  "name":"Psychic Lesbian Body Horror Wizardry",
+  "resources":[
+    {"id":{"name":"Camera","path":"objects/Camera/Camera.yy",},},
+    {"id":{"name":"World","path":"objects/World/World.yy",},},
+    {"id":{"name":"TestMap","path":"rooms/TestMap/TestMap.yy",},},
+    {"id":{"name":"scrMesh","path":"scripts/scrMesh/scrMesh.yy",},},
+    {"id":{"name":"scrTiles","path":"scripts/scrTiles/scrTiles.yy",},},
+    {"id":{"name":"scrTime","path":"scripts/scrTime/scrTime.yy",},},
+    {"id":{"name":"shDefault","path":"shaders/shDefault/shDefault.yy",},},
+    {"id":{"name":"sBrickTexture","path":"sprites/sBrickTexture/sBrickTexture.yy",},},
+    {"id":{"name":"sGrassTexture","path":"sprites/sGrassTexture/sGrassTexture.yy",},},
+    {"id":{"name":"sMetaTiles","path":"sprites/sMetaTiles/sMetaTiles.yy",},},
+    {"id":{"name":"sNull","path":"sprites/sNull/sNull.yy",},},
+    {"id":{"name":"sPathTexture","path":"sprites/sPathTexture/sPathTexture.yy",},},
+    {"id":{"name":"sTreeTexture","path":"sprites/sTreeTexture/sTreeTexture.yy",},},
+    {"id":{"name":"tMetaTiles","path":"tilesets/tMetaTiles/tMetaTiles.yy",},},
+  ],
+  "resourceType":"GMProject",
+  "resourceVersion":"2.0",
+  "RoomOrderNodes":[
+    {"roomId":{"name":"TestMap","path":"rooms/TestMap/TestMap.yy",},},
+  ],
+  "templateType":"game",
+  "TextureGroups":[
+    {"$GMTextureGroup":"","%Name":"Default","autocrop":true,"border":2,"compressFormat":"bz2","customOptions":"","directory":"","groupParent":null,"isScaled":true,"loadType":"default","mipsToGenerate":0,"name":"Default","resourceType":"GMTextureGroup","resourceVersion":"2.0","targets":-1,},
+  ],
+}
