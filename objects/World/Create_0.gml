@@ -151,12 +151,14 @@ for (var i = 0; i < cols; ++i) {
 		
 		//Grass
 		if tile == TileTypes.GRASS {
-			var grass = instance_create_layer(x1 + 16, y1 + 16, "Instances", Billboard);
+			var grass = instance_create_layer(x1 + 16, y1 + 16, "Instances", Grass);
+			grass.type = "grass";
 			grass.image_index = irandom(grass.image_number - 1);
 			grass.createMesh();
 		}
 		if tile == TileTypes.TALLGRASS {
-			var grass = instance_create_layer(x1 + 16, y1 + 16, "Instances", Billboard);
+			var grass = instance_create_layer(x1 + 16, y1 + 16, "Instances", Grass);
+			grass.type = "tallgrass";
 			grass.sprite_index = sBBGrass_Tall;
 			grass.image_index   = irandom(grass.image_number - 1);
 			grass.createMesh();
@@ -168,7 +170,7 @@ for (var i = 0; i < cols; ++i) {
 			for (var k = 0; k < shrooms; ++k) {
 				var shroomX = x1 + 16 + lengthdir_x(32, theta) + random_range(-2, 2);
 				var shroomY = y1 + 16 + lengthdir_y(32, theta) + random_range(-2, 2);
-			    var shroom = instance_create_layer(shroomX, shroomY, "Instances", Billboard, {sprite_index: sBBShroom});
+			    var shroom = instance_create_layer(shroomX, shroomY, "Instances", Grass, {sprite_index: sBBShroom});
 				shroom.image_index = irandom(shroom.image_number - 1);
 				shroom.createMesh();
 				theta += 360/shrooms;
@@ -179,7 +181,7 @@ for (var i = 0; i < cols; ++i) {
 		if tile == TileTypes.TREE {
 			
 			//uvs = sprite_get_uvs(sTreeTexture, 0);
-			var tree = instance_create_layer(xAvg + random_range(-2, 2), yAvg + random_range(-2, 2), "Instances", Billboard, {sprite_index: sTreeTexture});
+			var tree = instance_create_layer(xAvg + random_range(-2, 2), yAvg + random_range(-2, 2), "Instances", Tree, {sprite_index: sTreeTexture});
 			tree.createMesh();
 						
 			uvs = sprite_get_uvs(sCanopyTexture, irandom(sprite_get_number(sCanopyTexture) - 1));
@@ -324,7 +326,8 @@ render = function() {
 	
 	with Decal vertex_submit(mesh, pr_trianglelist, tex);
 	with Enemy render();
-	with Billboard render();
+	with Grass render();
+	with Tree  render();
 	with AnimatedBillboard render();
 	
 	matrix_set(matrix_world, identityMatrix);

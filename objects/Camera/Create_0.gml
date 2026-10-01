@@ -75,6 +75,16 @@ inputState = function() {
 				break;
 			}
 		}
+		for (var i = 0; i < instance_number(Grass); ++i) {
+		    var grass = instance_find(Grass, i);
+			var grassx = floor(grass.x / World.meshTileDim) * World.meshTileDim ;
+			var grassy = floor(grass.y / World.meshTileDim) * World.meshTileDim ;
+			
+			if(grassx == x + 32 *  dcos(lookDir) and grassy == y + 32 * -dsin(lookDir)) {
+				grass.takeDamage();
+				break;
+			}
+		}
 		
 		addTimesource("Attack", id, 24, attackFunc);
 		
@@ -243,6 +253,24 @@ moveFunc  = function() {
 	xPrevious = x;
 	yPrevious = y;
 	state = inputState;
+	
+	for (var i = 0; i < instance_number(Grass); ++i) {
+	    var bb = instance_find(Grass, i);
+		switch(bb.type) {
+			case "grass":
+				bb.sprite_index = sBBGrass;
+				if floor(bb.x/World.meshTileDim) * World.meshTileDim = x and floor(bb.y/World.meshTileDim) * World.meshTileDim = y {
+					bb.sprite_index = sBBGrass_Stepped;
+				}
+				break;
+			case "tallgrass":
+				bb.sprite_index = sBBGrass_Tall;
+				if floor(bb.x/World.meshTileDim) * World.meshTileDim = x and floor(bb.y/World.meshTileDim) * World.meshTileDim = y {
+					bb.sprite_index = sBBGrass_Tall_Stepped;
+				}
+				break;
+		}
+	}
 }
 
 bumpState = function() { 

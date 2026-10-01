@@ -1,5 +1,10 @@
 z = 0;
 mesh = -1;
+type = "null";
+
+takeDamage = function() {
+	instance_destroy();
+}
 
 createMesh = function() {
 	mesh = vertex_create_buffer();
@@ -15,6 +20,8 @@ createMesh = function() {
 	addVertex(mesh, [ width/2, 0,      0], [0, 1, 0], [1, 1], c_white, 1);
 	addVertex(mesh, [-width/2, 0,      0], [0, 1, 0], [0, 1], c_white, 1);
 	vertex_end(mesh);
+	
+	vertex_freeze(mesh);
 }
 
 render = function() {
