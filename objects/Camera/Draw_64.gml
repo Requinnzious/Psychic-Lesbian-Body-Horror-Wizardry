@@ -24,3 +24,5 @@ switch(lookDir) {
 		break;
 }
 
+draw_text(16, 32, $"HP: {hp}/ {maxHP}")
+draw_text(16, 48, $"Dir: {lookDir}:({lookDir + lookDirOffset})")

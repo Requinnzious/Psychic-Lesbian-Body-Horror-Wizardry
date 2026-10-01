@@ -20,10 +20,12 @@ rows = array_length(tiles[0]);
 var uvs, nullUVs = sprite_get_uvs(sNull, 0);
 var floorNorm = [0,0,1];
 
-floorMesh = vertex_create_buffer();
-wallMesh  = vertex_create_buffer();
-vertex_begin(floorMesh, vFormat);
-vertex_begin(wallMesh, vFormat);
+floorMesh   = vertex_create_buffer();
+wallMesh    = vertex_create_buffer();
+canopyMesh  = vertex_create_buffer();
+vertex_begin(floorMesh,  vFormat);
+vertex_begin(wallMesh,   vFormat);
+vertex_begin(canopyMesh, vFormat);
 for (var i = 0; i < cols; ++i) {
     for (var j = 0; j < rows; ++j) {
 	    var tile   = tiles[i][j].tile;
@@ -46,7 +48,7 @@ for (var i = 0; i < cols; ++i) {
 				break;
 			case TileTypes.WALL:
 				spr = sBrickTexture;
-				zz  = meshTileDim;
+				zz  = meshTileDim * 1.5;
 				nWall = true;
 				sWall = true;
 				eWall = true;
@@ -84,80 +86,233 @@ for (var i = 0; i < cols; ++i) {
 			norm = [0, -1, 0];
 			addVertex(wallMesh, [x2, y1, zz],               norm, [uvs[0], uvs[1]], c_white, 1);
 			addVertex(wallMesh, [x1, y1, zz],               norm, [uvs[2], uvs[1]], c_white, 1);
-			addVertex(wallMesh, [x1, y1, zz - meshTileDim], norm, [uvs[2], uvs[3]], c_white, 1);
+			addVertex(wallMesh, [x1, y1, zz - meshTileDim * 1.5], norm, [uvs[2], uvs[3]], c_white, 1);
 			
 			addVertex(wallMesh, [x2, y1, zz],               norm, [uvs[0], uvs[1]], c_white, 1);
-			addVertex(wallMesh, [x1, y1, zz - meshTileDim], norm, [uvs[2], uvs[3]], c_white, 1);
-			addVertex(wallMesh, [x2, y1, zz - meshTileDim], norm, [uvs[0], uvs[3]], c_white, 1);
+			addVertex(wallMesh, [x1, y1, zz - meshTileDim * 1.5], norm, [uvs[2], uvs[3]], c_white, 1);
+			addVertex(wallMesh, [x2, y1, zz - meshTileDim * 1.5], norm, [uvs[0], uvs[3]], c_white, 1);
 		}
 		if(sWall) {
 			norm = [0, 1, 0];
 			addVertex(wallMesh, [x1, y2, zz],               norm, [uvs[0], uvs[1]], c_white, 1);
 			addVertex(wallMesh, [x2, y2, zz],               norm, [uvs[2], uvs[1]], c_white, 1);
-			addVertex(wallMesh, [x2, y2, zz - meshTileDim], norm, [uvs[2], uvs[3]], c_white, 1);
+			addVertex(wallMesh, [x2, y2, zz - meshTileDim * 1.5], norm, [uvs[2], uvs[3]], c_white, 1);
 			
 			addVertex(wallMesh, [x1, y2, zz],               norm, [uvs[0], uvs[1]], c_white, 1);
-			addVertex(wallMesh, [x2, y2, zz - meshTileDim], norm, [uvs[2], uvs[3]], c_white, 1);
-			addVertex(wallMesh, [x1, y2, zz - meshTileDim], norm, [uvs[0], uvs[3]], c_white, 1);
+			addVertex(wallMesh, [x2, y2, zz - meshTileDim * 1.5], norm, [uvs[2], uvs[3]], c_white, 1);
+			addVertex(wallMesh, [x1, y2, zz - meshTileDim * 1.5], norm, [uvs[0], uvs[3]], c_white, 1);
 		}
 		if(eWall) {
 			norm = [1, 0, 0];
 			addVertex(wallMesh, [x2, y2, zz],               norm, [uvs[0], uvs[1]], c_white, 1);
 			addVertex(wallMesh, [x2, y1, zz],               norm, [uvs[2], uvs[1]], c_white, 1);
-			addVertex(wallMesh, [x2, y1, zz - meshTileDim], norm, [uvs[2], uvs[3]], c_white, 1);
+			addVertex(wallMesh, [x2, y1, zz - meshTileDim * 1.5], norm, [uvs[2], uvs[3]], c_white, 1);
 			
 			addVertex(wallMesh, [x2, y2, zz],               norm, [uvs[0], uvs[1]], c_white, 1);
-			addVertex(wallMesh, [x2, y1, zz - meshTileDim], norm, [uvs[2], uvs[3]], c_white, 1);
-			addVertex(wallMesh, [x2, y2, zz - meshTileDim], norm, [uvs[0], uvs[3]], c_white, 1);
+			addVertex(wallMesh, [x2, y1, zz - meshTileDim * 1.5], norm, [uvs[2], uvs[3]], c_white, 1);
+			addVertex(wallMesh, [x2, y2, zz - meshTileDim * 1.5], norm, [uvs[0], uvs[3]], c_white, 1);
 		}
 		if(wWall) {
 			norm = [-1, 0, 0];
 			addVertex(wallMesh, [x1, y1, zz],               norm, [uvs[0], uvs[1]], c_white, 1);
 			addVertex(wallMesh, [x1, y2, zz],               norm, [uvs[2], uvs[1]], c_white, 1);
-			addVertex(wallMesh, [x1, y2, zz - meshTileDim], norm, [uvs[2], uvs[3]], c_white, 1);
+			addVertex(wallMesh, [x1, y2, zz - meshTileDim * 1.5], norm, [uvs[2], uvs[3]], c_white, 1);
 			
 			addVertex(wallMesh, [x1, y1, zz],               norm, [uvs[0], uvs[1]], c_white, 1);
-			addVertex(wallMesh, [x1, y2, zz - meshTileDim], norm, [uvs[2], uvs[3]], c_white, 1);
-			addVertex(wallMesh, [x1, y1, zz - meshTileDim], norm, [uvs[0], uvs[3]], c_white, 1);
+			addVertex(wallMesh, [x1, y2, zz - meshTileDim * 1.5], norm, [uvs[2], uvs[3]], c_white, 1);
+			addVertex(wallMesh, [x1, y1, zz - meshTileDim * 1.5], norm, [uvs[0], uvs[3]], c_white, 1);
+		}
+		
+		var xAvg = (x1 + x2) / 2;
+		var yAvg = (y1 + y2) / 2;
+			
+		//Mountains
+		if tile == TileTypes.MOUNTAIN {
+			uvs = sprite_get_uvs(sMountain, irandom(sprite_get_number(sMountain) - 1));
+			var uAverage = (uvs[0] + uvs[2]) / 2;
+			var vAverage = (uvs[1] + uvs[3]) / 2;
+			
+			addVertex(wallMesh, [xAvg, yAvg, 32], [  0,  .5, .5], [uAverage, vAverage], c_white, 1);
+			addVertex(wallMesh, [x2,     y2,  0], [  0,  .5, .5], [uvs[2],     uvs[3]], c_white, 1);
+			addVertex(wallMesh, [x1,     y2,  0], [  0,  .5, .5], [uvs[0],     uvs[3]], c_white, 1);
+			
+			addVertex(wallMesh, [xAvg, yAvg, 32], [-.5,   0, .5], [uAverage, vAverage], c_white, 1);
+			addVertex(wallMesh, [x1,     y2,  0], [-.5,   0, .5], [uvs[2],     uvs[3]], c_white, 1);
+			addVertex(wallMesh, [x1,     y1,  0], [-.5,   0, .5], [uvs[0],     uvs[3]], c_white, 1);
+			
+			addVertex(wallMesh, [xAvg, yAvg, 32], [  0, -.5, .5], [uAverage, vAverage], c_white, 1);
+			addVertex(wallMesh, [x1,     y1,  0], [  0, -.5, .5], [uvs[2],     uvs[3]], c_white, 1);
+			addVertex(wallMesh, [x2,     y1,  0], [  0, -.5, .5], [uvs[0],     uvs[3]], c_white, 1);
+			
+			addVertex(wallMesh, [xAvg, yAvg, 32], [ .5,   0, .5], [uAverage, vAverage], c_white, 1);
+			addVertex(wallMesh, [x2,     y1,  0], [ .5,   0, .5], [uvs[2],     uvs[3]], c_white, 1);
+			addVertex(wallMesh, [x2,     y2,  0], [ .5,   0, .5], [uvs[0],     uvs[3]], c_white, 1);
 		}
 		
 		//Grass
 		if tile == TileTypes.GRASS {
 			var grass = instance_create_layer(x1 + 16, y1 + 16, "Instances", Billboard);
 			grass.image_index = irandom(grass.image_number - 1);
+			grass.createMesh();
 		}
 		if tile == TileTypes.TALLGRASS {
 			var grass = instance_create_layer(x1 + 16, y1 + 16, "Instances", Billboard);
 			grass.sprite_index = sBBGrass_Tall;
 			grass.image_index   = irandom(grass.image_number - 1);
+			grass.createMesh();
+		}
+		
+		if tile == TileTypes.FAIRYCIRCLE {
+			var shrooms = 8;
+			var theta   = 0;
+			for (var k = 0; k < shrooms; ++k) {
+				var shroomX = x1 + 16 + lengthdir_x(32, theta) + random_range(-2, 2);
+				var shroomY = y1 + 16 + lengthdir_y(32, theta) + random_range(-2, 2);
+			    var shroom = instance_create_layer(shroomX, shroomY, "Instances", Billboard, {sprite_index: sBBShroom});
+				shroom.image_index = irandom(shroom.image_number - 1);
+				shroom.createMesh();
+				theta += 360/shrooms;
+			}
 		}
 		
 		//Trees
 		if tile == TileTypes.TREE {
-			uvs = sprite_get_uvs(sTreeTexture, 0);
-			var xAvg = (x1 + x2) / 2;
-			var yAvg = (y1 + y2) / 2;
 			
-			addVertex(wallMesh, [x1,   yAvg, zz + 96], [ 0, 1, 0], [uvs[0], uvs[1]], c_white, 1);
-			addVertex(wallMesh, [x2,   yAvg, zz + 96], [ 0, 1, 0], [uvs[2], uvs[1]], c_white, 1);
-			addVertex(wallMesh, [x2,   yAvg,      zz], [ 0, 1, 0], [uvs[2], uvs[3]], c_white, 1);
-
-			addVertex(wallMesh, [x1,   yAvg, zz + 96], [ 0, 1, 0], [uvs[0], uvs[1]], c_white, 1);
-			addVertex(wallMesh, [x2,   yAvg,      zz], [ 0, 1, 0], [uvs[2], uvs[3]], c_white, 1);
-			addVertex(wallMesh, [x1,   yAvg,      zz], [ 0, 1, 0], [uvs[0], uvs[3]], c_white, 1);
+			//uvs = sprite_get_uvs(sTreeTexture, 0);
+			var tree = instance_create_layer(xAvg + random_range(-2, 2), yAvg + random_range(-2, 2), "Instances", Billboard, {sprite_index: sTreeTexture});
+			tree.createMesh();
+						
+			uvs = sprite_get_uvs(sCanopyTexture, irandom(sprite_get_number(sCanopyTexture) - 1));
+			var width  = random_range(-16, 16) + sprite_get_width(sCanopyTexture);
+			var height = random_range(-16, 16) + sprite_get_height(sCanopyTexture);
 			
-			addVertex(wallMesh, [xAvg,   y1, zz + 96], [-1, 0, 0], [uvs[0], uvs[1]], c_white, 1);
-			addVertex(wallMesh, [xAvg,   y2, zz + 96], [-1, 0, 0], [uvs[2], uvs[1]], c_white, 1);
-			addVertex(wallMesh, [xAvg,   y2,      zz], [-1, 0, 0], [uvs[2], uvs[3]], c_white, 1);
+			x1 = xAvg - width  / 2;
+			x2 = xAvg + width  / 2;
+			y1 = yAvg - height / 2;
+			y2 = yAvg + height / 2;
 			
-			addVertex(wallMesh, [xAvg,   y1, zz + 96], [-1, 0, 0], [uvs[0], uvs[1]], c_white, 1);
-			addVertex(wallMesh, [xAvg,   y2,      zz], [-1, 0, 0], [uvs[2], uvs[3]], c_white, 1);
-			addVertex(wallMesh, [xAvg,   y1,      zz], [-1, 0, 0], [uvs[0], uvs[3]], c_white, 1);
+			var z1 = random_range(48, 64);
+			var z2 = random_range(48, 64);
+			
+			addVertex(canopyMesh, [x1, y1, z1], [0, 0, -1], [uvs[0], uvs[1]], c_white, 1);
+			addVertex(canopyMesh, [x2, y1, z1], [0, 0, -1], [uvs[2], uvs[1]], c_white, 1);
+			addVertex(canopyMesh, [x2, y2, z2], [0, 0, -1], [uvs[2], uvs[3]], c_white, 1);
+			addVertex(canopyMesh, [x1, y1, z1], [0, 0, -1], [uvs[0], uvs[1]], c_white, 1);
+			addVertex(canopyMesh, [x2, y2, z2], [0, 0, -1], [uvs[2], uvs[3]], c_white, 1);
+			addVertex(canopyMesh, [x1, y2, z2], [0, 0, -1], [uvs[0], uvs[3]], c_white, 1);
+			
+			
+			uvs = sprite_get_uvs(sCanopyTexture_1, irandom(sprite_get_number(sCanopyTexture_1)- 1));
+			var width  = random_range(-16, 16) + sprite_get_width(sCanopyTexture_1);
+			var height = random_range(-16, 16) + sprite_get_height(sCanopyTexture_1);
+			
+			x1 = xAvg - width  / 2;
+			x2 = xAvg + width  / 2;
+			y1 = yAvg - height / 2;
+			y2 = yAvg + height / 2;
+			
+			z1 = random_range(80, 96);
+			z2 = random_range(80, 96);
+			
+			addVertex(canopyMesh, [x1, y1, z1], [0, 0, -1], [uvs[0], uvs[1]], c_white, 1);
+			addVertex(canopyMesh, [x2, y1, z1], [0, 0, -1], [uvs[2], uvs[1]], c_white, 1);
+			addVertex(canopyMesh, [x2, y2, z2], [0, 0, -1], [uvs[2], uvs[3]], c_white, 1);
+			
+			addVertex(canopyMesh, [x1, y1, z1], [0, 0, -1], [uvs[0], uvs[1]], c_white, 1);
+			addVertex(canopyMesh, [x2, y2, z2], [0, 0, -1], [uvs[2], uvs[3]], c_white, 1);
+			addVertex(canopyMesh, [x1, y2, z2], [0, 0, -1], [uvs[0], uvs[3]], c_white, 1);
+			
+			
+			//South wall
+			addVertex(canopyMesh, [x1, y2, z1 + height], [0, 1, 0], [uvs[0], uvs[1]], c_white, 1);
+			addVertex(canopyMesh, [x2, y2, z1 + height], [0, 1, 0], [uvs[2], uvs[1]], c_white, 1);
+			addVertex(canopyMesh, [x2, y2,          z2], [0, 1, 0], [uvs[2], uvs[3]], c_white, 1);
+			addVertex(canopyMesh, [x1, y2, z1 + height], [0, 1, 0], [uvs[0], uvs[1]], c_white, 1);
+			addVertex(canopyMesh, [x2, y2,          z2], [0, 1, 0], [uvs[2], uvs[3]], c_white, 1);
+			addVertex(canopyMesh, [x1, y2,          z2], [0, 1, 0], [uvs[0], uvs[3]], c_white, 1);
+			if random(1) < .15 {
+				var foliageUVs = sprite_get_uvs(sFoliage, irandom(sprite_get_number(sFoliage) - 1));
+				var fx1 = x1  + irandom(width - sprite_get_width(sFoliage));
+				var fx2 = fx1 + sprite_get_width(sFoliage);
+				var foliageHeight = sprite_get_height(sFoliage)
+				
+				addVertex(canopyMesh, [fx1, y2, z1],                 [0, 1, 0], [foliageUVs[0], foliageUVs[1]], c_white, 1);
+				addVertex(canopyMesh, [fx2, y2, z1],                 [0, 1, 0], [foliageUVs[2], foliageUVs[1]], c_white, 1);
+				addVertex(canopyMesh, [fx2, y2, z1 - foliageHeight], [0, 1, 0], [foliageUVs[2], foliageUVs[3]], c_white, 1);
+				addVertex(canopyMesh, [fx1, y2, z1],                 [0, 1, 0], [foliageUVs[0], foliageUVs[1]], c_white, 1);
+				addVertex(canopyMesh, [fx2, y2, z1 - foliageHeight], [0, 1, 0], [foliageUVs[2], foliageUVs[3]], c_white, 1);
+				addVertex(canopyMesh, [fx1, y2, z1 - foliageHeight], [0, 1, 0], [foliageUVs[0], foliageUVs[3]], c_white, 1);
+			}
+			
+			//North wall
+			addVertex(canopyMesh, [x2, y1, z1 + height], [0,-1, 0], [uvs[0], uvs[1]], c_white, 1);
+			addVertex(canopyMesh, [x1, y1, z1 + height], [0,-1, 0], [uvs[2], uvs[1]], c_white, 1);
+			addVertex(canopyMesh, [x1, y1,          z2], [0,-1, 0], [uvs[2], uvs[3]], c_white, 1);
+			addVertex(canopyMesh, [x2, y1, z1 + height], [0,-1, 0], [uvs[0], uvs[1]], c_white, 1);
+			addVertex(canopyMesh, [x1, y1,          z2], [0,-1, 0], [uvs[2], uvs[3]], c_white, 1);
+			addVertex(canopyMesh, [x2, y1,          z2], [0,-1, 0], [uvs[0], uvs[3]], c_white, 1);
+			if random(1) < .15 {
+				var foliageUVs = sprite_get_uvs(sFoliage, irandom(sprite_get_number(sFoliage) - 1));
+				var fx1 = x2  - irandom(width - sprite_get_width(sFoliage));
+				var fx2 = fx1 - sprite_get_width(sFoliage);
+				var foliageHeight = sprite_get_height(sFoliage)
+				
+				addVertex(canopyMesh, [fx2, y1, z1],                 [0, -1, 0], [foliageUVs[0], foliageUVs[1]], c_white, 1);
+				addVertex(canopyMesh, [fx1, y1, z1],                 [0, -1, 0], [foliageUVs[2], foliageUVs[1]], c_white, 1);
+				addVertex(canopyMesh, [fx1, y1, z1 - foliageHeight], [0, -1, 0], [foliageUVs[2], foliageUVs[3]], c_white, 1);
+				addVertex(canopyMesh, [fx2, y1, z1],                 [0, -1, 0], [foliageUVs[0], foliageUVs[1]], c_white, 1);
+				addVertex(canopyMesh, [fx1, y1, z1 - foliageHeight], [0, -1, 0], [foliageUVs[2], foliageUVs[3]], c_white, 1);
+				addVertex(canopyMesh, [fx2, y1, z1 - foliageHeight], [0, -1, 0], [foliageUVs[0], foliageUVs[3]], c_white, 1);
+			}
+			
+			//East wall
+			addVertex(canopyMesh, [x2, y2, z1 + height], [1, 0, 0], [uvs[0], uvs[1]], c_white, 1);
+			addVertex(canopyMesh, [x2, y1, z1 + height], [1, 0, 0], [uvs[2], uvs[1]], c_white, 1);
+			addVertex(canopyMesh, [x2, y1,          z2], [1, 0, 0], [uvs[2], uvs[3]], c_white, 1);
+			addVertex(canopyMesh, [x2, y2, z1 + height], [1, 0, 0], [uvs[0], uvs[1]], c_white, 1);
+			addVertex(canopyMesh, [x2, y1,          z2], [1, 0, 0], [uvs[2], uvs[3]], c_white, 1);
+			addVertex(canopyMesh, [x2, y2,          z2], [1, 0, 0], [uvs[0], uvs[3]], c_white, 1);
+			if random(1) < .15 {
+				var foliageUVs = sprite_get_uvs(sFoliage, irandom(sprite_get_number(sFoliage) - 1));
+				var fy1 = y2  - irandom(width - sprite_get_width(sFoliage));
+				var fy2 = fy1 - sprite_get_width(sFoliage);
+				var foliageHeight = sprite_get_height(sFoliage)
+				
+				addVertex(canopyMesh, [x2, fy2, z1],                 [-1, 0, 0], [foliageUVs[0], foliageUVs[1]], c_white, 1);
+				addVertex(canopyMesh, [x2, fy1, z1],                 [-1, 0, 0], [foliageUVs[2], foliageUVs[1]], c_white, 1);
+				addVertex(canopyMesh, [x2, fy1, z1 - foliageHeight], [-1, 0, 0], [foliageUVs[2], foliageUVs[3]], c_white, 1);
+				addVertex(canopyMesh, [x2, fy2, z1],                 [-1, 0, 0], [foliageUVs[0], foliageUVs[1]], c_white, 1);
+				addVertex(canopyMesh, [x2, fy1, z1 - foliageHeight], [-1, 0, 0], [foliageUVs[2], foliageUVs[3]], c_white, 1);
+				addVertex(canopyMesh, [x2, fy2, z1 - foliageHeight], [-1, 0, 0], [foliageUVs[0], foliageUVs[3]], c_white, 1);
+			}
+			
+			//west wall
+			addVertex(canopyMesh, [x1, y1, z1 + height], [-1, 0, 0], [uvs[0], uvs[1]], c_white, 1);
+			addVertex(canopyMesh, [x1, y2, z1 + height], [-1, 0, 0], [uvs[2], uvs[1]], c_white, 1);
+			addVertex(canopyMesh, [x1, y2,          z2], [-1, 0, 0], [uvs[2], uvs[3]], c_white, 1);
+			addVertex(canopyMesh, [x1, y1, z1 + height], [-1, 0, 0], [uvs[0], uvs[1]], c_white, 1);
+			addVertex(canopyMesh, [x1, y2,          z2], [-1, 0, 0], [uvs[2], uvs[3]], c_white, 1);
+			addVertex(canopyMesh, [x1, y1,          z2], [-1, 0, 0], [uvs[0], uvs[3]], c_white, 1);
+			if random(1) < .15 {
+				var foliageUVs = sprite_get_uvs(sFoliage, irandom(sprite_get_number(sFoliage) - 1));
+				var fy1 = y1  + irandom(width - sprite_get_width(sFoliage));
+				var fy2 = fy1 + sprite_get_width(sFoliage);
+				var foliageHeight = sprite_get_height(sFoliage)
+				
+				addVertex(canopyMesh, [x1, fy1, z1],                 [-1, 0, 0], [foliageUVs[0], foliageUVs[1]], c_white, 1);
+				addVertex(canopyMesh, [x1, fy2, z1],                 [-1, 0, 0], [foliageUVs[2], foliageUVs[1]], c_white, 1);
+				addVertex(canopyMesh, [x1, fy2, z1 - foliageHeight], [-1, 0, 0], [foliageUVs[2], foliageUVs[3]], c_white, 1);
+				addVertex(canopyMesh, [x1, fy1, z1],                 [-1, 0, 0], [foliageUVs[0], foliageUVs[1]], c_white, 1);
+				addVertex(canopyMesh, [x1, fy2, z1 - foliageHeight], [-1, 0, 0], [foliageUVs[2], foliageUVs[3]], c_white, 1);
+				addVertex(canopyMesh, [x1, fy1, z1 - foliageHeight], [-1, 0, 0], [foliageUVs[0], foliageUVs[3]], c_white, 1);
+			}
+			
 		}
 	}
 }
 vertex_end(floorMesh);
 vertex_end(wallMesh);
+vertex_end(canopyMesh);
 
 
 identityMatrix = matrix_build( 0,   0, 0, 0, 0,  0,  1,  1,  1);
@@ -168,6 +323,16 @@ render = function() {
 	vertex_submit(wallMesh, pr_trianglelist,  tex);
 	
 	with Decal vertex_submit(mesh, pr_trianglelist, tex);
+	with Enemy render();
 	with Billboard render();
+	with AnimatedBillboard render();
+	
+	matrix_set(matrix_world, identityMatrix);
+	
+	with Mountain render();
+	
+	shader_set(shWind);
+	vertex_submit(canopyMesh, pr_trianglelist,  tex);
+	shader_reset();
 }
 

@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"sBrickTexture",
   "bboxMode":0,
-  "bbox_bottom":63,
+  "bbox_bottom":95,
   "bbox_left":0,
   "bbox_right":63,
   "bbox_top":0,
@@ -23,7 +23,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":64,
+  "height":96,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"1f81f4db-21bf-42cb-9008-46383169608a","blendMode":0,"displayName":"Layer 1","isLocked":false,"name":"1f81f4db-21bf-42cb-9008-46383169608a","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},

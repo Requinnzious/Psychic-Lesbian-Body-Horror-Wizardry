@@ -6,5 +6,7 @@ enum TileTypes {
 	TREE,
 	GRASS,
 	PATH,
-	TALLGRASS
+	TALLGRASS,
+	FAIRYCIRCLE,
+	MOUNTAIN
 }

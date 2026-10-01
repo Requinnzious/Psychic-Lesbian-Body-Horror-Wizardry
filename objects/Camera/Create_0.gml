@@ -1,6 +1,8 @@
 gpu_set_ztestenable(true); //We just have to set these so openGL knows we're using 3D rendering
 gpu_set_zwriteenable(true);
 
+hp    = 6;
+maxHP = 6;
 
 z             =  16;       //GM doesn't give objects a default z so we have to define it every time :(
 lookDir       = 270;       //Since we're locked to a grid, lookDir is always going to be a multiple of 90					       
@@ -47,18 +49,54 @@ yMoveInc    = 0;
 
 //Here we define our states using the syntax variableName = function() {}
 //This defines a function that can only be used by this object, so the Camera and Menu objects
-//can have different inputState functions
+//can have different inputState functions for example
+
+waitState = function() {};
+
 inputState = function() {
 	//These are our deltas - eg if we press left or right our dDir will be + or - 90
 	var dX   = 0, dY = 0;  
 	var dDir = 0;	
+	var gridX = floor(x / World.meshTileDim);
+	var gridY = floor(y / World.meshTileDim);
+	
+	
+	//Attack
+	if(mouse_check_button(mb_left)) {
+		var xx = 30 *  dcos(lookDir) + xOffset
+		var yy = 30 * -dsin(lookDir) + yOffset
+		var slash = instance_create_layer(x + xx, y + yy, "Instances", AnimatedBillboard);
+		slash.z = z;
+		
+		for (var i = 0; i < instance_number(Enemy); ++i) {
+		    var enemy = instance_find(Enemy, i);
+			if(enemy.x == x + 32 *  dcos(lookDir) and enemy.y == y + 32 * -dsin(lookDir)) {
+				enemy.takeDamage(1);
+				break;
+			}
+		}
+		
+		addTimesource("Attack", id, 24, attackFunc);
+		
+		state = bumpState;
+		xPrevious = x;
+		yPrevious = y;
+		xMoveTarget = x + 8 *  dcos(lookDir);
+		yMoveTarget = y + 8 * -dsin(lookDir);
+		
+		return;
+	}
+	
 	
 	//Look around
 	if(mouse_check_button_pressed(mb_right)) {
 		state = lookState; //Set our state and reset our mouse position
+		xOffset = 16;
+		yOffset = 16;
 		window_mouse_set(window_get_width()/2, window_get_height()/2);
 		return; //Return causes the function we're in - inputState - to finish.
 	}
+	
 	
 	//Turn
 	dDir = 90 * ( keyboard_check(ord("A")) - keyboard_check(ord("D")) );
@@ -113,10 +151,7 @@ inputState = function() {
 			break;
 	}
 
-	
-	var gridX = floor(x / World.meshTileDim);
-	var gridY = floor(y / World.meshTileDim);
-	
+		
 	//Move forward and back
 	dX = 32 *  dcos(lookDir) * ( keyboard_check(ord("W")) - keyboard_check(ord("S")) );
 	dY = 32 * -dsin(lookDir) * ( keyboard_check(ord("W")) - keyboard_check(ord("S")) );
@@ -187,6 +222,10 @@ lookState = function() {
 	window_mouse_set(cx, cy);
 	
 	if(mouse_check_button_pressed(mb_right)) {
+		var compundDir = (lookDir + lookDirOffset + 360) mod 360;
+		lookDir = round(compundDir / 90) * 90;
+		lookDirOffset = compundDir - lookDir;
+		
 		state = inputState;
 	}
 }
@@ -212,10 +251,6 @@ bumpState = function() {
 	y = lerp(yPrevious, yMoveTarget, delta);
 	
 	animPos ++;
-	
-	zOffset = lerp(zOffset, dsin(current_time / 3) * 3, .5);
-	xFromOffset = lerp(xFromOffset, dsin(current_time / 5), .5);
-	yFromOffset = lerp(yFromOffset, dsin(current_time / 5), .5);
 }
 bumpFunc  = function() {
 	x = xPrevious;
@@ -225,9 +260,23 @@ bumpFunc  = function() {
 }
 
 createBloodDecal = function() {
+	hp = max(0, hp - 1);
+	var spr = sBloodDecal;
+	if (hp == 0) spr = sBloodDecal_Death;
+	
+	var dir = point_direction(xPrevious, yPrevious, xMoveTarget, yMoveTarget);
+	
 	var blood = instance_create_layer(xPrevious, yPrevious, "Instances", Decal);
-	blood.lookDir = lookDir;
+	blood.sprite_index = spr;
+	blood.lookDir = dir;
 	blood.createMesh();
+}
+
+attackFunc = function() {
+	x = xPrevious;
+	y = yPrevious;
+	animPos = 0;
+	state = inputState;
 }
 
 turnState = function() {
