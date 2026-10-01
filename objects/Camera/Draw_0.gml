@@ -1,4 +1,4 @@
-draw_clear(c_ltgray);
+draw_clear(#8fEfff);
 
 //Set up camera projection
 xFrom = x + xOffset + xFromOffset;
@@ -21,3 +21,5 @@ camera_apply(camera);
 shader_set(shDefault);
 World.render();
 shader_reset();
+
+matrix_set(matrix_world, World.identityMatrix);

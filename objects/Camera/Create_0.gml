@@ -23,10 +23,16 @@ zToOffset     =   0;
 
 moveSpeedFrames = 12;
 
+animPos         =  0;
+bumpAnim = animcurve_get_channel(acBump, 0);
+
 xMoveTarget = x;           //When we're moving, xyMoveTarget keeps track of the grid position we're moving to
 yMoveTarget = y;
+xPrevious   = x;           //Last tile we steeped on
+yPrevious   = y;
 xMoveInc    = 0;           //How many pixels we move every frame of the moveState
 yMoveInc    = 0;
+
 
 
 //Here I'm using a pattern called a 'state machine'. You don't want to process every action every frame, for example;
@@ -108,12 +114,26 @@ inputState = function() {
 	}
 
 	
+	var gridX = floor(x / World.meshTileDim);
+	var gridY = floor(y / World.meshTileDim);
+	
 	//Move forward and back
 	dX = 32 *  dcos(lookDir) * ( keyboard_check(ord("W")) - keyboard_check(ord("S")) );
 	dY = 32 * -dsin(lookDir) * ( keyboard_check(ord("W")) - keyboard_check(ord("S")) );
 	if(dX != 0 || dY != 0) {
+		var collis = tilemap_get_at_pixel(World.coll, x + dX, y + dY);
+		if collis {
+			xMoveTarget = x + dX;
+			yMoveTarget = y + dY;		
+			addTimesource("Bump", id, moveSpeedFrames, bumpFunc);
+			addTimesource("BloodSplatter", id, moveSpeedFrames / 4, createBloodDecal);
+			
+			state = bumpState;
+			return;
+		};
+		
 		xMoveTarget = x + dX;
-		yMoveTarget = y + dY;
+		yMoveTarget = y + dY;		
 		addTimesource("Move", id, moveSpeedFrames, moveFunc);
 		
 		state = moveState;
@@ -126,7 +146,18 @@ inputState = function() {
 	//Strafe
 	dX = 32 *  dcos(lookDir + 90) * ( keyboard_check(ord("Q")) - keyboard_check(ord("E")) );
 	dY = 32 * -dsin(lookDir + 90) * ( keyboard_check(ord("Q")) - keyboard_check(ord("E")) );
-	if(dX != 0 || dY != 0) {
+	if(dX != 0 || dY != 0) {	
+		var collis = tilemap_get_at_pixel(World.coll, x + dX, y + dY);
+		if collis {
+			xMoveTarget = x + dX;
+			yMoveTarget = y + dY;		
+			addTimesource("Bump", id, moveSpeedFrames, bumpFunc);
+			addTimesource("BloodSplatter", id, moveSpeedFrames / 4, createBloodDecal);
+			
+			state = bumpState;
+			return;
+		};
+		
 		xMoveTarget = x + dX;
 		yMoveTarget = y + dY;
 		addTimesource("Move", id, moveSpeedFrames, moveFunc);
@@ -170,7 +201,33 @@ moveState = function() {
 moveFunc  = function() {
 	x = xMoveTarget;
 	y = yMoveTarget;
+	xPrevious = x;
+	yPrevious = y;
 	state = inputState;
+}
+
+bumpState = function() { 
+	var delta = animcurve_channel_evaluate(bumpAnim, animPos / 12);
+	x = lerp(xPrevious, xMoveTarget, delta);
+	y = lerp(yPrevious, yMoveTarget, delta);
+	
+	animPos ++;
+	
+	zOffset = lerp(zOffset, dsin(current_time / 3) * 3, .5);
+	xFromOffset = lerp(xFromOffset, dsin(current_time / 5), .5);
+	yFromOffset = lerp(yFromOffset, dsin(current_time / 5), .5);
+}
+bumpFunc  = function() {
+	x = xPrevious;
+	y = yPrevious;	
+	animPos = 0;
+	state = inputState;
+}
+
+createBloodDecal = function() {
+	var blood = instance_create_layer(xPrevious, yPrevious, "Instances", Decal);
+	blood.lookDir = lookDir;
+	blood.createMesh();
 }
 
 turnState = function() {

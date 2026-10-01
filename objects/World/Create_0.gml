@@ -1,10 +1,13 @@
 //This just stores the tilemap
 tiles = [];
-var meta = layer_tilemap_get_id("Meta");
-for (var i = 0; i < room_width / 16; ++i) {
+var meta  = layer_tilemap_get_id("Meta");
+coll  = layer_tilemap_get_id("Collisions");
+for (var i = 0; i < room_width / 32; ++i) {
     array_push(tiles, []);
-	for (var j = 0; j < room_height / 16; ++j) {
-	    array_push(tiles[i], tilemap_get_at_pixel(meta, i * 16, j * 16))
+	for (var j = 0; j < room_height / 32; ++j) {
+		var tile   = tilemap_get_at_pixel(meta, i * 32, j * 32);
+		var collis = tilemap_get_at_pixel(coll, i * 32, j * 32);
+	    array_push(tiles[i], {tile: tile, collis: collis});
 	}
 }
 
@@ -23,7 +26,8 @@ vertex_begin(floorMesh, vFormat);
 vertex_begin(wallMesh, vFormat);
 for (var i = 0; i < cols; ++i) {
     for (var j = 0; j < rows; ++j) {
-	    var tile = tiles[i][j];
+	    var tile   = tiles[i][j].tile;
+	    var collis = tiles[i][j].collis;
 		var spr = sNull;
 		var zz  = 0;
 		
@@ -117,7 +121,18 @@ for (var i = 0; i < cols; ++i) {
 			addVertex(wallMesh, [x1, y1, zz - meshTileDim], norm, [uvs[0], uvs[3]], c_white, 1);
 		}
 		
+		//Grass
+		if tile == TileTypes.GRASS {
+			var grass = instance_create_layer(x1 + 16, y1 + 16, "Instances", Billboard);
+			grass.image_index = irandom(grass.image_number - 1);
+		}
+		if tile == TileTypes.TALLGRASS {
+			var grass = instance_create_layer(x1 + 16, y1 + 16, "Instances", Billboard);
+			grass.sprite_index = sBBGrass_Tall;
+			grass.image_index   = irandom(grass.image_number - 1);
+		}
 		
+		//Trees
 		if tile == TileTypes.TREE {
 			uvs = sprite_get_uvs(sTreeTexture, 0);
 			var xAvg = (x1 + x2) / 2;
@@ -147,8 +162,12 @@ vertex_end(wallMesh);
 
 identityMatrix = matrix_build( 0,   0, 0, 0, 0,  0,  1,  1,  1);
 render = function() {
+	var tex = sprite_get_texture(sPathTexture, 0);
 	matrix_set(matrix_world, identityMatrix);
-	vertex_submit(floorMesh, pr_trianglelist, sprite_get_texture(sPathTexture, 0));
-	vertex_submit(wallMesh, pr_trianglelist,  sprite_get_texture(sPathTexture, 0));
+	vertex_submit(floorMesh, pr_trianglelist, tex);
+	vertex_submit(wallMesh, pr_trianglelist,  tex);
+	
+	with Decal vertex_submit(mesh, pr_trianglelist, tex);
+	with Billboard render();
 }
 
