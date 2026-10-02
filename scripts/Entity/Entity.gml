@@ -71,6 +71,7 @@ function Entity() constructor {
 }
 
 function destroyEntity(entity) {
+	if entity == undefined return;
 	ds_map_delete(World.entities, entity.uuid);
 	entity.destroy();
 	delete entity;

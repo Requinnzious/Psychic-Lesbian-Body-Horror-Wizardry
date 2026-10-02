@@ -72,6 +72,7 @@
     {"id":{"name":"sCollisions","path":"sprites/sCollisions/sCollisions.yy",},},
     {"id":{"name":"sFoliage","path":"sprites/sFoliage/sFoliage.yy",},},
     {"id":{"name":"sGrassTexture","path":"sprites/sGrassTexture/sGrassTexture.yy",},},
+    {"id":{"name":"sMetaTiles_Strip","path":"sprites/sMetaTiles_Strip/sMetaTiles_Strip.yy",},},
     {"id":{"name":"sMetaTiles","path":"sprites/sMetaTiles/sMetaTiles.yy",},},
     {"id":{"name":"sMountain","path":"sprites/sMountain/sMountain.yy",},},
     {"id":{"name":"sNull","path":"sprites/sNull/sNull.yy",},},
