@@ -161,12 +161,14 @@ for (var i = 0; i < cols; ++i) {
 		if tile == TileTypes.GRASS {
 			var entity = new Entity();
 
-			entity.addComponent("PhysicsComponent");
+			entity.addComponent("HealthComponent",    {hp: 1});
 			entity.addComponent("PositionComponent",  {x: x1, y: y1, z: 0});
 			entity.addComponent("TransformComponent", {x: 16, y: 16});
 
 			entity.addComponent("SpriteComponent",    {randomSubimage: true});
 			entity.addComponent("SteppedOnComponent");
+
+			entity.addComponent("HurtSpriteComponent");
 
 			entity.addComponent("WindShaderComponent");
 			entity.addComponent("BillboardComponent");
@@ -178,13 +180,15 @@ for (var i = 0; i < cols; ++i) {
 		if tile == TileTypes.TALLGRASS {
 			var entity = new Entity();
 
-			entity.addComponent("PhysicsComponent");
-			entity.addComponent("PositionComponent",  {x: x1, y: y1, z: 0});
-			entity.addComponent("TransformComponent", {x: 16, y: 16});
+			entity.addComponent("HealthComponent",     {hp: 2});
+			entity.addComponent("PositionComponent",   {x: x1, y: y1, z: 0});
+			entity.addComponent("TransformComponent",  {x: 16, y: 16});
 
-			entity.addComponent("SpriteComponent",    {sprite: sBBGrass_Tall, randomSubimage: true});
-			entity.addComponent("SteppedOnComponent", {sprite: sBBGrass_Tall_Stepped});
+			entity.addComponent("SpriteComponent",     {sprite: sBBGrass_Tall, randomSubimage: true});
+			entity.addComponent("SteppedOnComponent",  {sprite: sBBGrass_Tall_Stepped});
 
+			entity.addComponent("HurtSpriteComponent", {sprite: sBBGrass_Tall_Stepped});
+			
 			entity.addComponent("WindShaderComponent");
 			entity.addComponent("BillboardComponent");
 
@@ -200,7 +204,6 @@ for (var i = 0; i < cols; ++i) {
 				var shroomY = y1 + 16 + lengthdir_y(32, theta) + random_range(-2, 2);
 				
 				var entity = new Entity();
-				entity.addComponent("PhysicsComponent");
 				entity.addComponent("PositionComponent",  {x: shroomX, y: shroomY, z: 0});
 				entity.addComponent("SpriteComponent",    {sprite: sBBShroom, randomSubimage: true});
 				entity.addComponent("WindShaderComponent");
@@ -218,7 +221,6 @@ for (var i = 0; i < cols; ++i) {
 		if tile == TileTypes.TREE {
 			var entity = new Entity();
 
-			entity.addComponent("PhysicsComponent");
 			entity.addComponent("PositionComponent",  {x: xAvg + random_range(-2, 2), y: yAvg + random_range(-2, 2), z: 0});
 
 			entity.addComponent("SpriteComponent",    {sprite: sTreeTexture});
@@ -382,13 +384,13 @@ render = function() {
 	with Decal       vertex_submit(mesh, pr_trianglelist, tex);
 	with Enemy       render();
 	with WeaponSlash render();
-	with Mountain    render();
 	shader_reset();
 	
 	//This renders every entity :> that's the power of ECS
 	renderEvent.fire();
 	
 	matrix_set(matrix_world, identityMatrix);
+	with Mountain    render();
 }
 
 

@@ -59,6 +59,12 @@ function Entity() constructor {
 	
 }
 
+function destroyEntity(entity) {
+	ds_map_delete(World.entities, entity.uuid);
+	entity.destroy();
+	delete entity;
+}
+
 function Component(c_Name) constructor {
 	componentName = c_Name
 	fireEvent = function(_event) {
@@ -146,15 +152,40 @@ function FireElementComponent(c_Name) : Component(c_Name) constructor {
 }
 function HealthComponent(c_Name) : Component(c_Name) constructor {
 	hp        = 10;
+	maxHp     = 10;
+	
 	fireEvent = function(_event) {		
 		switch(_event.type) {			
 			case "TakeDamage":
 				hp = max(0, hp - _event.params.amount);
 				show_debug_message($"Took {_event.params.amount} damage");
-				if(hp == 0) show_debug_message("OOOOoooow!");
+				
+				//This is temporary but look!
+				if(hp == 0) destroyEntity(parent);
 				break;
 		}
-		
+		return _event;
+	}
+}
+function HurtSpriteComponent(c_Name) : Component(c_Name) constructor {
+	sprite    = sBBGrass_Stepped;
+	hurt      = false;
+	hurtTimer = 12;
+	
+	unhurt = function() {
+		self.hurt = false;
+	}
+	
+	fireEvent = function(_event) {		
+		switch(_event.type) {			
+			case "TakeDamage":
+				hurt = true;
+				addTimesource($"{componentName}isHurting", World, 12, unhurt);
+				break;
+			case "Render":
+				if hurt _event.params.sprite = self.sprite;
+				break;
+		}
 		return _event;
 	}
 }

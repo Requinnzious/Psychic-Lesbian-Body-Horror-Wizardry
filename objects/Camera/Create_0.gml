@@ -71,16 +71,18 @@ inputState = function() {
 		//Check for collisions
 		var entities = ds_map_keys_to_array(World.entities, []);
 		for (var i = 0; i < array_length(entities); ++i) {
-		    var entity = World.entities[? entities[i]];
-			var entityX = entity.get("Position", "x");
-			var entityY = entity.get("Position", "y");
-			if(entityX != x + 32 *  dcos(lookDir) || entityY!= y + 32 * -dsin(lookDir)) continue;
+			var entityID = entities[i];
+		    var entity   = World.entities[? entityID];
 			
-			ds_map_delete(World.entities, entities[i]);
-			entity.destroy();
-			delete entity;
+			var entityX  = entity.get("Position", "x");
+			var entityY  = entity.get("Position", "y");
 			
-			show_debug_message(entity);
+			if (entityX != x + 32 *  dcos(lookDir) || entityY!= y + 32 * -dsin(lookDir)) continue;
+			
+			var event = new Event("TakeDamage", {amount: roll("1d6")})
+			event = entity.fireEvent(event);
+			show_debug_message(event);
+			//destroyEntity(entity);
 		}
 		for (var i = 0; i < instance_number(Enemy); ++i) {
 		    var enemy = instance_find(Enemy, i);
