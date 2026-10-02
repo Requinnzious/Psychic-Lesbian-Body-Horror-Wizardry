@@ -97,7 +97,7 @@ inputState = function() {
 		yMoveTarget = y + 8 * -dsin(lookDir);
 		
 		state = bumpState;
-		addTimesource("Attack", id, 24, attackFunc);
+		addTimesource("Attack", id, 12, attackFunc);
 		return;
 	}
 	

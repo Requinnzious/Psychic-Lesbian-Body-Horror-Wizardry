@@ -116,25 +116,33 @@ function ArmorComponent(c_Name) : Component(c_Name) constructor {
 function BillboardMeshComponent(c_Name) : Component(c_Name) constructor {
 	other.listen("Render");
 	
+	color = c_white;
+	
+	buildMesh = function(color) {
+		mesh = vertex_create_buffer();
+		
+		vertex_begin(mesh, vFormat);
+		addVertex(mesh, [-width/2, 0, height], [0, 1, 0], [0, 0], color, 1);
+		addVertex(mesh, [ width/2, 0, height], [0, 1, 0], [1, 0], color, 1);
+		addVertex(mesh, [ width/2, 0,      0], [0, 1, 0], [1, 1], color, 1);
+		addVertex(mesh, [-width/2, 0, height], [0, 1, 0], [0, 0], color, 1);
+		addVertex(mesh, [ width/2, 0,      0], [0, 1, 0], [1, 1], color, 1);
+		addVertex(mesh, [-width/2, 0,      0], [0, 1, 0], [0, 1], color, 1);
+		vertex_end(mesh);
+	}
+	
+	rebuildMesh = function(color) {
+		vertex_delete_buffer(mesh);
+		buildMesh(color);
+	}
+	
 	fireEvent = function(_event) {		
 		switch(_event.type) {
 			case "Create":
-				
-				mesh = vertex_create_buffer();
-				tex  = sprite_get_texture(_event.params.sprite, _event.params.subimage);
-				
-				var width  = sprite_get_width(_event.params.sprite);
-				var height = sprite_get_height(_event.params.sprite);
-				
-				vertex_begin(mesh, vFormat);
-				addVertex(mesh, [-width/2, 0, height], [0, 1, 0], [0, 0], c_white, 1);
-				addVertex(mesh, [ width/2, 0, height], [0, 1, 0], [1, 0], c_white, 1);
-				addVertex(mesh, [ width/2, 0,      0], [0, 1, 0], [1, 1], c_white, 1);
-				
-				addVertex(mesh, [-width/2, 0, height], [0, 1, 0], [0, 0], c_white, 1);
-				addVertex(mesh, [ width/2, 0,      0], [0, 1, 0], [1, 1], c_white, 1);
-				addVertex(mesh, [-width/2, 0,      0], [0, 1, 0], [0, 1], c_white, 1);
-				vertex_end(mesh);
+				tex    = sprite_get_texture(_event.params.sprite, _event.params.subimage);
+				width  = sprite_get_width(_event.params.sprite);
+				height = sprite_get_height(_event.params.sprite);
+				buildMesh(c_white);
 				break;
 			
 			case "Render":
@@ -143,8 +151,13 @@ function BillboardMeshComponent(c_Name) : Component(c_Name) constructor {
 					if(flash mod 6) > 1 {
 						break;
 					}
-					
 				}
+				
+				if(_event.params.color != color) {
+					color = _event.params.color;
+					rebuildMesh(color);
+				}
+				
 				var zRot = Camera.lookDir + Camera.lookDirOffset + 90;
 				matrix_set(matrix_world, matrix_build(_event.params.x, _event.params.y, _event.params.z, 0, 0, zRot, 1, 1, 1));
 				vertex_submit(mesh, pr_trianglelist, sprite_get_texture(_event.params.sprite, _event.params.subimage));
@@ -196,7 +209,7 @@ function HealthComponent(c_Name) : Component(c_Name) constructor {
 				show_debug_message($"Took {_event.params.amount} damage");
 				
 				//This is temporary but look!
-				if(hp == 0) destroyEntity(World.entities[? parent]);
+				if(hp == 0) addTimesource("IDied", World, 24, function(){destroyEntity(World.entities[? parent])});
 				break;
 		}
 		return _event;

@@ -162,12 +162,13 @@ for (var i = 0; i < cols; ++i) {
 			var entity = new Entity();
 
 			entity.addComponent("Physics");
-			entity.addComponent("Health",    {hp: 10});
+			entity.addComponent("Health",    {hp: 1});
 			entity.addComponent("Position",  {x: x1, y: y1, z: 0});
 			entity.addComponent("Transform", {x: 16, y: 16});
 			entity.addComponent("Sprite",    {randomSubimage: true});
 			entity.addComponent("SteppedOn");
 			entity.addComponent("HurtSprite");
+			entity.addComponent("HurtColor");
 			entity.addComponent("WindShader");
 			entity.addComponent("BillboardMesh");
 
@@ -185,6 +186,7 @@ for (var i = 0; i < cols; ++i) {
 			entity.addComponent("Sprite",     {sprite: sBBGrass_Tall, randomSubimage: true});
 			entity.addComponent("SteppedOn",  {sprite: sBBGrass_Tall_Stepped});
 			entity.addComponent("HurtSprite", {sprite: sBBGrass_Tall_Stepped});
+			entity.addComponent("HurtColor");
 			entity.addComponent("WindShader");
 			entity.addComponent("BillboardMesh");
 
