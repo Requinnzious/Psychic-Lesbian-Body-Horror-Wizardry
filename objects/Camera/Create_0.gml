@@ -105,8 +105,6 @@ inputState = function() {
 	//Look around
 	if(mouse_check_button_pressed(mb_right)) {
 		state = lookState; //Set our state and reset our mouse position
-		xOffset = 16;
-		yOffset = 16;
 		window_mouse_set(window_get_width()/2, window_get_height()/2);
 		return; //Return causes the function we're in - inputState - to finish.
 	}
@@ -120,51 +118,8 @@ inputState = function() {
 		state = turnState;
 		lookDirInc = dDir / moveSpeedFrames;
 		targetLookDir = (lookDir + dDir + 360) mod 360;
-		
-		switch(targetLookDir) {
-			//So this code will only execute if we're facing right
-			case 0:
-				targetxOffset =  0;
-				targetyOffset = 16;
-				break;
-			//up
-			case 90:
-				targetxOffset = 16;
-				targetyOffset = 32;
-				break;
-			//Left
-			case 180:
-				targetxOffset = 32;
-				targetyOffset = 16;
-				break;
-			//Down
-			case 270:
-				targetxOffset = 16;
-				targetyOffset =  0;
-				break;
-		}
-		
 		return;
 	}	
-	switch(lookDir) {
-		case 0:
-			xOffset =  0;
-			yOffset = 16;
-			break;
-		case 90:
-			xOffset = 16;
-			yOffset = 30;
-			break;
-		case 180:
-			xOffset = 30;
-			yOffset = 16;
-			break;
-		case 270:
-			xOffset = 16;
-			yOffset =  0;
-			break;
-	}
-
 		
 	//Move forward and back
 	dX = 32 *  dcos(lookDir) * ( keyboard_check(ord("W")) - keyboard_check(ord("S")) );
@@ -298,13 +253,9 @@ attackFunc = function() {
 
 turnState = function() {
 	lookDir = (lookDir + lookDirInc + 360) mod 360;
-	xOffset = lerp(xOffset, targetxOffset, .1);
-	yOffset = lerp(yOffset, targetyOffset, .1);
 }
 turnFunc = function() {
 	lookDir = targetLookDir;
-	xOffset = targetxOffset;
-	yOffset = targetyOffset;
 	state = inputState;
 }
 

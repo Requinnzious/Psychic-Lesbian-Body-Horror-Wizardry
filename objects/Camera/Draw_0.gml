@@ -1,5 +1,8 @@
 draw_clear(#8fEfff);
 
+xOffset = 16 - dcos(lookDir + lookDirOffset) * 16
+yOffset = 16 + dsin(lookDir + lookDirOffset) * 16
+
 //Set up camera projection
 xFrom = x + xOffset + xFromOffset;
 yFrom = y + yOffset + yFromOffset;
