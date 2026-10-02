@@ -68,6 +68,20 @@ inputState = function() {
 		var slash = instance_create_layer(x + xx, y + yy, "Instances", WeaponSlash);
 		slash.z = z;
 		
+		//Check for collisions
+		var entities = ds_map_keys_to_array(World.entities, []);
+		for (var i = 0; i < array_length(entities); ++i) {
+		    var entity = World.entities[? entities[i]];
+			var entityX = entity.get("Position", "x");
+			var entityY = entity.get("Position", "y");
+			if(entityX != x + 32 *  dcos(lookDir) || entityY!= y + 32 * -dsin(lookDir)) continue;
+			
+			ds_map_delete(World.entities, entities[i]);
+			entity.destroy();
+			delete entity;
+			
+			show_debug_message(entity);
+		}
 		for (var i = 0; i < instance_number(Enemy); ++i) {
 		    var enemy = instance_find(Enemy, i);
 			if(enemy.x == x + 32 *  dcos(lookDir) and enemy.y == y + 32 * -dsin(lookDir)) {
@@ -75,25 +89,14 @@ inputState = function() {
 				break;
 			}
 		}
-		for (var i = 0; i < instance_number(Grass); ++i) {
-		    var grass = instance_find(Grass, i);
-			var grassx = floor(grass.x / World.meshTileDim) * World.meshTileDim ;
-			var grassy = floor(grass.y / World.meshTileDim) * World.meshTileDim ;
-			
-			if(grassx == x + 32 *  dcos(lookDir) and grassy == y + 32 * -dsin(lookDir)) {
-				grass.takeDamage();
-				break;
-			}
-		}
-		
-		addTimesource("Attack", id, 24, attackFunc);
-		
-		state = bumpState;
+				
 		xPrevious = x;
 		yPrevious = y;
 		xMoveTarget = x + 8 *  dcos(lookDir);
 		yMoveTarget = y + 8 * -dsin(lookDir);
 		
+		state = bumpState;
+		addTimesource("Attack", id, 24, attackFunc);
 		return;
 	}
 	

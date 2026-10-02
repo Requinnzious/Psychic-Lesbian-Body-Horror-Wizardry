@@ -4,6 +4,7 @@ EntityUUID = 0;
 function Entity() constructor {
 	uuid = ++EntityUUID;
 	components    = [];
+	subscriptions = [];
 	
 	addComponent = function(componentName, args = {}) {
 		var component = constructComponent(componentName, args);
@@ -16,6 +17,31 @@ function Entity() constructor {
 	//	array_insert( components, index, constructComponent(componentName, args) );
 	//}
 	
+	has = function(componentName) {
+		for (var i = 0; i < array_length(components); ++i) {
+		    if(components[i].componentName == componentName) return true;
+		}
+		return false;
+	}
+	
+	get = function(componentName, componentMemberName) {
+		for (var i = 0; i < array_length(components); ++i) {
+		    if (components[i].componentName != componentName + "Component") continue;
+			if !variable_struct_exists(components[i], componentMemberName) return undefined;
+			return variable_struct_get(components[i], componentMemberName);
+		}
+		return undefined;
+	}
+	
+	listen = function(eventName) {
+		subscribe(eventName, self);
+		array_push(subscriptions, eventName);
+	}
+	
+	mute   = function(eventName) {
+		unsubscribe(eventName, self);
+	}
+	
 	fireEvent = function(_event) {
 		var arrLen = array_length(components);
 		for (var i = 0; i < arrLen; ++i) {
@@ -23,6 +49,12 @@ function Entity() constructor {
 			_event = component.fireEvent(_event);
 		}
 		return _event;
+	}
+	
+	destroy = function() {
+		for (var i = 0; i < array_length(subscriptions); ++i) {
+		    mute(subscriptions[i]);
+		}
 	}
 	
 }
@@ -65,9 +97,12 @@ function ArmorComponent(c_Name) : Component(c_Name) constructor {
 	}
 }
 function BillboardComponent(c_Name) : Component(c_Name) constructor {
+	other.listen("Render");
+	
 	fireEvent = function(_event) {		
 		switch(_event.type) {
-			case "Create":
+			case"Create":
+				
 				mesh = vertex_create_buffer();
 				tex  = sprite_get_texture(_event.params.sprite, _event.params.subimage);
 				
@@ -147,7 +182,10 @@ function PositionComponent(c_Name) : Component(c_Name) constructor {
 	x = undefined; y = undefined; z = undefined;
 	
 	fireEvent = function(_event) {		
-		switch(_event.type) {		
+		switch(_event.type) {	
+			case "AtPosition":
+				
+				break;
 			case "Move":
 				self.x += _event.params.x;
 				self.y += _event.params.y;
@@ -196,6 +234,9 @@ function SpriteComponent(c_Name) : Component(c_Name) constructor {
 function SteppedOnComponent(c_Name) : Component(c_Name) constructor {
 	sprite = sBBGrass_Stepped;
 	steppedOn = false;
+	
+	other.listen("Step");
+				
 	fireEvent = function(_event) {		
 		switch(_event.type) {
 			case "Render":

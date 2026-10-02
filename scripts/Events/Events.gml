@@ -7,15 +7,16 @@ function setEventUUID() {
 }
 
 function Event(_type, _params) constructor {
-	uuid   = setEventUUID();
-	type   = _type;
-	params = _params;
+	uuid    = setEventUUID();
+	type    = _type;
+	params  = _params;
 	
 	fire = function(eventBus = oEventManager.eventBus) {
 		var arrLen = array_length(eventBus[? type]);
 		var _event = self;
 		for (var i = 0; i < arrLen; ++i) {
-		    _event = eventBus[? type][i].fireEvent(_event);
+			var entity = eventBus[? type][i];
+		    _event = entity.fireEvent(_event);
 		}
 		return _event;
 	}

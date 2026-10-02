@@ -4,8 +4,10 @@ renderEvent = new Event("Render", {x: 0, y: 0, z: 0});
 
 meshTileDim = 32;
 
+identityMatrix = matrix_build( 0,   0, 0, 0, 0,  0,  1,  1,  1);
 
-//This just stores the tilemap
+
+//This stores the tilemap
 tiles = [];
 var meta  = layer_tilemap_get_id("Meta");
 coll  = layer_tilemap_get_id("Collisions");
@@ -19,7 +21,6 @@ for (var i = 0; i < room_width / 32; ++i) {
 }
 cols = array_length(tiles);
 rows = array_length(tiles[0]);
-
 
 
 //Construct the mesh of the level
@@ -171,9 +172,7 @@ for (var i = 0; i < cols; ++i) {
 			entity.addComponent("BillboardComponent");
 
 			entity.fireEvent(createEvent);
-			subscribe("Render", entity);
-			subscribe("Step", entity);
-			
+
 			entities[? entity.uuid] = entity;
 		}		
 		if tile == TileTypes.TALLGRASS {
@@ -190,8 +189,6 @@ for (var i = 0; i < cols; ++i) {
 			entity.addComponent("BillboardComponent");
 
 			entity.fireEvent(createEvent);
-			subscribe("Render", entity);
-			subscribe("Step", entity);
 						
 			entities[? entity.uuid] = entity;
 		}		
@@ -210,7 +207,6 @@ for (var i = 0; i < cols; ++i) {
 				entity.addComponent("BillboardComponent");
 
 				entity.fireEvent(createEvent);
-				subscribe("Render", entity);
 				
 				entities[? entity.uuid] = entity;
 				
@@ -231,7 +227,6 @@ for (var i = 0; i < cols; ++i) {
 			entity.addComponent("BillboardComponent");
 
 			entity.fireEvent(createEvent);
-			subscribe("Render", entity);
 
 			entities[? entity.uuid] = entity;
 
@@ -371,9 +366,7 @@ vertex_end(floorMesh);
 vertex_end(wallMesh);
 vertex_end(canopyMesh);
 
-createEvent.fire();
 
-identityMatrix = matrix_build( 0,   0, 0, 0, 0,  0,  1,  1,  1);
 render = function() {
 	
 	var tex = sprite_get_texture(sPathTexture, 0);
@@ -381,18 +374,23 @@ render = function() {
 	vertex_submit(floorMesh, pr_trianglelist, tex);
 	vertex_submit(wallMesh, pr_trianglelist,  tex);
 	
-	with Decal vertex_submit(mesh, pr_trianglelist, tex);
-	with Enemy render();
-	with WeaponSlash render();
-	
-	renderEvent.fire();
-	
-	matrix_set(matrix_world, identityMatrix);
-	
-	with Mountain render();
-	
-	
 	shader_set(shWind);
 	vertex_submit(canopyMesh, pr_trianglelist,  tex);
 	shader_reset();
-};
+	
+	shader_set(shDefault);
+	with Decal       vertex_submit(mesh, pr_trianglelist, tex);
+	with Enemy       render();
+	with WeaponSlash render();
+	with Mountain    render();
+	shader_reset();
+	
+	//This renders every entity :> that's the power of ECS
+	renderEvent.fire();
+	
+	matrix_set(matrix_world, identityMatrix);
+}
+
+
+
+createEvent.fire();
