@@ -30,8 +30,8 @@
   "nineSlice":null,
   "origin":9,
   "parent":{
-    "name":"Textures",
-    "path":"folders/Textures.yy",
+    "name":"Effects",
+    "path":"folders/Textures/Effects.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",

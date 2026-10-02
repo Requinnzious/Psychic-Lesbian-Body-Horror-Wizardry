@@ -65,7 +65,7 @@ inputState = function() {
 	if(mouse_check_button(mb_left)) {
 		var xx = 30 *  dcos(lookDir) + xOffset
 		var yy = 30 * -dsin(lookDir) + yOffset
-		var slash = instance_create_layer(x + xx, y + yy, "Instances", AnimatedBillboard);
+		var slash = instance_create_layer(x + xx, y + yy, "Instances", WeaponSlash);
 		slash.z = z;
 		
 		for (var i = 0; i < instance_number(Enemy); ++i) {
@@ -271,6 +271,9 @@ moveFunc  = function() {
 				break;
 		}
 	}
+	
+	var event = new Event("Step", {x: x, y: y, z: z - 16});
+	event.fire();
 }
 
 bumpState = function() { 

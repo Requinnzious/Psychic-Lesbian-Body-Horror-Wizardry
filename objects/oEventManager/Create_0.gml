@@ -1,0 +1,1 @@
+eventBus = ds_map_create();

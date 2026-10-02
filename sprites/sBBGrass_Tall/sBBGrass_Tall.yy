@@ -30,8 +30,8 @@
   "nineSlice":null,
   "origin":7,
   "parent":{
-    "name":"Textures",
-    "path":"folders/Textures.yy",
+    "name":"Billboards",
+    "path":"folders/Textures/Billboards.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",

@@ -1,12 +1,12 @@
 {
   "$GMScript":"v1",
-  "%Name":"scrTiles",
+  "%Name":"Events",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"scrTiles",
+  "name":"Events",
   "parent":{
-    "name":"Scripts",
-    "path":"folders/01 Functions/Scripts.yy",
+    "name":"ECS",
+    "path":"folders/01 Functions/ECS.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

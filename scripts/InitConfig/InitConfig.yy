@@ -1,12 +1,12 @@
 {
   "$GMScript":"v1",
-  "%Name":"scrTiles",
+  "%Name":"InitConfig",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"scrTiles",
+  "name":"InitConfig",
   "parent":{
-    "name":"Scripts",
-    "path":"folders/01 Functions/Scripts.yy",
+    "name":"00 Init",
+    "path":"folders/00 Init.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

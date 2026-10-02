@@ -1,12 +1,12 @@
 {
   "$GMScript":"v1",
-  "%Name":"scrTiles",
+  "%Name":"InputHandling",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"scrTiles",
+  "name":"InputHandling",
   "parent":{
-    "name":"Scripts",
-    "path":"folders/01 Functions/Scripts.yy",
+    "name":"01 Functions",
+    "path":"folders/01 Functions.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

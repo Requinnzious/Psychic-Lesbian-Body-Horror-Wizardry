@@ -10,8 +10,8 @@
   "name":"Grass",
   "overriddenProperties":[],
   "parent":{
-    "name":"Objects",
-    "path":"folders/Objects.yy",
+    "name":"02 Objects",
+    "path":"folders/02 Objects.yy",
   },
   "parentObjectId":null,
   "persistent":false,

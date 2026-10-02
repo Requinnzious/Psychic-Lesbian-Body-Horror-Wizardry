@@ -6,7 +6,7 @@
   "name":"scrTime",
   "parent":{
     "name":"Scripts",
-    "path":"folders/Scripts.yy",
+    "path":"folders/01 Functions/Scripts.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

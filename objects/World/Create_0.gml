@@ -1,3 +1,10 @@
+entities = ds_map_create();
+createEvent = new Event("Create", {});
+renderEvent = new Event("Render", {x: 0, y: 0, z: 0});
+
+meshTileDim = 32;
+
+
 //This just stores the tilemap
 tiles = [];
 var meta  = layer_tilemap_get_id("Meta");
@@ -10,10 +17,9 @@ for (var i = 0; i < room_width / 32; ++i) {
 	    array_push(tiles[i], {tile: tile, collis: collis});
 	}
 }
-
-meshTileDim = 32;
 cols = array_length(tiles);
 rows = array_length(tiles[0]);
+
 
 
 //Construct the mesh of the level
@@ -26,6 +32,7 @@ canopyMesh  = vertex_create_buffer();
 vertex_begin(floorMesh,  vFormat);
 vertex_begin(wallMesh,   vFormat);
 vertex_begin(canopyMesh, vFormat);
+
 for (var i = 0; i < cols; ++i) {
     for (var j = 0; j < rows; ++j) {
 	    var tile   = tiles[i][j].tile;
@@ -151,174 +158,224 @@ for (var i = 0; i < cols; ++i) {
 		
 		//Grass
 		if tile == TileTypes.GRASS {
-			var grass = instance_create_layer(x1 + 16, y1 + 16, "Instances", Grass);
-			grass.type = "grass";
-			grass.image_index = irandom(grass.image_number - 1);
-			grass.createMesh();
-		}
+			var entity = new Entity();
+
+			entity.addComponent("PhysicsComponent");
+			entity.addComponent("PositionComponent",  {x: x1, y: y1, z: 0});
+			entity.addComponent("TransformComponent", {x: 16, y: 16});
+
+			entity.addComponent("SpriteComponent",    {randomSubimage: true});
+			entity.addComponent("SteppedOnComponent");
+
+			entity.addComponent("WindShaderComponent");
+			entity.addComponent("BillboardComponent");
+
+			entity.fireEvent(createEvent);
+			subscribe("Render", entity);
+			subscribe("Step", entity);
+			
+			entities[? entity.uuid] = entity;
+		}		
 		if tile == TileTypes.TALLGRASS {
-			var grass = instance_create_layer(x1 + 16, y1 + 16, "Instances", Grass);
-			grass.type = "tallgrass";
-			grass.sprite_index = sBBGrass_Tall;
-			grass.image_index   = irandom(grass.image_number - 1);
-			grass.createMesh();
-		}
-		
+			var entity = new Entity();
+
+			entity.addComponent("PhysicsComponent");
+			entity.addComponent("PositionComponent",  {x: x1, y: y1, z: 0});
+			entity.addComponent("TransformComponent", {x: 16, y: 16});
+
+			entity.addComponent("SpriteComponent",    {sprite: sBBGrass_Tall, randomSubimage: true});
+			entity.addComponent("SteppedOnComponent", {sprite: sBBGrass_Tall_Stepped});
+
+			entity.addComponent("WindShaderComponent");
+			entity.addComponent("BillboardComponent");
+
+			entity.fireEvent(createEvent);
+			subscribe("Render", entity);
+			subscribe("Step", entity);
+						
+			entities[? entity.uuid] = entity;
+		}		
 		if tile == TileTypes.FAIRYCIRCLE {
 			var shrooms = 8;
 			var theta   = 0;
 			for (var k = 0; k < shrooms; ++k) {
 				var shroomX = x1 + 16 + lengthdir_x(32, theta) + random_range(-2, 2);
 				var shroomY = y1 + 16 + lengthdir_y(32, theta) + random_range(-2, 2);
-			    var shroom = instance_create_layer(shroomX, shroomY, "Instances", Grass, {sprite_index: sBBShroom});
-				shroom.image_index = irandom(shroom.image_number - 1);
-				shroom.createMesh();
+				
+				var entity = new Entity();
+				entity.addComponent("PhysicsComponent");
+				entity.addComponent("PositionComponent",  {x: shroomX, y: shroomY, z: 0});
+				entity.addComponent("SpriteComponent",    {sprite: sBBShroom, randomSubimage: true});
+				entity.addComponent("WindShaderComponent");
+				entity.addComponent("BillboardComponent");
+
+				entity.fireEvent(createEvent);
+				subscribe("Render", entity);
+				
+				entities[? entity.uuid] = entity;
+				
 				theta += 360/shrooms;
 			}
-		}
-		
+		}		
+
 		//Trees
 		if tile == TileTypes.TREE {
+			var entity = new Entity();
+
+			entity.addComponent("PhysicsComponent");
+			entity.addComponent("PositionComponent",  {x: xAvg + random_range(-2, 2), y: yAvg + random_range(-2, 2), z: 0});
+
+			entity.addComponent("SpriteComponent",    {sprite: sTreeTexture});
+
+			entity.addComponent("WindShaderComponent");
+			entity.addComponent("BillboardComponent");
+
+			entity.fireEvent(createEvent);
+			subscribe("Render", entity);
+
+			entities[? entity.uuid] = entity;
+
+			#region Foliage
+				//Make small canopy
+				uvs = sprite_get_uvs(sCanopyTexture, irandom(sprite_get_number(sCanopyTexture) - 1));
+				var width  = random_range(-16, 16) + sprite_get_width(sCanopyTexture);
+				var height = random_range(-16, 16) + sprite_get_height(sCanopyTexture);
 			
-			//uvs = sprite_get_uvs(sTreeTexture, 0);
-			var tree = instance_create_layer(xAvg + random_range(-2, 2), yAvg + random_range(-2, 2), "Instances", Tree, {sprite_index: sTreeTexture});
-			tree.createMesh();
-						
-			uvs = sprite_get_uvs(sCanopyTexture, irandom(sprite_get_number(sCanopyTexture) - 1));
-			var width  = random_range(-16, 16) + sprite_get_width(sCanopyTexture);
-			var height = random_range(-16, 16) + sprite_get_height(sCanopyTexture);
+				x1 = xAvg - width  / 2;
+				x2 = xAvg + width  / 2;
+				y1 = yAvg - height / 2;
+				y2 = yAvg + height / 2;
 			
-			x1 = xAvg - width  / 2;
-			x2 = xAvg + width  / 2;
-			y1 = yAvg - height / 2;
-			y2 = yAvg + height / 2;
+				var z1 = random_range(48, 64);
+				var z2 = random_range(48, 64);
 			
-			var z1 = random_range(48, 64);
-			var z2 = random_range(48, 64);
-			
-			addVertex(canopyMesh, [x1, y1, z1], [0, 0, -1], [uvs[0], uvs[1]], c_white, 1);
-			addVertex(canopyMesh, [x2, y1, z1], [0, 0, -1], [uvs[2], uvs[1]], c_white, 1);
-			addVertex(canopyMesh, [x2, y2, z2], [0, 0, -1], [uvs[2], uvs[3]], c_white, 1);
-			addVertex(canopyMesh, [x1, y1, z1], [0, 0, -1], [uvs[0], uvs[1]], c_white, 1);
-			addVertex(canopyMesh, [x2, y2, z2], [0, 0, -1], [uvs[2], uvs[3]], c_white, 1);
-			addVertex(canopyMesh, [x1, y2, z2], [0, 0, -1], [uvs[0], uvs[3]], c_white, 1);
-			
-			
-			uvs = sprite_get_uvs(sCanopyTexture_1, irandom(sprite_get_number(sCanopyTexture_1)- 1));
-			var width  = random_range(-16, 16) + sprite_get_width(sCanopyTexture_1);
-			var height = random_range(-16, 16) + sprite_get_height(sCanopyTexture_1);
-			
-			x1 = xAvg - width  / 2;
-			x2 = xAvg + width  / 2;
-			y1 = yAvg - height / 2;
-			y2 = yAvg + height / 2;
-			
-			z1 = random_range(80, 96);
-			z2 = random_range(80, 96);
-			
-			addVertex(canopyMesh, [x1, y1, z1], [0, 0, -1], [uvs[0], uvs[1]], c_white, 1);
-			addVertex(canopyMesh, [x2, y1, z1], [0, 0, -1], [uvs[2], uvs[1]], c_white, 1);
-			addVertex(canopyMesh, [x2, y2, z2], [0, 0, -1], [uvs[2], uvs[3]], c_white, 1);
-			
-			addVertex(canopyMesh, [x1, y1, z1], [0, 0, -1], [uvs[0], uvs[1]], c_white, 1);
-			addVertex(canopyMesh, [x2, y2, z2], [0, 0, -1], [uvs[2], uvs[3]], c_white, 1);
-			addVertex(canopyMesh, [x1, y2, z2], [0, 0, -1], [uvs[0], uvs[3]], c_white, 1);
+				addVertex(canopyMesh, [x1, y1, z1], [0, 0, -1], [uvs[0], uvs[1]], c_white, 1);
+				addVertex(canopyMesh, [x2, y1, z1], [0, 0, -1], [uvs[2], uvs[1]], c_white, 1);
+				addVertex(canopyMesh, [x2, y2, z2], [0, 0, -1], [uvs[2], uvs[3]], c_white, 1);
+				addVertex(canopyMesh, [x1, y1, z1], [0, 0, -1], [uvs[0], uvs[1]], c_white, 1);
+				addVertex(canopyMesh, [x2, y2, z2], [0, 0, -1], [uvs[2], uvs[3]], c_white, 1);
+				addVertex(canopyMesh, [x1, y2, z2], [0, 0, -1], [uvs[0], uvs[3]], c_white, 1);
 			
 			
-			//South wall
-			addVertex(canopyMesh, [x1, y2, z1 + height], [0, 1, 0], [uvs[0], uvs[1]], c_white, 1);
-			addVertex(canopyMesh, [x2, y2, z1 + height], [0, 1, 0], [uvs[2], uvs[1]], c_white, 1);
-			addVertex(canopyMesh, [x2, y2,          z2], [0, 1, 0], [uvs[2], uvs[3]], c_white, 1);
-			addVertex(canopyMesh, [x1, y2, z1 + height], [0, 1, 0], [uvs[0], uvs[1]], c_white, 1);
-			addVertex(canopyMesh, [x2, y2,          z2], [0, 1, 0], [uvs[2], uvs[3]], c_white, 1);
-			addVertex(canopyMesh, [x1, y2,          z2], [0, 1, 0], [uvs[0], uvs[3]], c_white, 1);
-			if random(1) < .15 {
-				var foliageUVs = sprite_get_uvs(sFoliage, irandom(sprite_get_number(sFoliage) - 1));
-				var fx1 = x1  + irandom(width - sprite_get_width(sFoliage));
-				var fx2 = fx1 + sprite_get_width(sFoliage);
-				var foliageHeight = sprite_get_height(sFoliage)
+				//Make large canopy
+				uvs = sprite_get_uvs(sCanopyTexture_1, irandom(sprite_get_number(sCanopyTexture_1)- 1));
+				var width  = random_range(-16, 16) + sprite_get_width(sCanopyTexture_1);
+				var height = random_range(-16, 16) + sprite_get_height(sCanopyTexture_1);
+			
+				x1 = xAvg - width  / 2;
+				x2 = xAvg + width  / 2;
+				y1 = yAvg - height / 2;
+				y2 = yAvg + height / 2;
+			
+				z1 = random_range(80, 96);
+				z2 = random_range(80, 96);
+			
+				addVertex(canopyMesh, [x1, y1, z1], [0, 0, -1], [uvs[0], uvs[1]], c_white, 1);
+				addVertex(canopyMesh, [x2, y1, z1], [0, 0, -1], [uvs[2], uvs[1]], c_white, 1);
+				addVertex(canopyMesh, [x2, y2, z2], [0, 0, -1], [uvs[2], uvs[3]], c_white, 1);
+			
+				addVertex(canopyMesh, [x1, y1, z1], [0, 0, -1], [uvs[0], uvs[1]], c_white, 1);
+				addVertex(canopyMesh, [x2, y2, z2], [0, 0, -1], [uvs[2], uvs[3]], c_white, 1);
+				addVertex(canopyMesh, [x1, y2, z2], [0, 0, -1], [uvs[0], uvs[3]], c_white, 1);
+			
+			
+				//South wall
+				addVertex(canopyMesh, [x1, y2, z1 + height], [0, 1, 0], [uvs[0], uvs[1]], c_white, 1);
+				addVertex(canopyMesh, [x2, y2, z1 + height], [0, 1, 0], [uvs[2], uvs[1]], c_white, 1);
+				addVertex(canopyMesh, [x2, y2,          z2], [0, 1, 0], [uvs[2], uvs[3]], c_white, 1);
+				addVertex(canopyMesh, [x1, y2, z1 + height], [0, 1, 0], [uvs[0], uvs[1]], c_white, 1);
+				addVertex(canopyMesh, [x2, y2,          z2], [0, 1, 0], [uvs[2], uvs[3]], c_white, 1);
+				addVertex(canopyMesh, [x1, y2,          z2], [0, 1, 0], [uvs[0], uvs[3]], c_white, 1);
+				if random(1) < .15 {
+					var foliageUVs = sprite_get_uvs(sFoliage, irandom(sprite_get_number(sFoliage) - 1));
+					var fx1 = x1  + irandom(width - sprite_get_width(sFoliage));
+					var fx2 = fx1 + sprite_get_width(sFoliage);
+					var foliageHeight = sprite_get_height(sFoliage)
 				
-				addVertex(canopyMesh, [fx1, y2, z1],                 [0, 1, 0], [foliageUVs[0], foliageUVs[1]], c_white, 1);
-				addVertex(canopyMesh, [fx2, y2, z1],                 [0, 1, 0], [foliageUVs[2], foliageUVs[1]], c_white, 1);
-				addVertex(canopyMesh, [fx2, y2, z1 - foliageHeight], [0, 1, 0], [foliageUVs[2], foliageUVs[3]], c_white, 1);
-				addVertex(canopyMesh, [fx1, y2, z1],                 [0, 1, 0], [foliageUVs[0], foliageUVs[1]], c_white, 1);
-				addVertex(canopyMesh, [fx2, y2, z1 - foliageHeight], [0, 1, 0], [foliageUVs[2], foliageUVs[3]], c_white, 1);
-				addVertex(canopyMesh, [fx1, y2, z1 - foliageHeight], [0, 1, 0], [foliageUVs[0], foliageUVs[3]], c_white, 1);
-			}
+					addVertex(canopyMesh, [fx1, y2, z1],                 [0, 1, 0], [foliageUVs[0], foliageUVs[1]], c_white, 1);
+					addVertex(canopyMesh, [fx2, y2, z1],                 [0, 1, 0], [foliageUVs[2], foliageUVs[1]], c_white, 1);
+					addVertex(canopyMesh, [fx2, y2, z1 - foliageHeight], [0, 1, 0], [foliageUVs[2], foliageUVs[3]], c_white, 1);
+					addVertex(canopyMesh, [fx1, y2, z1],                 [0, 1, 0], [foliageUVs[0], foliageUVs[1]], c_white, 1);
+					addVertex(canopyMesh, [fx2, y2, z1 - foliageHeight], [0, 1, 0], [foliageUVs[2], foliageUVs[3]], c_white, 1);
+					addVertex(canopyMesh, [fx1, y2, z1 - foliageHeight], [0, 1, 0], [foliageUVs[0], foliageUVs[3]], c_white, 1);
+				}
 			
-			//North wall
-			addVertex(canopyMesh, [x2, y1, z1 + height], [0,-1, 0], [uvs[0], uvs[1]], c_white, 1);
-			addVertex(canopyMesh, [x1, y1, z1 + height], [0,-1, 0], [uvs[2], uvs[1]], c_white, 1);
-			addVertex(canopyMesh, [x1, y1,          z2], [0,-1, 0], [uvs[2], uvs[3]], c_white, 1);
-			addVertex(canopyMesh, [x2, y1, z1 + height], [0,-1, 0], [uvs[0], uvs[1]], c_white, 1);
-			addVertex(canopyMesh, [x1, y1,          z2], [0,-1, 0], [uvs[2], uvs[3]], c_white, 1);
-			addVertex(canopyMesh, [x2, y1,          z2], [0,-1, 0], [uvs[0], uvs[3]], c_white, 1);
-			if random(1) < .15 {
-				var foliageUVs = sprite_get_uvs(sFoliage, irandom(sprite_get_number(sFoliage) - 1));
-				var fx1 = x2  - irandom(width - sprite_get_width(sFoliage));
-				var fx2 = fx1 - sprite_get_width(sFoliage);
-				var foliageHeight = sprite_get_height(sFoliage)
+				//North wall
+				addVertex(canopyMesh, [x2, y1, z1 + height], [0,-1, 0], [uvs[0], uvs[1]], c_white, 1);
+				addVertex(canopyMesh, [x1, y1, z1 + height], [0,-1, 0], [uvs[2], uvs[1]], c_white, 1);
+				addVertex(canopyMesh, [x1, y1,          z2], [0,-1, 0], [uvs[2], uvs[3]], c_white, 1);
+				addVertex(canopyMesh, [x2, y1, z1 + height], [0,-1, 0], [uvs[0], uvs[1]], c_white, 1);
+				addVertex(canopyMesh, [x1, y1,          z2], [0,-1, 0], [uvs[2], uvs[3]], c_white, 1);
+				addVertex(canopyMesh, [x2, y1,          z2], [0,-1, 0], [uvs[0], uvs[3]], c_white, 1);
+				if random(1) < .15 {
+					var foliageUVs = sprite_get_uvs(sFoliage, irandom(sprite_get_number(sFoliage) - 1));
+					var fx1 = x2  - irandom(width - sprite_get_width(sFoliage));
+					var fx2 = fx1 - sprite_get_width(sFoliage);
+					var foliageHeight = sprite_get_height(sFoliage)
 				
-				addVertex(canopyMesh, [fx2, y1, z1],                 [0, -1, 0], [foliageUVs[0], foliageUVs[1]], c_white, 1);
-				addVertex(canopyMesh, [fx1, y1, z1],                 [0, -1, 0], [foliageUVs[2], foliageUVs[1]], c_white, 1);
-				addVertex(canopyMesh, [fx1, y1, z1 - foliageHeight], [0, -1, 0], [foliageUVs[2], foliageUVs[3]], c_white, 1);
-				addVertex(canopyMesh, [fx2, y1, z1],                 [0, -1, 0], [foliageUVs[0], foliageUVs[1]], c_white, 1);
-				addVertex(canopyMesh, [fx1, y1, z1 - foliageHeight], [0, -1, 0], [foliageUVs[2], foliageUVs[3]], c_white, 1);
-				addVertex(canopyMesh, [fx2, y1, z1 - foliageHeight], [0, -1, 0], [foliageUVs[0], foliageUVs[3]], c_white, 1);
-			}
+					addVertex(canopyMesh, [fx2, y1, z1],                 [0, -1, 0], [foliageUVs[0], foliageUVs[1]], c_white, 1);
+					addVertex(canopyMesh, [fx1, y1, z1],                 [0, -1, 0], [foliageUVs[2], foliageUVs[1]], c_white, 1);
+					addVertex(canopyMesh, [fx1, y1, z1 - foliageHeight], [0, -1, 0], [foliageUVs[2], foliageUVs[3]], c_white, 1);
+					addVertex(canopyMesh, [fx2, y1, z1],                 [0, -1, 0], [foliageUVs[0], foliageUVs[1]], c_white, 1);
+					addVertex(canopyMesh, [fx1, y1, z1 - foliageHeight], [0, -1, 0], [foliageUVs[2], foliageUVs[3]], c_white, 1);
+					addVertex(canopyMesh, [fx2, y1, z1 - foliageHeight], [0, -1, 0], [foliageUVs[0], foliageUVs[3]], c_white, 1);
+				}
 			
-			//East wall
-			addVertex(canopyMesh, [x2, y2, z1 + height], [1, 0, 0], [uvs[0], uvs[1]], c_white, 1);
-			addVertex(canopyMesh, [x2, y1, z1 + height], [1, 0, 0], [uvs[2], uvs[1]], c_white, 1);
-			addVertex(canopyMesh, [x2, y1,          z2], [1, 0, 0], [uvs[2], uvs[3]], c_white, 1);
-			addVertex(canopyMesh, [x2, y2, z1 + height], [1, 0, 0], [uvs[0], uvs[1]], c_white, 1);
-			addVertex(canopyMesh, [x2, y1,          z2], [1, 0, 0], [uvs[2], uvs[3]], c_white, 1);
-			addVertex(canopyMesh, [x2, y2,          z2], [1, 0, 0], [uvs[0], uvs[3]], c_white, 1);
-			if random(1) < .15 {
-				var foliageUVs = sprite_get_uvs(sFoliage, irandom(sprite_get_number(sFoliage) - 1));
-				var fy1 = y2  - irandom(width - sprite_get_width(sFoliage));
-				var fy2 = fy1 - sprite_get_width(sFoliage);
-				var foliageHeight = sprite_get_height(sFoliage)
+				//East wall
+				addVertex(canopyMesh, [x2, y2, z1 + height], [1, 0, 0], [uvs[0], uvs[1]], c_white, 1);
+				addVertex(canopyMesh, [x2, y1, z1 + height], [1, 0, 0], [uvs[2], uvs[1]], c_white, 1);
+				addVertex(canopyMesh, [x2, y1,          z2], [1, 0, 0], [uvs[2], uvs[3]], c_white, 1);
+				addVertex(canopyMesh, [x2, y2, z1 + height], [1, 0, 0], [uvs[0], uvs[1]], c_white, 1);
+				addVertex(canopyMesh, [x2, y1,          z2], [1, 0, 0], [uvs[2], uvs[3]], c_white, 1);
+				addVertex(canopyMesh, [x2, y2,          z2], [1, 0, 0], [uvs[0], uvs[3]], c_white, 1);
+				if random(1) < .15 {
+					var foliageUVs = sprite_get_uvs(sFoliage, irandom(sprite_get_number(sFoliage) - 1));
+					var fy1 = y2  - irandom(width - sprite_get_width(sFoliage));
+					var fy2 = fy1 - sprite_get_width(sFoliage);
+					var foliageHeight = sprite_get_height(sFoliage)
 				
-				addVertex(canopyMesh, [x2, fy2, z1],                 [-1, 0, 0], [foliageUVs[0], foliageUVs[1]], c_white, 1);
-				addVertex(canopyMesh, [x2, fy1, z1],                 [-1, 0, 0], [foliageUVs[2], foliageUVs[1]], c_white, 1);
-				addVertex(canopyMesh, [x2, fy1, z1 - foliageHeight], [-1, 0, 0], [foliageUVs[2], foliageUVs[3]], c_white, 1);
-				addVertex(canopyMesh, [x2, fy2, z1],                 [-1, 0, 0], [foliageUVs[0], foliageUVs[1]], c_white, 1);
-				addVertex(canopyMesh, [x2, fy1, z1 - foliageHeight], [-1, 0, 0], [foliageUVs[2], foliageUVs[3]], c_white, 1);
-				addVertex(canopyMesh, [x2, fy2, z1 - foliageHeight], [-1, 0, 0], [foliageUVs[0], foliageUVs[3]], c_white, 1);
-			}
+					addVertex(canopyMesh, [x2, fy2, z1],                 [-1, 0, 0], [foliageUVs[0], foliageUVs[1]], c_white, 1);
+					addVertex(canopyMesh, [x2, fy1, z1],                 [-1, 0, 0], [foliageUVs[2], foliageUVs[1]], c_white, 1);
+					addVertex(canopyMesh, [x2, fy1, z1 - foliageHeight], [-1, 0, 0], [foliageUVs[2], foliageUVs[3]], c_white, 1);
+					addVertex(canopyMesh, [x2, fy2, z1],                 [-1, 0, 0], [foliageUVs[0], foliageUVs[1]], c_white, 1);
+					addVertex(canopyMesh, [x2, fy1, z1 - foliageHeight], [-1, 0, 0], [foliageUVs[2], foliageUVs[3]], c_white, 1);
+					addVertex(canopyMesh, [x2, fy2, z1 - foliageHeight], [-1, 0, 0], [foliageUVs[0], foliageUVs[3]], c_white, 1);
+				}
 			
-			//west wall
-			addVertex(canopyMesh, [x1, y1, z1 + height], [-1, 0, 0], [uvs[0], uvs[1]], c_white, 1);
-			addVertex(canopyMesh, [x1, y2, z1 + height], [-1, 0, 0], [uvs[2], uvs[1]], c_white, 1);
-			addVertex(canopyMesh, [x1, y2,          z2], [-1, 0, 0], [uvs[2], uvs[3]], c_white, 1);
-			addVertex(canopyMesh, [x1, y1, z1 + height], [-1, 0, 0], [uvs[0], uvs[1]], c_white, 1);
-			addVertex(canopyMesh, [x1, y2,          z2], [-1, 0, 0], [uvs[2], uvs[3]], c_white, 1);
-			addVertex(canopyMesh, [x1, y1,          z2], [-1, 0, 0], [uvs[0], uvs[3]], c_white, 1);
-			if random(1) < .15 {
-				var foliageUVs = sprite_get_uvs(sFoliage, irandom(sprite_get_number(sFoliage) - 1));
-				var fy1 = y1  + irandom(width - sprite_get_width(sFoliage));
-				var fy2 = fy1 + sprite_get_width(sFoliage);
-				var foliageHeight = sprite_get_height(sFoliage)
+				//west wall
+				addVertex(canopyMesh, [x1, y1, z1 + height], [-1, 0, 0], [uvs[0], uvs[1]], c_white, 1);
+				addVertex(canopyMesh, [x1, y2, z1 + height], [-1, 0, 0], [uvs[2], uvs[1]], c_white, 1);
+				addVertex(canopyMesh, [x1, y2,          z2], [-1, 0, 0], [uvs[2], uvs[3]], c_white, 1);
+				addVertex(canopyMesh, [x1, y1, z1 + height], [-1, 0, 0], [uvs[0], uvs[1]], c_white, 1);
+				addVertex(canopyMesh, [x1, y2,          z2], [-1, 0, 0], [uvs[2], uvs[3]], c_white, 1);
+				addVertex(canopyMesh, [x1, y1,          z2], [-1, 0, 0], [uvs[0], uvs[3]], c_white, 1);
+				if random(1) < .15 {
+					var foliageUVs = sprite_get_uvs(sFoliage, irandom(sprite_get_number(sFoliage) - 1));
+					var fy1 = y1  + irandom(width - sprite_get_width(sFoliage));
+					var fy2 = fy1 + sprite_get_width(sFoliage);
+					var foliageHeight = sprite_get_height(sFoliage)
 				
-				addVertex(canopyMesh, [x1, fy1, z1],                 [-1, 0, 0], [foliageUVs[0], foliageUVs[1]], c_white, 1);
-				addVertex(canopyMesh, [x1, fy2, z1],                 [-1, 0, 0], [foliageUVs[2], foliageUVs[1]], c_white, 1);
-				addVertex(canopyMesh, [x1, fy2, z1 - foliageHeight], [-1, 0, 0], [foliageUVs[2], foliageUVs[3]], c_white, 1);
-				addVertex(canopyMesh, [x1, fy1, z1],                 [-1, 0, 0], [foliageUVs[0], foliageUVs[1]], c_white, 1);
-				addVertex(canopyMesh, [x1, fy2, z1 - foliageHeight], [-1, 0, 0], [foliageUVs[2], foliageUVs[3]], c_white, 1);
-				addVertex(canopyMesh, [x1, fy1, z1 - foliageHeight], [-1, 0, 0], [foliageUVs[0], foliageUVs[3]], c_white, 1);
-			}
-			
+					addVertex(canopyMesh, [x1, fy1, z1],                 [-1, 0, 0], [foliageUVs[0], foliageUVs[1]], c_white, 1);
+					addVertex(canopyMesh, [x1, fy2, z1],                 [-1, 0, 0], [foliageUVs[2], foliageUVs[1]], c_white, 1);
+					addVertex(canopyMesh, [x1, fy2, z1 - foliageHeight], [-1, 0, 0], [foliageUVs[2], foliageUVs[3]], c_white, 1);
+					addVertex(canopyMesh, [x1, fy1, z1],                 [-1, 0, 0], [foliageUVs[0], foliageUVs[1]], c_white, 1);
+					addVertex(canopyMesh, [x1, fy2, z1 - foliageHeight], [-1, 0, 0], [foliageUVs[2], foliageUVs[3]], c_white, 1);
+					addVertex(canopyMesh, [x1, fy1, z1 - foliageHeight], [-1, 0, 0], [foliageUVs[0], foliageUVs[3]], c_white, 1);
+				}
+			#endregion
 		}
 	}
 }
+
 vertex_end(floorMesh);
 vertex_end(wallMesh);
 vertex_end(canopyMesh);
 
+createEvent.fire();
 
 identityMatrix = matrix_build( 0,   0, 0, 0, 0,  0,  1,  1,  1);
 render = function() {
+	
 	var tex = sprite_get_texture(sPathTexture, 0);
 	matrix_set(matrix_world, identityMatrix);
 	vertex_submit(floorMesh, pr_trianglelist, tex);
@@ -326,16 +383,16 @@ render = function() {
 	
 	with Decal vertex_submit(mesh, pr_trianglelist, tex);
 	with Enemy render();
-	with Grass render();
-	with Tree  render();
-	with AnimatedBillboard render();
+	with WeaponSlash render();
+	
+	renderEvent.fire();
 	
 	matrix_set(matrix_world, identityMatrix);
 	
 	with Mountain render();
 	
+	
 	shader_set(shWind);
 	vertex_submit(canopyMesh, pr_trianglelist,  tex);
 	shader_reset();
-}
-
+};

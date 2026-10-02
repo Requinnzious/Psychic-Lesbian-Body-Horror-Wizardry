@@ -26,8 +26,8 @@
   "nineSlice":null,
   "origin":0,
   "parent":{
-    "name":"Psychic Lesbian Body Horror Wizardry",
-    "path":"Psychic Lesbian Body Horror Wizardry.yyp",
+    "name":"Tiles",
+    "path":"folders/Textures/Tiles.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",
