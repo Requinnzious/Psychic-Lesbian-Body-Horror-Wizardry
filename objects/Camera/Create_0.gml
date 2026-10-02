@@ -81,9 +81,8 @@ inputState = function() {
 			
 			var event = new Event("TakeDamage", {amount: roll("1d6")})
 			event = entity.fireEvent(event);
-			show_debug_message(event);
-			//destroyEntity(entity);
 		}
+		
 		for (var i = 0; i < instance_number(Enemy); ++i) {
 		    var enemy = instance_find(Enemy, i);
 			if(enemy.x == x + 32 *  dcos(lookDir) and enemy.y == y + 32 * -dsin(lookDir)) {
@@ -258,24 +257,6 @@ moveFunc  = function() {
 	xPrevious = x;
 	yPrevious = y;
 	state = inputState;
-	
-	for (var i = 0; i < instance_number(Grass); ++i) {
-	    var bb = instance_find(Grass, i);
-		switch(bb.type) {
-			case "grass":
-				bb.sprite_index = sBBGrass;
-				if floor(bb.x/World.meshTileDim) * World.meshTileDim = x and floor(bb.y/World.meshTileDim) * World.meshTileDim = y {
-					bb.sprite_index = sBBGrass_Stepped;
-				}
-				break;
-			case "tallgrass":
-				bb.sprite_index = sBBGrass_Tall;
-				if floor(bb.x/World.meshTileDim) * World.meshTileDim = x and floor(bb.y/World.meshTileDim) * World.meshTileDim = y {
-					bb.sprite_index = sBBGrass_Tall_Stepped;
-				}
-				break;
-		}
-	}
 	
 	var event = new Event("Step", {x: x, y: y, z: z - 16});
 	event.fire();

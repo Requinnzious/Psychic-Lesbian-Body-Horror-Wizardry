@@ -7,10 +7,20 @@ function Entity() constructor {
 	subscriptions = [];
 	
 	addComponent = function(componentName, args = {}) {
-		var component = constructComponent(componentName, args);
-		component.parent = self;
+		var component = constructComponent(componentName + "Component", args);
+		component.parent = uuid;
 		array_push( components, component );
-		//ds_map_add(componentMap, componentName, component);
+	}
+	
+	removeComponent = function(componentName) {
+		for (var i = 0; i < array_length(components); ++i) {
+			var component = components[i];
+		    if component.componentName == componentName + "Component" {
+				delete component;
+				array_delete(components, i, 1);
+				return;
+			}
+		}
 	}
 	
 	//insertComponent = function(componentName, index, args = {}) {
@@ -43,8 +53,8 @@ function Entity() constructor {
 	}
 	
 	fireEvent = function(_event) {
-		var arrLen = array_length(components);
-		for (var i = 0; i < arrLen; ++i) {
+		//var arrLen = array_length(components);
+		for (var i = 0; i < array_length(components); ++i) {
 		    var component = components[i];
 			_event = component.fireEvent(_event);
 		}
@@ -52,6 +62,7 @@ function Entity() constructor {
 	}
 	
 	destroy = function() {
+		var event = fireEvent(new Event("Death", {}))
 		for (var i = 0; i < array_length(subscriptions); ++i) {
 		    mute(subscriptions[i]);
 		}
@@ -102,12 +113,12 @@ function ArmorComponent(c_Name) : Component(c_Name) constructor {
 		return _event;
 	}
 }
-function BillboardComponent(c_Name) : Component(c_Name) constructor {
+function BillboardMeshComponent(c_Name) : Component(c_Name) constructor {
 	other.listen("Render");
 	
 	fireEvent = function(_event) {		
 		switch(_event.type) {
-			case"Create":
+			case "Create":
 				
 				mesh = vertex_create_buffer();
 				tex  = sprite_get_texture(_event.params.sprite, _event.params.subimage);
@@ -127,14 +138,38 @@ function BillboardComponent(c_Name) : Component(c_Name) constructor {
 				break;
 			
 			case "Render":
+				if(variable_struct_exists(_event.params, "flash")) {
+					var flash = variable_struct_get(_event.params, "flash");
+					if(flash mod 6) > 1 {
+						break;
+					}
+					
+				}
 				var zRot = Camera.lookDir + Camera.lookDirOffset + 90;
 				matrix_set(matrix_world, matrix_build(_event.params.x, _event.params.y, _event.params.z, 0, 0, zRot, 1, 1, 1));
-				
 				vertex_submit(mesh, pr_trianglelist, sprite_get_texture(_event.params.sprite, _event.params.subimage));
 				shader_reset();
 				break;
 		}
-		
+		return _event;
+	}
+}
+function BillboardSpriteComponent(c_Name) : Component(c_Name) constructor {
+	other.listen("Render");
+	
+	fireEvent = function(_event) {		
+		switch(_event.type) {
+			case "Render":
+				if(variable_struct_exists(_event.params, "flash")) {
+					var flash = variable_struct_get(_event.params, "flash");
+					if(flash mod 6) > 1 {
+						break;
+					}
+					
+				}
+				draw_sprite_billboard(_event.params.sprite, _event.params.subimage, _event.params.x, _event.params.y, _event.params.z, _event.params.color)
+				break;
+		}
 		return _event;
 	}
 }
@@ -161,7 +196,25 @@ function HealthComponent(c_Name) : Component(c_Name) constructor {
 				show_debug_message($"Took {_event.params.amount} damage");
 				
 				//This is temporary but look!
-				if(hp == 0) destroyEntity(parent);
+				if(hp == 0) destroyEntity(World.entities[? parent]);
+				break;
+		}
+		return _event;
+	}
+}
+function HurtColorComponent(c_Name) : Component(c_Name) constructor {
+	fireEvent = function(_event) {		
+		switch(_event.type) {			
+			case "Render":
+				var col = #ffffff;
+				if (_event.params.flash >  6) col = #ff00ff;
+				if (_event.params.flash >  8) col = #aa00ff;
+				if (_event.params.flash > 10) col = #0000ff;
+				if (_event.params.flash > 12) col = #00ff00;
+				if (_event.params.flash > 14) col = #ffff00;
+				if (_event.params.flash > 16) col = #ffaa00;
+				if (_event.params.flash > 18) col = #ff0000;
+				_event.params.color = col;
 				break;
 		}
 		return _event;
@@ -199,9 +252,32 @@ function InvulnComponent(c_Name) : Component(c_Name) constructor {
 		return _event;
 	}
 }
+function LootComponent(c_Name) : Component(c_Name) constructor {
+	items = [];
+	fireEvent = function(_event) {
+		switch(_event.type) {
+			case "Death":
+				_event.params.items = self.items;
+				break;
+		}
+		return _event;
+	}
+}
 function PhysicsComponent(c_Name) : Component(c_Name) constructor {
+	flash = 0;
+	color = c_white;
+	
 	fireEvent = function(_event) {		
-		switch(_event.type) {		
+		switch(_event.type) {
+			case "TakeDamage":
+				flash = 24;
+				break;
+			case "Render":
+				flash = max(0, flash - 1);
+				
+				_event.params.color = color;
+				_event.params.flash = flash;
+				break;
 			default:
 				//show_debug_message($"Event Data Type: {_event.type}, Params: {_event.params}");
 				break;

@@ -16,7 +16,7 @@ function Event(_type, _params) constructor {
 		var _event = self;
 		for (var i = 0; i < arrLen; ++i) {
 			var entity = eventBus[? type][i];
-		    _event = entity.fireEvent(_event);
+		    entity.fireEvent(_event);
 		}
 		return _event;
 	}

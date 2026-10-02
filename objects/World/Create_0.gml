@@ -161,17 +161,15 @@ for (var i = 0; i < cols; ++i) {
 		if tile == TileTypes.GRASS {
 			var entity = new Entity();
 
-			entity.addComponent("HealthComponent",    {hp: 1});
-			entity.addComponent("PositionComponent",  {x: x1, y: y1, z: 0});
-			entity.addComponent("TransformComponent", {x: 16, y: 16});
-
-			entity.addComponent("SpriteComponent",    {randomSubimage: true});
-			entity.addComponent("SteppedOnComponent");
-
-			entity.addComponent("HurtSpriteComponent");
-
-			entity.addComponent("WindShaderComponent");
-			entity.addComponent("BillboardComponent");
+			entity.addComponent("Physics");
+			entity.addComponent("Health",    {hp: 10});
+			entity.addComponent("Position",  {x: x1, y: y1, z: 0});
+			entity.addComponent("Transform", {x: 16, y: 16});
+			entity.addComponent("Sprite",    {randomSubimage: true});
+			entity.addComponent("SteppedOn");
+			entity.addComponent("HurtSprite");
+			entity.addComponent("WindShader");
+			entity.addComponent("BillboardMesh");
 
 			entity.fireEvent(createEvent);
 
@@ -179,18 +177,16 @@ for (var i = 0; i < cols; ++i) {
 		}		
 		if tile == TileTypes.TALLGRASS {
 			var entity = new Entity();
-
-			entity.addComponent("HealthComponent",     {hp: 2});
-			entity.addComponent("PositionComponent",   {x: x1, y: y1, z: 0});
-			entity.addComponent("TransformComponent",  {x: 16, y: 16});
-
-			entity.addComponent("SpriteComponent",     {sprite: sBBGrass_Tall, randomSubimage: true});
-			entity.addComponent("SteppedOnComponent",  {sprite: sBBGrass_Tall_Stepped});
-
-			entity.addComponent("HurtSpriteComponent", {sprite: sBBGrass_Tall_Stepped});
 			
-			entity.addComponent("WindShaderComponent");
-			entity.addComponent("BillboardComponent");
+			entity.addComponent("Physics");
+			entity.addComponent("Health",     {hp: 2});
+			entity.addComponent("Position",   {x: x1, y: y1, z: 0});
+			entity.addComponent("Transform",  {x: 16, y: 16});
+			entity.addComponent("Sprite",     {sprite: sBBGrass_Tall, randomSubimage: true});
+			entity.addComponent("SteppedOn",  {sprite: sBBGrass_Tall_Stepped});
+			entity.addComponent("HurtSprite", {sprite: sBBGrass_Tall_Stepped});
+			entity.addComponent("WindShader");
+			entity.addComponent("BillboardMesh");
 
 			entity.fireEvent(createEvent);
 						
@@ -204,10 +200,10 @@ for (var i = 0; i < cols; ++i) {
 				var shroomY = y1 + 16 + lengthdir_y(32, theta) + random_range(-2, 2);
 				
 				var entity = new Entity();
-				entity.addComponent("PositionComponent",  {x: shroomX, y: shroomY, z: 0});
-				entity.addComponent("SpriteComponent",    {sprite: sBBShroom, randomSubimage: true});
-				entity.addComponent("WindShaderComponent");
-				entity.addComponent("BillboardComponent");
+				entity.addComponent("Position",  {x: shroomX, y: shroomY, z: 0});
+				entity.addComponent("Sprite",    {sprite: sBBShroom, randomSubimage: true});
+				entity.addComponent("WindShader");
+				entity.addComponent("BillboardMesh");
 
 				entity.fireEvent(createEvent);
 				
@@ -220,13 +216,11 @@ for (var i = 0; i < cols; ++i) {
 		//Trees
 		if tile == TileTypes.TREE {
 			var entity = new Entity();
-
-			entity.addComponent("PositionComponent",  {x: xAvg + random_range(-2, 2), y: yAvg + random_range(-2, 2), z: 0});
-
-			entity.addComponent("SpriteComponent",    {sprite: sTreeTexture});
-
-			entity.addComponent("WindShaderComponent");
-			entity.addComponent("BillboardComponent");
+			entity.addComponent("Physics");
+			entity.addComponent("Position",  {x: xAvg + random_range(-2, 2), y: yAvg + random_range(-2, 2), z: 0});
+			entity.addComponent("Sprite",    {sprite: sTreeTexture});
+			entity.addComponent("WindShader");
+			entity.addComponent("BillboardMesh");
 
 			entity.fireEvent(createEvent);
 
