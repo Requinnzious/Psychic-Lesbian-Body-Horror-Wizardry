@@ -1,12 +1,10 @@
-//draw_text(16, 32, $"HP: {hp}/ {maxHP}")
-//draw_text(16, 48, $"Dir: {lookDir}:({lookDir + lookDirOffset})");
-
-//Draw minimap
 var x1 = 0;
 var x2 = window_get_width();
 var y1 = 0;
 var y2 = window_get_height();
 
+
+//Draw minimap
 draw_rectangle(x2 - 160, 0, x2, 160, false);
 for (var i = 0; i < 160; i += TileDim) {
     for (var j = 0; j < 160; j += TileDim) {
@@ -17,6 +15,7 @@ for (var i = 0; i < 160; i += TileDim) {
 		draw_sprite(sMetaTiles_Strip, tile, 128 - i + x2 - 160, 128 - j);
 	}
 }
+
 
 //Draw enemies on minimap
 for (var i = 0; i < instance_number(Enemy); ++i) {
@@ -32,6 +31,11 @@ for (var i = 0; i < instance_number(Enemy); ++i) {
 	draw_sprite(enemy.sprite_index, enemy.image_index, x2 - xx - 96 + 16, 160 - yy - 96 + 24);
 }
 
-var cx = x2 - 80;
-var cy = 80;
-draw_arrow(cx - dcos(lookDir) * 8, cy + dsin(lookDir) * 16, cx + lengthdir_x(16, lookDir), cy + lengthdir_y(16, lookDir), 16);
+
+//Player cursor
+var cx1 = x2 - 80 -       dcos(lookDir) *  8;
+var cy1 = 80      +       dsin(lookDir) * 16;
+var cx2 = cx1     + lengthdir_x(16, lookDir);
+var cy2 = cy1     + lengthdir_y(16, lookDir);
+
+draw_arrow(cx1, cy1, cx2, cy2, 16);

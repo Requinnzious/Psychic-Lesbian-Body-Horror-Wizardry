@@ -1,6 +1,7 @@
 gpu_set_ztestenable(true); //We just have to set these so openGL knows we're using 3D rendering
 gpu_set_zwriteenable(true);
 
+Steps = 0;
 
 djikstra = computeDjikstra(x, y);
 
@@ -22,7 +23,7 @@ yOffset              =   0;	   //This is represented as an offset from 0 - tileD
 
 xFromOffset          =   0;	   //These offsets change the position of the "eyes" of the player,
 yFromOffset          =   0;	   //Used for head bobbing and stuff like that
-zOffset              =   0;
+zFromOffset          =   0;
 
 xToOffset            =   0;	   //And these offsets are for nodding and shaking the head
 yToOffset            =   0;
@@ -42,6 +43,7 @@ xMoveInc    = 0;           //How many pixels we move every frame of the moveStat
 yMoveInc    = 0;
 
 
+
 //Here I'm using a pattern called a 'state machine'. You don't want to process every action every frame, for example;
 //If you move your character to another square, you don't want to be able to turn mid-animation
 //Similarly you wouldn't want to be reading movement inputs when you are in a menu
@@ -55,184 +57,219 @@ yMoveInc    = 0;
 //This defines a function that can only be used by this object, so the Camera and Menu objects
 //can have different inputState functions for example
 
-waitState = function() {};
+stateMachine = new SnowState("step", false)
+	.add("idle", {
+		enter: function() {},
+		update: function() {}
+	})
 
-inputState = function() {	
-	//These are our deltas - eg if we press left or right our dDir will be + or - 90
-	var dX   = 0, dY = 0;  
-	var dDir = 0;	
-	var gridX = floor(x / TileDim);
-	var gridY = floor(y / TileDim);
+	.add("step", {
+		enter: function() {
+			Steps++;
+			show_debug_message( $"Steps: {Steps}" );
+			
+			stateMachine.change("input")
+		},
+		update: function() { stateMachine.change("input") }
+	})
+
+	.add("input", {
+		enter: function() {},
+		update: function() {
+			//These are our deltas - eg if we press left or right our dDir will be + or - 90
+			var dX   = 0, dY = 0;  
+			var dDir = 0;	
+			var gridX = floor(x / TileDim);
+			var gridY = floor(y / TileDim);	
 	
-	
-	//Attack
-	if(GetAttackHeld()) {
-		var xx = 30 *  dcos(lookDir) + xOffset
-		var yy = 30 * -dsin(lookDir) + yOffset
-		var slash = instance_create_layer(x + xx, y + yy, "Instances", WeaponSlash);
-		slash.z = z;
+			//Attack
+			if(GetAttackHeld()) {
+				var xx = 30 *  dcos(lookDir) + xOffset
+				var yy = 30 * -dsin(lookDir) + yOffset
+				var slash = instance_create_layer(x + xx, y + yy, "Instances", WeaponSlash);
+				slash.z = z;
 		
-		//Check for collisions
-		var entities = ds_map_keys_to_array(World.entities, []);
-		for (var i = 0; i < array_length(entities); ++i) {
-			var entityID = entities[i];
-		    var entity   = World.entities[? entityID];
+				//Check for collisions
+				var entities = ds_map_keys_to_array(World.entities, []);
+				for (var i = 0; i < array_length(entities); ++i) {
+					var entityID = entities[i];
+				    var entity   = World.entities[? entityID];
 			
-			var entityX  = entity.get("Position", "x");
-			var entityY  = entity.get("Position", "y");
+					var entityX  = entity.get("Position", "x");
+					var entityY  = entity.get("Position", "y");
 			
-			if (entityX != x + 32 *  dcos(lookDir) || entityY!= y + 32 * -dsin(lookDir)) continue;
+					if (entityX != x + 32 *  dcos(lookDir) || entityY!= y + 32 * -dsin(lookDir)) continue;
 			
-			var event = new Event("TakeDamage", {amount: roll("1d6")})
-			event = entity.fireEvent(event);
+					var event = new Event("TakeDamage", {amount: roll("1d6")})
+					event = entity.fireEvent(event);
+				}
+
+				xPrevious = x;
+				yPrevious = y;
+				xMoveTarget = x + 8 *  dcos(lookDir);
+				yMoveTarget = y + 8 * -dsin(lookDir);
+		
+				addTimesource("Attack", id, 24, bumpFunc);
+				stateMachine.change("bump");
+				return;
+			}
+	
+	
+			//Look around
+			if(GetLookPressed()) {
+				stateMachine.change("look");                                  //Set our state and reset our mouse position
+				window_mouse_set(window_get_width()/2, window_get_height()/2);
+				return;
+			}
+	
+	
+			//Turn
+			dDir = 90 * ( GetLeftHeld() - GetRightHeld() );
+			if(dDir != 0) {		
+				lookDirInc = dDir / moveSpeedFrames;
+				targetLookDir = (lookDir + dDir + 360) mod 360;
+			
+				addTimesource("Turn", id, moveSpeedFrames, turnFunc);
+				stateMachine.change("turn");
+				return;
+			}	
+		
+		
+			//Move forward and back
+			dX = 32 *  dcos(lookDir) * ( GetUpHeld() - GetDownHeld() );
+			dY = 32 * -dsin(lookDir) * ( GetUpHeld() - GetDownHeld() );
+			if(dX != 0 || dY != 0) {
+				var collis = tilemap_get_at_pixel(World.coll, x + dX, y + dY);
+				if collis {
+					xMoveTarget = x + dX;
+					yMoveTarget = y + dY;
+				
+					addTimesource("Bump",          id, moveSpeedFrames,             bumpFunc);
+					addTimesource("BloodSplatter", id, moveSpeedFrames / 4, createBloodDecal);
+					stateMachine.change("bump");
+					return;
+				};
+		
+				xMoveTarget = x + dX;
+				yMoveTarget = y + dY;
+				xMoveInc = dX / moveSpeedFrames;
+				yMoveInc = dY / moveSpeedFrames;
+			
+				addTimesource("Move", id, moveSpeedFrames, moveFunc);
+				stateMachine.change("move");
+				return;
+			}	
+
+
+			//Strafe
+			dX = 32 *  dcos(lookDir + 90) * ( GetStrafeLeftHeld() - GetStrafeRightHeld() );
+			dY = 32 * -dsin(lookDir + 90) * ( GetStrafeLeftHeld() - GetStrafeRightHeld() );
+			if(dX != 0 || dY != 0) {	
+				var collis = tilemap_get_at_pixel(World.coll, x + dX, y + dY);
+				if collis {
+					xMoveTarget = x + dX;
+					yMoveTarget = y + dY;
+				
+					addTimesource("Bump", id, moveSpeedFrames, bumpFunc);
+					addTimesource("BloodSplatter", id, moveSpeedFrames / 4, createBloodDecal);
+					stateMachine.change("bump");
+					return;
+				};
+		
+				xMoveTarget = x + dX;
+				yMoveTarget = y + dY;
+				xMoveInc = dX / moveSpeedFrames;
+				yMoveInc = dY / moveSpeedFrames;
+			
+				addTimesource("Move", id, moveSpeedFrames, moveFunc);
+				stateMachine.change("move");
+				return;
+			}
+
+	
+			bobHead();
+			nodHead();
+			shakeHead();
 		}
+	})
 
-		xPrevious = x;
-		yPrevious = y;
-		xMoveTarget = x + 8 *  dcos(lookDir);
-		yMoveTarget = y + 8 * -dsin(lookDir);
-		
-		state = bumpState;
-		addTimesource("Attack", id, 24, attackFunc);
-		return;
-	}
-	
-	
-	//Look around
-	if(GetLookPressed()) {
-		state = lookState; //Set our state and reset our mouse position
-		window_mouse_set(window_get_width()/2, window_get_height()/2);
-		return; //Return causes the function we're in - inputState - to finish.
-	}
-	
-	
-	//Turn
-	dDir = 90 * ( GetLeftHeld() - GetRightHeld() );
-	if(dDir != 0) {
-		addTimesource("Turn", id, moveSpeedFrames, turnFunc);
-		
-		state = turnState;
-		lookDirInc = dDir / moveSpeedFrames;
-		targetLookDir = (lookDir + dDir + 360) mod 360;
-		return;
-	}	
-		
-	//Move forward and back
-	dX = 32 *  dcos(lookDir) * ( GetUpHeld() - GetDownHeld() );
-	dY = 32 * -dsin(lookDir) * ( GetUpHeld() - GetDownHeld() );
-	if(dX != 0 || dY != 0) {
-		var collis = tilemap_get_at_pixel(World.coll, x + dX, y + dY);
-		if collis {
-			xMoveTarget = x + dX;
-			yMoveTarget = y + dY;		
-			addTimesource("Bump", id, moveSpeedFrames, bumpFunc);
-			addTimesource("BloodSplatter", id, moveSpeedFrames / 4, createBloodDecal);
-			
-			state = bumpState;
-			return;
-		};
-		
-		xMoveTarget = x + dX;
-		yMoveTarget = y + dY;		
-		addTimesource("Move", id, moveSpeedFrames, moveFunc);
-		
-		state = moveState;
-		xMoveInc = dX / moveSpeedFrames;
-		yMoveInc = dY / moveSpeedFrames;
-		return;
-	}	
+	.add("move", {
+		enter: function() {},
+		update: function() {
+			x += xMoveInc; y += yMoveInc;
+			bobHead();
+		}
+	})
 
+	.add("turn", {
+		enter: function() {},
+		update: function() { lookDir = (lookDir + lookDirInc + 360) mod 360 }
+	})
 
-	//Strafe
-	dX = 32 *  dcos(lookDir + 90) * ( GetStrafeLeftHeld() - GetStrafeRightHeld() );
-	dY = 32 * -dsin(lookDir + 90) * ( GetStrafeLeftHeld() - GetStrafeRightHeld() );
-	if(dX != 0 || dY != 0) {	
-		var collis = tilemap_get_at_pixel(World.coll, x + dX, y + dY);
-		if collis {
-			xMoveTarget = x + dX;
-			yMoveTarget = y + dY;		
-			addTimesource("Bump", id, moveSpeedFrames, bumpFunc);
-			addTimesource("BloodSplatter", id, moveSpeedFrames / 4, createBloodDecal);
-						
-			state = bumpState;
-			return;
-		};
+	.add("look", {
+		enter: function() {},
+		update: function() {
+			var mx = window_mouse_get_x(), my = window_mouse_get_y();
+			var cx = window_get_width()/2, cy = window_get_height()/2;
+	
+			lookDirOffset -= ( mx - cx ) / 5;
+			lookPitOffset += ( my - cy ) / 5;
+	
+			//-80 < lookPit + lookPitOffset < 80
+			lookPitOffset = clamp(lookPitOffset, -80 - lookPit, 80 - lookPit);	
+	
+			window_mouse_set(cx, cy);
+	
+			if(GetLookPressed()) {
+				var compundDir = (lookDir + lookDirOffset + 360) mod 360;
+				lookDir = round(compundDir / 90) * 90;
+				lookDirOffset = compundDir - lookDir;
 		
-		xMoveTarget = x + dX;
-		yMoveTarget = y + dY;
-		addTimesource("Move", id, moveSpeedFrames, moveFunc);
-		
-		state = moveState;
-		xMoveInc = dX / moveSpeedFrames;
-		yMoveInc = dY / moveSpeedFrames;
-		return;
-	}
+				stateMachine.change("input");
+			}
+		}
+	})
 
+	.add("bump", {
+		enter: function() {},
+		update: function() {
+			var delta = animcurve_channel_evaluate(bumpAnim, animPos / 12);
+			x = lerp(xPrevious, xMoveTarget, delta);
+			y = lerp(yPrevious, yMoveTarget, delta);
 	
-	zOffset     = lerp(zOffset, 0, .5);
-	xFromOffset = lerp(xFromOffset, 0, .5);
-	yFromOffset = lerp(yFromOffset, 0, .5);
-}
+			animPos ++;
+	
+			bobHead();
+		}
+	})
 
-lookState = function() {
-	var mx = window_mouse_get_x(), my = window_mouse_get_y();
-	var cx = window_get_width()/2, cy = window_get_height()/2;
-	
-	lookDirOffset -= ( mx - cx ) / 5;
-	lookPitOffset += ( my - cy ) / 5;
-	
-	//-80 < lookPit + lookPitOffset < 80
-	lookPitOffset = clamp(lookPitOffset, -80 - lookPit, 80 - lookPit);	
-	
-	window_mouse_set(cx, cy);
-	
-	if(GetLookPressed()) {
-		var compundDir = (lookDir + lookDirOffset + 360) mod 360;
-		lookDir = round(compundDir / 90) * 90;
-		lookDirOffset = compundDir - lookDir;
-		
-		state = inputState;
-	}
-}
-
-moveState = function() {
-	x += xMoveInc;
-	y += yMoveInc;
-	zOffset = lerp(zOffset, dsin(current_time / 3) * 3, .5);
-	xFromOffset = lerp(xFromOffset, dsin(current_time / 5), .5);
-	yFromOffset = lerp(yFromOffset, dsin(current_time / 5), .5);
-}
+//Callbacks for when states are finished [WIP]
 moveFunc  = function() {
 	x = xMoveTarget;
 	y = yMoveTarget;
 	xPrevious = x;
 	yPrevious = y;
-	state = inputState;
 	
 	djikstra = computeDjikstra(x, y);
 	
 	var event = new Event("Step", {x: x, y: y, z: z - 16});
 	event.fire();
+	
+	stateMachine.change("step");
 }
-
-bumpState = function() { 
-	var delta = animcurve_channel_evaluate(bumpAnim, animPos / 12);
-	x = lerp(xPrevious, xMoveTarget, delta);
-	y = lerp(yPrevious, yMoveTarget, delta);
-	
-	animPos ++;
-	
-	zOffset     = lerp(zOffset, 0, .5);
-	xFromOffset = lerp(xFromOffset, 0, .5);
-	yFromOffset = lerp(yFromOffset, 0, .5);
+turnFunc  = function() {
+	lookDir = targetLookDir;
+	stateMachine.change("input");
 }
 bumpFunc  = function() {
 	x = xPrevious;
 	y = yPrevious;	
 	animPos = 0;
-	state = inputState;
+	
+	stateMachine.change("step");
 }
 
+//Various methods for the player
 createBloodDecal = function() {
 	hp = max(0, hp - 1);
 	var spr = sBloodDecal;
@@ -245,22 +282,31 @@ createBloodDecal = function() {
 	blood.lookDir = dir;
 	blood.createMesh();
 }
-
-attackFunc = function() {
-	x = xPrevious;
-	y = yPrevious;
-	animPos = 0;
-	state = inputState;
+bobHead          = function() {
+	zFromOffset = lerp(zFromOffset, 0, .5);
+	xFromOffset = lerp(xFromOffset, 0, .5);
+	yFromOffset = lerp(yFromOffset, 0, .5);
 }
-
-turnState = function() {
-	lookDir = (lookDir + lookDirInc + 360) mod 360;
+nodHead          = function() {
+	if !GetInputHeld(Config.CONTROLS.NOD) { relaxHead(); return; }	
+	zToOffset = lerp(zToOffset, dsin(current_time / 2)/3, .5);
 }
-turnFunc = function() {
-	lookDir = targetLookDir;
-	state = inputState;
+shakeHead        = function() {
+	if !GetInputHeld(Config.CONTROLS.SHAKE) { relaxHead(); return; }	
+	switch(lookDir) {
+		case 0:
+			yToOffset = lerp(yToOffset, dsin(current_time/2)/3, .5);
+			break;
+		case 180:
+			yToOffset = lerp(yToOffset, dsin(current_time/2)/3, .5);
+			break;
+		default:
+			xToOffset = lerp(xToOffset, dsin(current_time/2)/3, .5);
+			break;
+	}
 }
-
-//And we set our state equal to the function name without ()
-state = inputState;
-
+relaxHead        = function() {
+	xToOffset = lerp(xToOffset, 0, 0.5);
+	yToOffset = lerp(yToOffset, 0, 0.5);
+	zToOffset = lerp(zToOffset, 0, 0.5);
+}

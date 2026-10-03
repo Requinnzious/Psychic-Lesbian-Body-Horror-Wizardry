@@ -1,6 +1,7 @@
 globalvar TileTypes;
-globalvar TileDim;
-TileDim = 32;
+globalvar TileDim, HalfTile;
+TileDim  = 32;
+HalfTile = TileDim / 2;
 
 enum TileTypes {
 	NULL,
