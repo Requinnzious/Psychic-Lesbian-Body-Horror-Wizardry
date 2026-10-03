@@ -1,5 +1,62 @@
+globalvar EventUUIDIncrement;
+EventUUIDIncrement = 0;
+
+function setEventUUID() {
+	var _id = EventUUIDIncrement;
+	EventUUIDIncrement ++;
+	return _id;
+}
+
+function Event(_type, _params) constructor {
+	uuid    = setEventUUID();
+	type    = _type;
+	params  = _params;
+	
+	handled = false;
+	
+	fire = function(eventBus = oEventManager.eventBus) {
+		var arrLen = array_length(eventBus[? type]);
+		var _event = self;
+		for (var i = 0; i < arrLen; ++i) {
+			var entity = eventBus[? type][i];
+		    _event = entity.fireEvent(_event);
+			if _event.handled return _event;
+		}
+		return _event;
+	}
+	
+}
+
+function subscribe(_type, _id, eventBus = oEventManager.eventBus) {
+	if !ds_map_exists(eventBus, _type) ds_map_add(eventBus, _type, []);
+	array_push(eventBus[? _type], _id);
+}
+
+function unsubscribe(_type, _id, eventBus = oEventManager.eventBus) {
+	if !ds_map_exists(eventBus, _type) return;
+	
+	var subscribers = eventBus[? _type];
+	
+	var arrLen = array_length(subscribers);
+	
+	for (var i = 0; i < arrLen; ++i) {
+	    if (subscribers[i] == _id)  {
+			array_delete(subscribers, i, 1);
+			if arrLen == 1 ds_map_delete(eventBus, _type);
+			return;
+		}
+	}
+}
+
+
 globalvar EntityUUID;
 EntityUUID = 0;
+
+globalvar EntityCreateEvent, EntityDestroyEvent, EntityRenderEvent;
+
+EntityCreateEvent  = new Event("Create",  {});
+EntityDestroyEvent = new Event("Destroy", {});
+EntityRenderEvent  = new Event("Render",  {x: 0, y: 0, z: 0});
 
 function Entity() constructor {
 	uuid = ++EntityUUID;
@@ -73,6 +130,7 @@ function Entity() constructor {
 
 function destroyEntity(entity) {
 	if entity == undefined return;
+	
 	ds_map_delete(World.entities, entity.uuid);
 	entity.destroy();
 	delete entity;
@@ -151,6 +209,8 @@ function BillboardMeshComponent(c_Name) : Component(c_Name) constructor {
 				if(variable_struct_exists(_event.params, "flash")) {
 					var flash = variable_struct_get(_event.params, "flash");
 					if(flash mod 6) > 1 {
+						_event.params.flash = 0;
+						_event.params.color = c_white;
 						break;
 					}
 				}
@@ -164,6 +224,8 @@ function BillboardMeshComponent(c_Name) : Component(c_Name) constructor {
 				matrix_set(matrix_world, matrix_build(_event.params.x, _event.params.y, _event.params.z, 0, 0, zRot, 1, 1, 1));
 				vertex_submit(mesh, pr_trianglelist, sprite_get_texture(_event.params.sprite, _event.params.subimage));
 				shader_reset();
+				
+				_event.params.color = c_white;
 				break;
 		}
 		return _event;

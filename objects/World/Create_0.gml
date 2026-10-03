@@ -1,8 +1,6 @@
 identityMatrix = matrix_build( 0,   0, 0, 0, 0,  0,  1,  1,  1);
 
 entities    = ds_map_create();
-createEvent = new Event("Create", {});
-renderEvent = new Event("Render", {x: 0, y: 0, z: 0});
 
 #region Store the tilemap
 	tiles = [];
@@ -169,7 +167,7 @@ renderEvent = new Event("Render", {x: 0, y: 0, z: 0});
 				entity.addComponent("WindShader");
 				entity.addComponent("BillboardMesh");
 
-				entity.fireEvent(createEvent);
+				entity.fireEvent(EntityCreateEvent);
 
 				entities[? entity.uuid] = entity;
 			}		
@@ -187,7 +185,7 @@ renderEvent = new Event("Render", {x: 0, y: 0, z: 0});
 				entity.addComponent("WindShader");
 				entity.addComponent("BillboardMesh");
 
-				entity.fireEvent(createEvent);
+				entity.fireEvent(EntityCreateEvent);
 						
 				entities[? entity.uuid] = entity;
 			}		
@@ -204,7 +202,7 @@ renderEvent = new Event("Render", {x: 0, y: 0, z: 0});
 					entity.addComponent("WindShader");
 					entity.addComponent("BillboardMesh");
 
-					entity.fireEvent(createEvent);
+					entity.fireEvent(EntityCreateEvent);
 				
 					entities[? entity.uuid] = entity;
 				
@@ -221,7 +219,7 @@ renderEvent = new Event("Render", {x: 0, y: 0, z: 0});
 				entity.addComponent("WindShader");
 				entity.addComponent("BillboardMesh");
 
-				entity.fireEvent(createEvent);
+				entity.fireEvent(EntityCreateEvent);
 
 				entities[? entity.uuid] = entity;
 
@@ -381,7 +379,7 @@ renderEvent = new Event("Render", {x: 0, y: 0, z: 0});
 		matrix_set(matrix_world, identityMatrix);
 			with Mountain    render();
 
-		renderEvent.fire();
+		EntityRenderEvent.fire();
 	}
 #endregion
 
@@ -399,9 +397,6 @@ renderEvent = new Event("Render", {x: 0, y: 0, z: 0});
 	entity.addComponent("DebugDjikstra");
 	entity.addComponent("BillboardMesh");
 
-	entity.fireEvent(createEvent);
+	entity.fireEvent(EntityCreateEvent);
 	entities[? entity.uuid] = entity;
 #endregion
-
-
-createEvent.fire();
