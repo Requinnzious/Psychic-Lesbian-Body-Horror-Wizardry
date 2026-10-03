@@ -1,6 +1,10 @@
 gpu_set_ztestenable(true); //We just have to set these so openGL knows we're using 3D rendering
 gpu_set_zwriteenable(true);
 
+
+djikstra = computeDjikstra(x, y);
+
+
 hp    = 6;
 maxHP = 6;
 
@@ -36,7 +40,6 @@ xMoveInc    = 0;           //How many pixels we move every frame of the moveStat
 yMoveInc    = 0;
 
 
-
 //Here I'm using a pattern called a 'state machine'. You don't want to process every action every frame, for example;
 //If you move your character to another square, you don't want to be able to turn mid-animation
 //Similarly you wouldn't want to be reading movement inputs when you are in a menu
@@ -46,14 +49,13 @@ yMoveInc    = 0;
 //will move the player every frame until they reach a target destination
 
 
-
 //Here we define our states using the syntax variableName = function() {}
 //This defines a function that can only be used by this object, so the Camera and Menu objects
 //can have different inputState functions for example
 
 waitState = function() {};
 
-inputState = function() {
+inputState = function() {	
 	//These are our deltas - eg if we press left or right our dDir will be + or - 90
 	var dX   = 0, dY = 0;  
 	var dDir = 0;	
@@ -81,14 +83,6 @@ inputState = function() {
 			
 			var event = new Event("TakeDamage", {amount: roll("1d6")})
 			event = entity.fireEvent(event);
-		}
-		
-		for (var i = 0; i < instance_number(Enemy); ++i) {
-		    var enemy = instance_find(Enemy, i);
-			if(enemy.x == x + 32 *  dcos(lookDir) and enemy.y == y + 32 * -dsin(lookDir)) {
-				enemy.takeDamage(1);
-				break;
-			}
 		}
 				
 		xPrevious = x;
@@ -157,7 +151,7 @@ inputState = function() {
 			yMoveTarget = y + dY;		
 			addTimesource("Bump", id, moveSpeedFrames, bumpFunc);
 			addTimesource("BloodSplatter", id, moveSpeedFrames / 4, createBloodDecal);
-			
+						
 			state = bumpState;
 			return;
 		};
@@ -213,6 +207,8 @@ moveFunc  = function() {
 	yPrevious = y;
 	state = inputState;
 	
+	djikstra = computeDjikstra(x, y);
+	
 	var event = new Event("Step", {x: x, y: y, z: z - 16});
 	event.fire();
 }
@@ -258,7 +254,6 @@ turnFunc = function() {
 	lookDir = targetLookDir;
 	state = inputState;
 }
-
 
 //And we set our state equal to the function name without ()
 state = inputState;

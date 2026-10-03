@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"Djikstra",
   "parent":{
-    "name":"00 Init",
-    "path":"folders/00 Init.yy",
+    "name":"01 Functions",
+    "path":"folders/01 Functions.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

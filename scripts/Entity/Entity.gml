@@ -10,6 +10,7 @@ function Entity() constructor {
 		var component = constructComponent(componentName + "Component", args);
 		component.parent = uuid;
 		array_push( components, component );
+		return component;
 	}
 	
 	removeComponent = function(componentName) {
@@ -187,6 +188,18 @@ function BillboardSpriteComponent(c_Name) : Component(c_Name) constructor {
 		return _event;
 	}
 }
+function DefaultShaderComponent(c_Name) : Component(c_Name) constructor {
+	fireEvent = function(_event) {		
+		switch(_event.type) {
+			case "Render":
+				shader_set(shDefault);
+				break;
+		}
+		
+		return _event;
+	}
+}
+
 function FireElementComponent(c_Name) : Component(c_Name) constructor {
 	hitDice = "1d6";
 	fireEvent = function(_event) {
@@ -200,8 +213,10 @@ function FireElementComponent(c_Name) : Component(c_Name) constructor {
 	}
 }
 function HealthComponent(c_Name) : Component(c_Name) constructor {
-	hp        = 10;
-	maxHp     = 10;
+	hp         = 10;
+	maxHp      = 10;
+	
+	deathTimer = 12;
 	
 	fireEvent = function(_event) {		
 		switch(_event.type) {			
@@ -210,24 +225,26 @@ function HealthComponent(c_Name) : Component(c_Name) constructor {
 				show_debug_message($"Took {_event.params.amount} damage");
 				
 				//This is temporary but look!
-				if(hp == 0) addTimesource("IDied", World, 24, function(){destroyEntity(World.entities[? parent])});
+				if(hp == 0) addTimesource("IDied", World, deathTimer, function(){destroyEntity(World.entities[? parent])});
 				break;
 		}
 		return _event;
 	}
 }
 function HurtColorComponent(c_Name) : Component(c_Name) constructor {
+	hurtTimer = 12;
+	
 	fireEvent = function(_event) {		
 		switch(_event.type) {			
 			case "Render":
 				var col = #ffffff;
-				if (_event.params.flash >  6) col = #ff00ff;
-				if (_event.params.flash >  8) col = #aa00ff;
-				if (_event.params.flash > 10) col = #0000ff;
-				if (_event.params.flash > 12) col = #00ff00;
-				if (_event.params.flash > 14) col = #ffff00;
-				if (_event.params.flash > 16) col = #ffaa00;
-				if (_event.params.flash > 18) col = #ff0000;
+				if (_event.params.flash > hurtTimer * .25) col = #ff00ff;
+				if (_event.params.flash > hurtTimer * .33) col = #aa00ff;
+				if (_event.params.flash > hurtTimer * .41) col = #0000ff;
+				if (_event.params.flash > hurtTimer * .50) col = #00ff00;
+				if (_event.params.flash > hurtTimer * .66) col = #ffff00;
+				if (_event.params.flash > hurtTimer * .82) col = #ffaa00;
+				if (_event.params.flash > hurtTimer * .75) col = #ff0000;
 				_event.params.color = col;
 				break;
 		}
@@ -247,10 +264,32 @@ function HurtSpriteComponent(c_Name) : Component(c_Name) constructor {
 		switch(_event.type) {			
 			case "TakeDamage":
 				hurt = true;
-				addTimesource($"{componentName}isHurting", World, 12, unhurt);
+				addTimesource($"{componentName}isHurting", World, hurtTimer, unhurt);
 				break;
 			case "Render":
 				if hurt _event.params.sprite = self.sprite;
+				break;
+		}
+		return _event;
+	}
+}
+function HurtSubimageComponent(c_Name) : Component(c_Name) constructor {
+	subimage  = 0;
+	hurt      = false;
+	hurtTimer = 12;
+	
+	unhurt = function() {
+		self.hurt = false;
+	}
+	
+	fireEvent = function(_event) {		
+		switch(_event.type) {			
+			case "TakeDamage":
+				hurt = true;
+				addTimesource($"{componentName}isHurting", World, hurtTimer, unhurt);
+				break;
+			case "Render":
+				if hurt _event.params.subimage = self.subimage;
 				break;
 		}
 		return _event;
@@ -278,13 +317,14 @@ function LootComponent(c_Name) : Component(c_Name) constructor {
 	}
 }
 function PhysicsComponent(c_Name) : Component(c_Name) constructor {
-	flash = 0;
-	color = c_white;
+	flash    = 0;
+	color    = c_white;
+	maxFlash = 12;
 	
 	fireEvent = function(_event) {		
 		switch(_event.type) {
 			case "TakeDamage":
-				flash = 24;
+				flash = maxFlash;
 				break;
 			case "Render":
 				flash = max(0, flash - 1);

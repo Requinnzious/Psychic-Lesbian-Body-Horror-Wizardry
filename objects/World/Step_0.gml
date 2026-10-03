@@ -1,3 +1,1 @@
 updateTimesources();
-
-with Enemy update();

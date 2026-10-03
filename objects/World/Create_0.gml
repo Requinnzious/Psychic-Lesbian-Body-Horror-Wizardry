@@ -378,7 +378,6 @@ render = function() {
 	
 	shader_set(shDefault);
 	with Decal       vertex_submit(mesh, pr_trianglelist, tex);
-	with Enemy       render();
 	with WeaponSlash render();
 	shader_reset();
 	
@@ -386,9 +385,30 @@ render = function() {
 	renderEvent.fire();
 	
 	matrix_set(matrix_world, identityMatrix);
+	
+	shader_set(shDefault);
+	with Enemy       render();
+	shader_reset();
+	
 	with Mountain    render();
 }
 
 
+
+#region Test Enemy
+	var entity = new Entity();
+	entity.addComponent("Physics",      {maxFlash:   24});
+	entity.addComponent("Health",       {deathTimer: 24});
+	entity.addComponent("Position",     {x: 192, y: 448, z: 0});
+	entity.addComponent("Transform",    {x: 16,  y: 16});
+	entity.addComponent("Sprite",       {sprite: sSlime});
+	entity.addComponent("HurtSubimage", {hurtTimer: 24, subimage: 1});
+	entity.addComponent("HurtColor",    {hurtTimer: 24});
+	entity.addComponent("DefaultShader");
+	entity.addComponent("BillboardMesh");
+
+	entity.fireEvent(createEvent);
+	entities[? entity.uuid] = entity;
+#endregion
 
 createEvent.fire();

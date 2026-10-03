@@ -10,8 +10,8 @@ var y2 = window_get_height();
 draw_rectangle(x2 - 160, 0, x2, 160, false);
 for (var i = 0; i < 160; i += World.meshTileDim) {
     for (var j = 0; j < 160; j += World.meshTileDim) {
-		var xx = clamp(x / World.meshTileDim + 2 - i / World.meshTileDim, 0, array_length(World.tiles) - 1);
-		var yy = clamp(y / World.meshTileDim + 2 - j / World.meshTileDim, 0, array_length(World.tiles) - 1);
+		var xx = clamp(x / World.meshTileDim + 2 - i / World.meshTileDim, 0, array_length(World.tiles)    - 1);
+		var yy = clamp(y / World.meshTileDim + 2 - j / World.meshTileDim, 0, array_length(World.tiles[0]) - 1);
 		
 	    var tile = World.tiles[xx][yy].tile;
 		draw_sprite(sMetaTiles_Strip, tile, 128 - i + x2 - 160, 128 - j);

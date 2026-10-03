@@ -1,13 +1,18 @@
-function computeDjikstra() {
+enum DjikstraMode {
+	UDLR,
+	DIAG
+}
+
+function computeDjikstra(targetX, targetY, tileDim = 32, mode = DjikstraMode.UDLR) {
 	var djikstra;
 		var collisions = layer_tilemap_get_id("Collisions");
-		var xx    = oPlayer.xTarget / 16, yy = oPlayer.yTarget / 16;
+		var xx    = targetX / tileDim, yy = targetY / tileDim;
 		var dist  = 1;
 		var queue = [{xx: xx, yy: yy, d: 0}];
 	
 		djikstra = [[]];
-		for (var i = 0; i < floor(room_width / 16); ++i) {
-		    for (var j = 0; j < floor(room_height / 16); ++j) {
+		for (var i = 0; i < floor(room_width / tileDim); ++i) {
+		    for (var j = 0; j < floor(room_height / tileDim); ++j) {
 			    djikstra[i][j] = undefined;
 			}
 		}
@@ -21,7 +26,14 @@ function computeDjikstra() {
 			for (var i = 0; i < 3; ++i) {
 			    for (var j = 0; j < 3; ++j) {
 				
-					if i == 1 and j == 1 continue;
+					switch(mode) {
+						case DjikstraMode.DIAG:
+							if i == 1 and j == 1 continue;
+							break;
+						case DjikstraMode.UDLR:
+							if !(abs(i - 1) xor abs(j - 1)) continue;
+							break;
+					}
 				
 					if !is_undefined(djikstra[xx + i - 1][yy + j - 1]) continue;
 				
