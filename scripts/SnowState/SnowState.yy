@@ -1,12 +1,12 @@
 {
   "$GMScript":"v1",
-  "%Name":"Entity",
+  "%Name":"SnowState",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"Entity",
+  "name":"SnowState",
   "parent":{
-    "name":"ECS",
-    "path":"folders/01 Functions/Libraries/ECS.yy",
+    "name":"SnowState",
+    "path":"folders/01 Functions/Libraries/SnowState.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

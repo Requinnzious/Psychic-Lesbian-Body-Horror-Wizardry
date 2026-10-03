@@ -3,8 +3,8 @@
   "%Name":"shWind",
   "name":"shWind",
   "parent":{
-    "name":"Shaders",
-    "path":"folders/Shaders.yy",
+    "name":"04 Shaders",
+    "path":"folders/04 Shaders.yy",
   },
   "resourceType":"GMShader",
   "resourceVersion":"2.0",

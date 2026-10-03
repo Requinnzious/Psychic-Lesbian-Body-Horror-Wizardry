@@ -28,7 +28,7 @@
   "origin":9,
   "parent":{
     "name":"Enemies",
-    "path":"folders/Textures/Enemies.yy",
+    "path":"folders/03 Textures/Enemies.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",

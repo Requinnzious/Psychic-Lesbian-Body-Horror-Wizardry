@@ -34,7 +34,7 @@
   "origin":0,
   "parent":{
     "name":"Tiles",
-    "path":"folders/Textures/Tiles.yy",
+    "path":"folders/03 Textures/Tiles.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",

@@ -66,7 +66,7 @@ inputState = function() {
 	
 	
 	//Attack
-	if(mouse_check_button(mb_left)) {
+	if(GetAttackHeld()) {
 		var xx = 30 *  dcos(lookDir) + xOffset
 		var yy = 30 * -dsin(lookDir) + yOffset
 		var slash = instance_create_layer(x + xx, y + yy, "Instances", WeaponSlash);
@@ -99,7 +99,7 @@ inputState = function() {
 	
 	
 	//Look around
-	if(mouse_check_button_pressed(mb_right)) {
+	if(GetLookPressed()) {
 		state = lookState; //Set our state and reset our mouse position
 		window_mouse_set(window_get_width()/2, window_get_height()/2);
 		return; //Return causes the function we're in - inputState - to finish.
@@ -107,7 +107,7 @@ inputState = function() {
 	
 	
 	//Turn
-	dDir = 90 * ( keyboard_check(ord("A")) - keyboard_check(ord("D")) );
+	dDir = 90 * ( GetLeftHeld() - GetRightHeld() );
 	if(dDir != 0) {
 		addTimesource("Turn", id, moveSpeedFrames, turnFunc);
 		
@@ -118,8 +118,8 @@ inputState = function() {
 	}	
 		
 	//Move forward and back
-	dX = 32 *  dcos(lookDir) * ( keyboard_check(ord("W")) - keyboard_check(ord("S")) );
-	dY = 32 * -dsin(lookDir) * ( keyboard_check(ord("W")) - keyboard_check(ord("S")) );
+	dX = 32 *  dcos(lookDir) * ( GetUpHeld() - GetDownHeld() );
+	dY = 32 * -dsin(lookDir) * ( GetUpHeld() - GetDownHeld() );
 	if(dX != 0 || dY != 0) {
 		var collis = tilemap_get_at_pixel(World.coll, x + dX, y + dY);
 		if collis {
@@ -144,8 +144,8 @@ inputState = function() {
 
 
 	//Strafe
-	dX = 32 *  dcos(lookDir + 90) * ( keyboard_check(ord("Q")) - keyboard_check(ord("E")) );
-	dY = 32 * -dsin(lookDir + 90) * ( keyboard_check(ord("Q")) - keyboard_check(ord("E")) );
+	dX = 32 *  dcos(lookDir + 90) * ( GetStrafeLeftHeld() - GetStrafeRightHeld() );
+	dY = 32 * -dsin(lookDir + 90) * ( GetStrafeLeftHeld() - GetStrafeRightHeld() );
 	if(dX != 0 || dY != 0) {	
 		var collis = tilemap_get_at_pixel(World.coll, x + dX, y + dY);
 		if collis {
@@ -186,7 +186,7 @@ lookState = function() {
 	
 	window_mouse_set(cx, cy);
 	
-	if(mouse_check_button_pressed(mb_right)) {
+	if(GetLookPressed()) {
 		var compundDir = (lookDir + lookDirOffset + 360) mod 360;
 		lookDir = round(compundDir / 90) * 90;
 		lookDirOffset = compundDir - lookDir;

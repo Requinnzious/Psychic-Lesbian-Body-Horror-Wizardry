@@ -12,8 +12,8 @@
   "out_tilehborder":2,
   "out_tilevborder":2,
   "parent":{
-    "name":"Psychic Lesbian Body Horror Wizardry",
-    "path":"Psychic Lesbian Body Horror Wizardry.yyp",
+    "name":"05 Tilesets",
+    "path":"folders/05 Tilesets.yy",
   },
   "resourceType":"GMTileSet",
   "resourceVersion":"2.0",

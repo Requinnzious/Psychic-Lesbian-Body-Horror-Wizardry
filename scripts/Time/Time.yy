@@ -1,12 +1,12 @@
 {
   "$GMScript":"v1",
-  "%Name":"Entity",
+  "%Name":"Time",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"Entity",
+  "name":"Time",
   "parent":{
-    "name":"ECS",
-    "path":"folders/01 Functions/Libraries/ECS.yy",
+    "name":"Libraries",
+    "path":"folders/01 Functions/Libraries.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

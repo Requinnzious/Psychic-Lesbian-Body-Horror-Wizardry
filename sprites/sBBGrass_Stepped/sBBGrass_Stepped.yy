@@ -36,7 +36,7 @@
   "origin":7,
   "parent":{
     "name":"Billboards",
-    "path":"folders/Textures/Billboards.yy",
+    "path":"folders/03 Textures/Billboards.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",

@@ -1,7 +1,7 @@
 state(); //This executes whatever function is assigned to state
 
 //Head Nod!!!
-if(keyboard_check(vk_space)) {
+if(GetInputHeld(Config.CONTROLS.NOD)) {
 	zToOffset = lerp(zToOffset, dsin(current_time / 2)/3, .5);
 } 
 else {
@@ -9,7 +9,7 @@ else {
 }
 
 //Head shake!!
-if(keyboard_check(vk_shift)) {
+if(GetInputHeld(Config.CONTROLS.SHAKE)) {
 	switch(lookDir) {
 		case 0:
 			yToOffset = lerp(yToOffset, dsin(current_time/2)/3, .5);

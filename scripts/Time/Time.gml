@@ -1,6 +1,3 @@
-globalvar TimeSources;
-TimeSources = [];
-
 function TimeSource(name, owner, countdownFrames, callback, loop = false) constructor {
 	self.name        = name;
 	self.owner       = owner;

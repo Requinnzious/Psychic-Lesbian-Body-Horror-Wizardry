@@ -78,63 +78,32 @@ function GetConfirmHeld() {
 	return GetInputHeld(inputs);
 }
 
-function GetTurnPressed() {
-	var inputs = Config.CONTROLS.TURN;
-	return GetInputPressed(inputs);
-}
-function GetTurnHeld() {
-	var inputs = Config.CONTROLS.TURN;
-	return GetInputHeld(inputs);
-}
-function GetTurnReleased() {
-	var inputs = Config.CONTROLS.TURN;
-	return GetInputReleased(inputs);
-}
 
-function GetDiagPressed() {
-	var inputs = Config.CONTROLS.DIAG;
-	return GetInputPressed(inputs);
-}
-function GetDiagHeld() {
-	var inputs = Config.CONTROLS.DIAG;
+function GetAttackHeld() {
+	var inputs = Config.CONTROLS.ATTACK;
 	return GetInputHeld(inputs);
 }
 
-function GetMinimapPressed() {
-	var inputs = Config.CONTROLS.MINIMAP;
+function GetLookPressed() {
+	var inputs = Config.CONTROLS.LOOK;
 	return GetInputPressed(inputs);
 }
+
 
 function GetUpPressed() {
 	var inputs = Config.CONTROLS.UP;
-	return GetInputPressed(inputs);	
-}
-function GetUpLeftPressed() {
-	var inputs = Config.CONTROLS.UPLEFT;
-	return GetInputPressed(inputs);	
-}
-function GetUpRightPressed() {
-	var inputs = Config.CONTROLS.UPRIGHT;
 	return GetInputPressed(inputs);	
 }
 function GetDownPressed() {
 	var inputs = Config.CONTROLS.DOWN;
 	return GetInputPressed(inputs);	
 }
-function GetDownLeftPressed() {
-	var inputs = Config.CONTROLS.DOWNLEFT;
-	return GetInputPressed(inputs);	
-}
-function GetDownRightPressed() {
-	var inputs = Config.CONTROLS.DOWNRIGHT;
-	return GetInputPressed(inputs);	
-}
 function GetLeftPressed() {
-	var inputs = Config.CONTROLS.LEFT;
+	var inputs = Config.CONTROLS.TURN_LEFT;
 	return GetInputPressed(inputs);	
 }
 function GetRightPressed() {
-	var inputs = Config.CONTROLS.RIGHT;
+	var inputs = Config.CONTROLS.TURN_RIGHT;
 	return GetInputPressed(inputs);	
 }
 
@@ -142,31 +111,23 @@ function GetUpHeld() {
 	var inputs = Config.CONTROLS.UP;
 	return GetInputHeld(inputs);	
 }
-function GetUpLeftHeld() {
-	var inputs = Config.CONTROLS.UPLEFT;
-	return GetInputHeld(inputs);	
-}
-function GetUpRightHeld() {
-	var inputs = Config.CONTROLS.UPRIGHT;
-	return GetInputHeld(inputs);	
-}
 function GetDownHeld() {
 	var inputs = Config.CONTROLS.DOWN;
 	return GetInputHeld(inputs);	
 }
-function GetDownLeftHeld() {
-	var inputs = Config.CONTROLS.DOWNLEFT;
-	return GetInputHeld(inputs);	
-}
-function GetDownRightHeld() {
-	var inputs = Config.CONTROLS.DOWNRIGHT;
-	return GetInputHeld(inputs);	
-}
 function GetLeftHeld() {
-	var inputs = Config.CONTROLS.LEFT;
+	var inputs = Config.CONTROLS.TURN_LEFT;
 	return GetInputHeld(inputs);	
 }
 function GetRightHeld() {
-	var inputs = Config.CONTROLS.RIGHT;
+	var inputs = Config.CONTROLS.TURN_RIGHT;
+	return GetInputHeld(inputs);	
+}
+function GetStrafeLeftHeld() {
+	var inputs = Config.CONTROLS.STRAFE_LEFT;
+	return GetInputHeld(inputs);	
+}
+function GetStrafeRightHeld() {
+	var inputs = Config.CONTROLS.STRAFE_RIGHT;
 	return GetInputHeld(inputs);	
 }

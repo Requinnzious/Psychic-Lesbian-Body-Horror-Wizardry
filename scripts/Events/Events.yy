@@ -6,7 +6,7 @@
   "name":"Events",
   "parent":{
     "name":"ECS",
-    "path":"folders/01 Functions/ECS.yy",
+    "path":"folders/01 Functions/Libraries/ECS.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

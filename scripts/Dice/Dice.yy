@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"Dice",
   "parent":{
-    "name":"01 Functions",
-    "path":"folders/01 Functions.yy",
+    "name":"Libraries",
+    "path":"folders/01 Functions/Libraries.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

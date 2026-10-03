@@ -6,7 +6,6 @@
   "inheritCreationOrder":false,
   "inheritLayers":false,
   "instanceCreationOrder":[
-    {"name":"inst_15455D71","path":"rooms/TestMap/TestMap.yy",},
     {"name":"inst_6D6E02C3","path":"rooms/TestMap/TestMap.yy",},
     {"name":"inst_121BA984","path":"rooms/TestMap/TestMap.yy",},
     {"name":"inst_693431A","path":"rooms/TestMap/TestMap.yy",},
@@ -31,7 +30,6 @@
   "layers":[
     {"$GMRInstanceLayer":"","%Name":"Instances","depth":0,"effectEnabled":true,"effectType":null,"gridX":32,"gridY":32,"hierarchyFrozen":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"instances":[
         {"$GMRInstance":"v4","%Name":"inst_6D6E02C3","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"name":"inst_6D6E02C3","objectId":{"name":"Camera","path":"objects/Camera/Camera.yy",},"properties":[],"resourceType":"GMRInstance","resourceVersion":"2.0","rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":96.0,"y":96.0,},
-        {"$GMRInstance":"v4","%Name":"inst_15455D71","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"name":"inst_15455D71","objectId":{"name":"oEventManager","path":"objects/oEventManager/oEventManager.yy",},"properties":[],"resourceType":"GMRInstance","resourceVersion":"2.0","rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":-32.0,"y":-32.0,},
         {"$GMRInstance":"v4","%Name":"inst_121BA984","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"name":"inst_121BA984","objectId":{"name":"World","path":"objects/World/World.yy",},"properties":[],"resourceType":"GMRInstance","resourceVersion":"2.0","rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":-16.0,"y":-16.0,},
         {"$GMRInstance":"v4","%Name":"inst_693431A","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"name":"inst_693431A","objectId":{"name":"Mountain","path":"objects/Mountain/Mountain.yy",},"properties":[],"resourceType":"GMRInstance","resourceVersion":"2.0","rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":-768.0,"y":1344.0,},
         {"$GMRInstance":"v4","%Name":"inst_7014ACEF","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"name":"inst_7014ACEF","objectId":{"name":"Mountain","path":"objects/Mountain/Mountain.yy",},"properties":[],"resourceType":"GMRInstance","resourceVersion":"2.0","rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":-192.0,"y":2016.0,},
@@ -122,8 +120,8 @@
   ],
   "name":"TestMap",
   "parent":{
-    "name":"Psychic Lesbian Body Horror Wizardry",
-    "path":"Psychic Lesbian Body Horror Wizardry.yyp",
+    "name":"06 Scenes",
+    "path":"folders/06 Scenes.yy",
   },
   "parentRoom":null,
   "physicsSettings":{
@@ -154,7 +152,7 @@
   ],
   "viewSettings":{
     "clearDisplayBuffer":true,
-    "clearViewBackground":false,
+    "clearViewBackground":true,
     "enableViews":true,
     "inheritViewSettings":false,
   },

@@ -11,8 +11,8 @@
   "function":2,
   "name":"acBump",
   "parent":{
-    "name":"Psychic Lesbian Body Horror Wizardry",
-    "path":"Psychic Lesbian Body Horror Wizardry.yyp",
+    "name":"Animation Curves",
+    "path":"folders/01 Functions/Animation Curves.yy",
   },
   "resourceType":"GMAnimCurve",
   "resourceVersion":"2.0",

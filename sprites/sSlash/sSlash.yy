@@ -31,7 +31,7 @@
   "origin":9,
   "parent":{
     "name":"Effects",
-    "path":"folders/Textures/Effects.yy",
+    "path":"folders/03 Textures/Effects.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",

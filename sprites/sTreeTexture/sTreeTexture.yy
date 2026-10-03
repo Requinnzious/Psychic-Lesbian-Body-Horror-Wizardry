@@ -26,7 +26,7 @@
   "origin":9,
   "parent":{
     "name":"Forest",
-    "path":"folders/Textures/Forest.yy",
+    "path":"folders/03 Textures/Forest.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",

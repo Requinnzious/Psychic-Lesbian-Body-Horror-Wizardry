@@ -26,7 +26,7 @@
   "origin":0,
   "parent":{
     "name":"Decals",
-    "path":"folders/Textures/Decals.yy",
+    "path":"folders/03 Textures/Decals.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",

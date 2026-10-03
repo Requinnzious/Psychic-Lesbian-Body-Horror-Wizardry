@@ -1,12 +1,12 @@
 {
   "$GMScript":"v1",
-  "%Name":"scrTime",
+  "%Name":"Init",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"scrTime",
+  "name":"Init",
   "parent":{
-    "name":"Scripts",
-    "path":"folders/01 Functions/Scripts.yy",
+    "name":"00 Init",
+    "path":"folders/00 Init.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

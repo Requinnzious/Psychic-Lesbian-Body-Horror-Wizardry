@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"scrBillboard",
   "parent":{
-    "name":"Scripts",
-    "path":"folders/01 Functions/Scripts.yy",
+    "name":"01 Functions",
+    "path":"folders/01 Functions.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",
