@@ -8,23 +8,25 @@ djikstra = computeDjikstra(x, y);
 hp    = 6;
 maxHP = 6;
 
-z             =  16;       //GM doesn't give objects a default z so we have to define it every time :(
-lookDir       = 270;       //Since we're locked to a grid, lookDir is always going to be a multiple of 90					       
-lookPit       =   0;       //We may want to script the player looking up or down, so we'll keep track of the pitch					       
-lookDirOffset =   0;       //Offsets used for the lookState
-lookPitOffset =   0;
+z                    =  16;       //GM doesn't give objects a default z so we have to define it every time :(
+lookDir              = 270;       //Since we're locked to a grid, lookDir is always going to be a multiple of 90					       
+lookPit              =   0;       //We may want to script the player looking up or down, so we'll keep track of the pitch					       
+lookDirOffset        =   0;       //Offsets used for the lookState
+lookPitOffset        =   0;
 
+screenShake          =   0;
+screenShakeIntensity =   0;
 
-xOffset       =   0;	   //Depending on which direction we're facing, we change our position relative to the tile
-yOffset       =   0;	   //This is represented as an offset from 0 - tileDimension. Just to make things look consistent
+xOffset              =   0;	   //Depending on which direction we're facing, we change our position relative to the tile
+yOffset              =   0;	   //This is represented as an offset from 0 - tileDimension. Just to make things look consistent
 
-xFromOffset   =   0;	   //These offsets change the position of the "eyes" of the player,
-yFromOffset   =   0;	   //Used for head bobbing and stuff like that
-zOffset       =   0;
+xFromOffset          =   0;	   //These offsets change the position of the "eyes" of the player,
+yFromOffset          =   0;	   //Used for head bobbing and stuff like that
+zOffset              =   0;
 
-xToOffset     =   0;	   //And these offsets are for nodding and shaking the head
-yToOffset     =   0;
-zToOffset     =   0;
+xToOffset            =   0;	   //And these offsets are for nodding and shaking the head
+yToOffset            =   0;
+zToOffset            =   0;
 
 
 moveSpeedFrames = 12;
@@ -59,8 +61,8 @@ inputState = function() {
 	//These are our deltas - eg if we press left or right our dDir will be + or - 90
 	var dX   = 0, dY = 0;  
 	var dDir = 0;	
-	var gridX = floor(x / World.meshTileDim);
-	var gridY = floor(y / World.meshTileDim);
+	var gridX = floor(x / TileDim);
+	var gridY = floor(y / TileDim);
 	
 	
 	//Attack
@@ -84,7 +86,7 @@ inputState = function() {
 			var event = new Event("TakeDamage", {amount: roll("1d6")})
 			event = entity.fireEvent(event);
 		}
-				
+
 		xPrevious = x;
 		yPrevious = y;
 		xMoveTarget = x + 8 *  dcos(lookDir);
@@ -219,6 +221,10 @@ bumpState = function() {
 	y = lerp(yPrevious, yMoveTarget, delta);
 	
 	animPos ++;
+	
+	zOffset     = lerp(zOffset, 0, .5);
+	xFromOffset = lerp(xFromOffset, 0, .5);
+	yFromOffset = lerp(yFromOffset, 0, .5);
 }
 bumpFunc  = function() {
 	x = xPrevious;

@@ -1,7 +1,7 @@
 lookDir = 0;
 z  = 0;
-width  = World.meshTileDim / 4;
-height = World.meshTileDim / 4;
+width  = TileDim / 4;
+height = TileDim / 4;
 image_index = irandom_range(0, image_number - 1);
 image_speed = 0;
 
@@ -39,7 +39,7 @@ createMesh = function() {
 			x3 = x1;
 			x4 = x1;
 		
-			y1 = y + World.meshTileDim - irandom_range(width, width * 2);
+			y1 = y + TileDim - irandom_range(width, width * 2);
 			y2 = y1 - width;
 			y3 = y2;
 			y4 = y1;
@@ -52,12 +52,12 @@ createMesh = function() {
 			break;
 			
 		case 270:
-			x1 = x + World.meshTileDim - irandom_range(width, width * 2);
+			x1 = x + TileDim - irandom_range(width, width * 2);
 			x2 = x1 - width;
 			x3 = x2;
 			x4 = x1;
 		
-			y1 = y + World.meshTileDim - random(1);
+			y1 = y + TileDim - random(1);
 			y2 = y1;
 			y3 = y1;
 			y4 = y1;
@@ -70,7 +70,7 @@ createMesh = function() {
 			break;
 	
 		default: //case 0:
-			x1 = x + World.meshTileDim - random(1);
+			x1 = x + TileDim - random(1);
 			x2 = x1;
 			x3 = x1;
 			x4 = x1;

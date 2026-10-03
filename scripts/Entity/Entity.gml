@@ -199,7 +199,28 @@ function DefaultShaderComponent(c_Name) : Component(c_Name) constructor {
 		return _event;
 	}
 }
-
+function DebugDjikstraComponent(c_Name) : Component(c_Name) constructor {
+	fireEvent = function(_event) {		
+		switch(_event.type) {
+			case "Render":
+				//Debug Djikstra
+				var xx = floor(_event.params.x / TileDim);
+				var yy = floor(_event.params.y / TileDim);
+				var dist = Camera.djikstra[xx][yy]
+				matrix_set(matrix_world, matrix_build(_event.params.x, _event.params.y, _event.params.z + 3, 90, 90, Camera.lookDir, 1, 1, 1));
+	
+				draw_set_halign(fa_center);
+				draw_set_valign(fa_bottom);
+				draw_text(0, 0, dist)
+				draw_set_halign(fa_left);
+				draw_set_valign(fa_top);
+				matrix_set(matrix_world, matrix_build_identity());
+				break;
+		}
+		
+		return _event;
+	}
+}
 function FireElementComponent(c_Name) : Component(c_Name) constructor {
 	hitDice = "1d6";
 	fireEvent = function(_event) {
@@ -226,6 +247,20 @@ function HealthComponent(c_Name) : Component(c_Name) constructor {
 				
 				//This is temporary but look!
 				if(hp == 0) addTimesource("IDied", World, deathTimer, function(){destroyEntity(World.entities[? parent])});
+				break;
+		}
+		return _event;
+	}
+}
+function ShakeScreenComponent(c_Name) : Component(c_Name) constructor {
+	screenShake          = 6;
+	screenShakeIntensity = 1;
+	
+	fireEvent = function(_event) {		
+		switch(_event.type) {			
+			case "TakeDamage":
+				Camera.screenShake          = screenShake;
+				Camera.screenShakeIntensity = screenShakeIntensity;
 				break;
 		}
 		return _event;
