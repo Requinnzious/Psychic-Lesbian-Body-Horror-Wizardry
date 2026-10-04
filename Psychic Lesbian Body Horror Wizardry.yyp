@@ -39,6 +39,7 @@
   "name":"Psychic Lesbian Body Horror Wizardry",
   "resources":[
     {"id":{"name":"acBump","path":"animcurves/acBump/acBump.yy",},},
+    {"id":{"name":"Billboard","path":"objects/Billboard/Billboard.yy",},},
     {"id":{"name":"Camera","path":"objects/Camera/Camera.yy",},},
     {"id":{"name":"Decal","path":"objects/Decal/Decal.yy",},},
     {"id":{"name":"Enemy","path":"objects/Enemy/Enemy.yy",},},
@@ -79,6 +80,7 @@
     {"id":{"name":"sCollisions","path":"sprites/sCollisions/sCollisions.yy",},},
     {"id":{"name":"sFoliage","path":"sprites/sFoliage/sFoliage.yy",},},
     {"id":{"name":"sGrassTexture","path":"sprites/sGrassTexture/sGrassTexture.yy",},},
+    {"id":{"name":"sHit","path":"sprites/sHit/sHit.yy",},},
     {"id":{"name":"sMetaTiles_Strip","path":"sprites/sMetaTiles_Strip/sMetaTiles_Strip.yy",},},
     {"id":{"name":"sMetaTiles","path":"sprites/sMetaTiles/sMetaTiles.yy",},},
     {"id":{"name":"sMountain","path":"sprites/sMountain/sMountain.yy",},},

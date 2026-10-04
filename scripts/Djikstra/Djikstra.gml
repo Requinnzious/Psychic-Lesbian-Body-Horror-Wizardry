@@ -7,6 +7,7 @@ function computeDjikstra(targetX, targetY, tileDim = 32, mode = DjikstraMode.UDL
 	var djikstra;
 		var collisions = layer_tilemap_get_id("Collisions");
 		var xx    = targetX / tileDim, yy = targetY / tileDim;
+		
 		var dist  = 1;
 		var queue = [{xx: xx, yy: yy, d: 0}];
 	
@@ -16,6 +17,8 @@ function computeDjikstra(targetX, targetY, tileDim = 32, mode = DjikstraMode.UDL
 			    djikstra[i][j] = undefined;
 			}
 		}
+		if xx < 0 or xx >= array_length(djikstra)    or 
+		   yy < 0 or yy >= array_length(djikstra[0]) return self.djikstra;
 		djikstra[xx][yy] = 0;
 	
 		while(array_length(queue) > 0) {
@@ -34,6 +37,9 @@ function computeDjikstra(targetX, targetY, tileDim = 32, mode = DjikstraMode.UDL
 							if !(abs(i - 1) xor abs(j - 1)) continue;
 							break;
 					}
+				
+					if xx + i - 1 < 0 or xx + i - 1 >= array_length(djikstra)    or 
+					   yy + j - 1 < 0 or yy + j - 1 >= array_length(djikstra[0]) continue; 
 				
 					if !is_undefined(djikstra[xx + i - 1][yy + j - 1]) continue;
 				

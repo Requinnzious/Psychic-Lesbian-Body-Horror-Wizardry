@@ -164,7 +164,7 @@ stateMachine = new SnowState("step", false)
 			//Strafe
 			dX = 32 *  dcos(lookDir + 90) * ( GetStrafeLeftHeld() - GetStrafeRightHeld() );
 			dY = 32 * -dsin(lookDir + 90) * ( GetStrafeLeftHeld() - GetStrafeRightHeld() );
-			if(dX != 0 || dY != 0) {	
+			if(dX != 0 || dY != 0) {
 				var collis = tilemap_get_at_pixel(World.coll, x + dX, y + dY);
 				if collis {
 					xMoveTarget = x + dX;
@@ -275,11 +275,11 @@ createBloodDecal = function() {
 	var spr = sBloodDecal;
 	if (hp == 0) spr = sBloodDecal_Death;
 	
-	var dir = point_direction(xPrevious, yPrevious, xMoveTarget, yMoveTarget);
-	
 	var blood = instance_create_layer(xPrevious, yPrevious, "Instances", Decal);
 	blood.sprite_index = spr;
-	blood.lookDir = dir;
+	blood.lookDir      = point_direction(xPrevious, yPrevious, xMoveTarget, yMoveTarget);
+	blood.image_index  = irandom_range(0, image_number - 1);
+	blood.image_speed  = 0;
 	blood.createMesh();
 }
 bobHead          = function() {

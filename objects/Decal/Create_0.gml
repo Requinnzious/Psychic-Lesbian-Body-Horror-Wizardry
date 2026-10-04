@@ -2,17 +2,9 @@ lookDir = 0;
 z  = 0;
 width  = TileDim / 4;
 height = TileDim / 4;
-image_index = irandom_range(0, image_number - 1);
-image_speed = 0;
 
 createMesh = function() {
-	var uvs = sprite_get_uvs(sprite_index, image_index);
-
-	var x1, x2, x3, x4;
-	var y1, y2, y3, y4;
-	var z1, z2;
-
-	var norm = [0, 0, 0];
+	norm = [0, 0, 0];
 
 	switch(lookDir) {	
 		case 90:
@@ -28,9 +20,9 @@ createMesh = function() {
 		
 			z1 = z + irandom_range(height, height * 2);
 			z2 = z1 + height;
-			
+		
 			norm = [0, -1, 0];
-			
+		
 			break;
 	
 		case 180: //case 0:
@@ -46,11 +38,11 @@ createMesh = function() {
 		
 			z1 = z + irandom_range(height, height * 2);
 			z2 = z1 + height;
-			
+		
 			norm = [1, 0, 0];
-			
+		
 			break;
-			
+		
 		case 270:
 			x1 = x + TileDim - irandom_range(width, width * 2);
 			x2 = x1 - width;
@@ -64,9 +56,9 @@ createMesh = function() {
 		
 			z1 = z + irandom_range(height, height * 2);
 			z2 = z1 + height;
-			
+		
 			norm = [0, 1, 0];
-			
+		
 			break;
 	
 		default: //case 0:
@@ -82,12 +74,16 @@ createMesh = function() {
 		
 			z1 = z + irandom_range(height, height * 2);
 			z2 = z1 + height;
-			
+		
 			norm = [-1, 0, 0];
 			break;
-	}
+		}
+	
+	buildMesh();
+}
 
-
+buildMesh  = function() {
+	uvs  = sprite_get_uvs(sprite_index, image_index);
 	mesh = vertex_create_buffer();
 	vertex_begin(mesh, vFormat);
 	
@@ -99,4 +95,15 @@ createMesh = function() {
 	addVertex(mesh, [x4, y4, z1], norm, [uvs[0], uvs[3]], c_white, 1);
 
 	vertex_end(mesh);
+}
+
+rebuildMesh = function() {
+	vertex_delete_buffer(mesh);
+	buildMesh();
+}
+
+render     = function() {
+	if image_index + image_speed > image_number { instance_destroy(); return; };
+	if floor(image_index - image_speed) < floor(image_index) rebuildMesh();
+	vertex_submit(mesh, pr_trianglelist, DefaultTexture);
 }

@@ -70,14 +70,19 @@ function Entity() constructor {
 
 function destroyEntity(entity) {
 	if entity == undefined return;
-	
+	entity.fireEvent(EntityDestroyEvent);
 	ds_map_delete(World.entities, entity.uuid);
 	entity.destroy();
 	delete entity;
 }
 
 function Component(c_Name) constructor {
-	componentName = c_Name
+	componentName = c_Name;
+	
+	getParent = function() {
+		return World.entities[? parent]
+	}
+	
 	fireEvent = function(_event) {
 		switch(_event.type) {
 			default:
@@ -201,6 +206,32 @@ function DefaultShaderComponent(c_Name) : Component(c_Name) constructor {
 		return _event;
 	}
 }
+function DeathParticleComponent(c_Name) : Component(c_Name) constructor {
+	sprite = sHit;
+	width  = TileDim / 2;
+	height = TileDim / 2;
+	
+	fireEvent = function(_event) {		
+		switch(_event.type) {
+			case "Destroy":
+				var pObject = getParent();
+				var xx = pObject.get("Position", "x") + (pObject.get("Transform", "x") ?? 0);
+				var yy = pObject.get("Position", "y") + (pObject.get("Transform", "y") ?? 0);
+				var zz = pObject.get("Position", "z") + (pObject.get("Transform", "z") ?? 0);
+				
+				var particle = instance_create_layer(xx, yy, "Instances", Billboard, {
+					sprite_index: sprite,
+					width:        width,
+					height:       height
+				})
+				particle.buildMesh();
+				break;
+		}
+		
+		return _event;
+	}
+}
+
 function DebugDjikstraComponent(c_Name) : Component(c_Name) constructor {
 	fireEvent = function(_event) {		
 		switch(_event.type) {
@@ -346,7 +377,7 @@ function LootComponent(c_Name) : Component(c_Name) constructor {
 	items = [];
 	fireEvent = function(_event) {
 		switch(_event.type) {
-			case "Death":
+			case "Destroy":
 				_event.params.items = self.items;
 				break;
 		}
@@ -495,6 +526,26 @@ function WindShaderComponent(c_Name) : Component(c_Name) constructor {
 				shader_set(shWind);	
 				shader_set_uniform_f(shader_get_uniform(shWind, "windSpeed"), current_time/self.sway);
 				shader_set_uniform_f(shader_get_uniform(shWind, "baseZ"), _event.params.z);
+				break;
+		}
+		
+		return _event;
+	}
+}
+
+function WorldTileComponent(c_Name) : Component(c_Name) constructor {
+	gridX         =              0;
+	gridY         =              0;
+	worldMeshes   =             [];
+	isBlocking    =          false;
+	destroyedTile = TileTypes.NULL;
+	
+	fireEvent = function(_event) {		
+		switch(_event.type) {
+			case "Destroy":
+				World.tiles[gridX][gridY].tile   = destroyedTile;
+				if !array_length(worldMeshes) == 0 World.buildMesh(worldMeshes);
+				if isBlocking tilemap_set(World.coll, 0, gridX, gridY);
 				break;
 		}
 		

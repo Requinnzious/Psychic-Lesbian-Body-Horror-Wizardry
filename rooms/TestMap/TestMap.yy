@@ -78,7 +78,7 @@
           1,-6,-2147483648,1,1,-5,-2147483648,1,1,-7,-2147483648,-2,1,3,-2147483648,1,1,-15,-2147483648,1,1,-6,
           -2147483648,1,1,-5,-2147483648,1,1,-7,-2147483648,-2,1,3,-2147483648,1,1,-15,-2147483648,1,1,-6,-2147483648,
           1,1,-5,-2147483648,-10,1,1,-2147483648,-40,1,1,-2147483648,
-        ],"TileDataFormat":1,},"tilesetId":{"name":"tCollisions","path":"tilesets/tCollisions/tCollisions.yy",},"userdefinedDepth":false,"visible":false,"x":0,"y":0,},
+        ],"TileDataFormat":1,},"tilesetId":{"name":"tCollisions","path":"tilesets/tCollisions/tCollisions.yy",},"userdefinedDepth":false,"visible":true,"x":0,"y":0,},
     {"$GMRTileLayer":"","%Name":"Meta","depth":200,"effectEnabled":true,"effectType":null,"gridX":32,"gridY":32,"hierarchyFrozen":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"layers":[],"name":"Meta","properties":[],"resourceType":"GMRTileLayer","resourceVersion":"2.0","tiles":{"SerialiseHeight":30,"SerialiseWidth":41,"TileCompressedData":[
           -30,2,-10,1,-2,2,3,-2147483648,0,4,-5,1,1,2,-3,5,-8,2,-2,-2147483648,-4,3,-3,-2147483648,-10,1,-3,2,
           7,0,4,0,-2147483648,1,0,1,-7,5,-3,2,-3,-2147483648,-2,3,-2,5,-2,3,-2,-2147483648,-2,1,-5,-2147483648,

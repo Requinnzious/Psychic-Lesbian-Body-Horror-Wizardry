@@ -1,6 +1,7 @@
 // Script assets have changed for v2.3.0 see
 // https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
 function Init(){
+	
 	globalvar Config;
 	Config = init_config();
 	
@@ -22,5 +23,10 @@ function Init(){
 	#region TimeSources
 		globalvar TimeSources;
 		TimeSources = [];
+	#endregion
+	
+	#region Rendering Globals
+		globalvar DefaultTexture;
+		DefaultTexture = sprite_get_texture(sPathTexture, 0);
 	#endregion
 }
