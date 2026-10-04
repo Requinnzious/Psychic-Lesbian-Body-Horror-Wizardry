@@ -52,6 +52,7 @@
     {"id":{"name":"_00_InitScene","path":"rooms/_00_InitScene/_00_InitScene.yy",},},
     {"id":{"name":"TestMap","path":"rooms/TestMap/TestMap.yy",},},
     {"id":{"name":"__snowstate_config","path":"scripts/__snowstate_config/__snowstate_config.yy",},},
+    {"id":{"name":"AI","path":"scripts/AI/AI.yy",},},
     {"id":{"name":"Dice","path":"scripts/Dice/Dice.yy",},},
     {"id":{"name":"Djikstra","path":"scripts/Djikstra/Djikstra.yy",},},
     {"id":{"name":"Entity","path":"scripts/Entity/Entity.yy",},},

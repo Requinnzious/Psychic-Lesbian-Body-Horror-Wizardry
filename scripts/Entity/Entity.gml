@@ -231,7 +231,6 @@ function DeathParticleComponent(c_Name) : Component(c_Name) constructor {
 		return _event;
 	}
 }
-
 function DebugDjikstraComponent(c_Name) : Component(c_Name) constructor {
 	fireEvent = function(_event) {		
 		switch(_event.type) {
@@ -532,7 +531,6 @@ function WindShaderComponent(c_Name) : Component(c_Name) constructor {
 		return _event;
 	}
 }
-
 function WorldTileComponent(c_Name) : Component(c_Name) constructor {
 	gridX         =              0;
 	gridY         =              0;
@@ -544,7 +542,7 @@ function WorldTileComponent(c_Name) : Component(c_Name) constructor {
 		switch(_event.type) {
 			case "Destroy":
 				World.tiles[gridX][gridY].tile   = destroyedTile;
-				if !array_length(worldMeshes) == 0 World.buildMesh(worldMeshes);
+				if !array_length(worldMeshes) == 0 World.buildMesh(worldMeshes, floor(gridX/5), floor(gridY/5));
 				if isBlocking tilemap_set(World.coll, 0, gridX, gridY);
 				break;
 		}
