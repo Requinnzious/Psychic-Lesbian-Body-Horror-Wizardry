@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"iui_trim_label",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"iui_trim_label",
+  "parent":{
+    "name":"IMNOTGUI",
+    "path":"folders/Scripts/IMNOTGUI.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

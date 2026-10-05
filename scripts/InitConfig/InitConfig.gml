@@ -8,7 +8,7 @@ function init_config(){
 		#region General	
 			var attackInput = [
 				{controlType: "Keyboard", binds: [vk_space]},
-				{controlType: "Mouse",    binds: [mb_left]},
+				{controlType: "Mouse",    binds: [mb_side2]},
 				{controlType: "Gamepad",  binds: [gp_face3]}
 			]
 			var lookInput = [

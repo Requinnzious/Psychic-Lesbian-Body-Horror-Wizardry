@@ -1,7 +1,6 @@
 //Clear the screen
 draw_clear(#8fEfff);
 
-
 //Rotate the camera around the center of the tile we're in
 xOffset = HalfTile - dcos(lookDir + lookDirOffset) * HalfTile;
 yOffset = HalfTile + dsin(lookDir + lookDirOffset) * HalfTile;

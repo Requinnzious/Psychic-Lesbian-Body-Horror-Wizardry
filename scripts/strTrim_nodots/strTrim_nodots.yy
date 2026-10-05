@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"strTrim_nodots",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"strTrim_nodots",
+  "parent":{
+    "name":"IMNOTGUI",
+    "path":"folders/Scripts/IMNOTGUI.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

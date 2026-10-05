@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"iui_begin",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"iui_begin",
+  "parent":{
+    "name":"IMNOTGUI",
+    "path":"folders/Scripts/IMNOTGUI.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"iui_vtx_begin",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"iui_vtx_begin",
+  "parent":{
+    "name":"VTX",
+    "path":"folders/Scripts/IMNOTGUI/DRAW/VTX.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

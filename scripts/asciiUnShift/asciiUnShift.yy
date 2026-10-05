@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"asciiUnShift",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"asciiUnShift",
+  "parent":{
+    "name":"IMNOTGUI",
+    "path":"folders/Scripts/IMNOTGUI.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

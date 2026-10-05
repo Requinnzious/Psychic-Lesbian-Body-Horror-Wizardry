@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"iui_button_nodraw",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"iui_button_nodraw",
+  "parent":{
+    "name":"ELEMENT",
+    "path":"folders/Scripts/IMNOTGUI/ELEMENT.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

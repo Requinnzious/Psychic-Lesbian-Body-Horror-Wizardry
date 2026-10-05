@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"iui_rect",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"iui_rect",
+  "parent":{
+    "name":"DRAW",
+    "path":"folders/Scripts/IMNOTGUI/DRAW.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

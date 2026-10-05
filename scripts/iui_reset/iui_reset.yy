@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"iui_reset",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"iui_reset",
+  "parent":{
+    "name":"IMNOTGUI",
+    "path":"folders/Scripts/IMNOTGUI.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
