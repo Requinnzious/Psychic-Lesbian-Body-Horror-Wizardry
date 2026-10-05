@@ -306,7 +306,7 @@ entities       = ds_map_create();
 				if !initialize continue;
 				//Entities
 				if tile == TileTypes.WALL {
-					var entity = new Entity();
+					var entity = new Entity("Brick Wall");
 
 					entity.addComponent("Physics");
 					entity.addComponent("Health",    {hp: 1});
@@ -318,7 +318,7 @@ entities       = ds_map_create();
 					entities[? entity.uuid] = entity;
 				}	
 				if tile == TileTypes.GRASS {
-					var entity = new Entity();
+					var entity = new Entity("Grass");
 
 					entity.addComponent("Physics");
 					entity.addComponent("Health",    {hp: 1});
@@ -337,7 +337,7 @@ entities       = ds_map_create();
 					entities[? entity.uuid] = entity;
 				}		
 				if tile == TileTypes.TALLGRASS {
-					var entity = new Entity();
+					var entity = new Entity("Tall Grass");
 			
 					entity.addComponent("Physics");
 					entity.addComponent("Health",     {hp: 2});
@@ -362,7 +362,7 @@ entities       = ds_map_create();
 						var shroomX = x1 + 16 + lengthdir_x(32, theta) + random_range(-2, 2);
 						var shroomY = y1 + 16 + lengthdir_y(32, theta) + random_range(-2, 2);
 				
-						var entity = new Entity();
+						var entity = new Entity("Fairy Mushroom");
 						entity.addComponent("Position",  {x: shroomX, y: shroomY, z: 0});
 						entity.addComponent("Sprite",    {sprite: sBBShroom, randomSubimage: true});
 						entity.addComponent("WindShader");
@@ -376,7 +376,7 @@ entities       = ds_map_create();
 					}
 				}		
 				if tile == TileTypes.TREE {
-					var entity = new Entity();
+					var entity = new Entity("Tree");
 					entity.addComponent("Physics");
 					entity.addComponent("Health");
 					entity.addComponent("Position",  {x: x1, y: y1, z: 0});
@@ -437,21 +437,71 @@ entities       = ds_map_create();
 #endregion
 
 #region Test Enemy
-	var entity = new Entity();
-	entity.addComponent("Physics",      {maxFlash:   24});
-	entity.addComponent("Health",       {deathTimer: 24});
-	entity.addComponent("ShakeScreen",  {screenShake: 12, screenShakeIntensity: .1});
-	entity.addComponent("Position",     {x: 192, y: 448, z: 0});
-	entity.addComponent("Transform",    {x: 16,  y: 16});
-	entity.addComponent("Sprite",       {sprite: sSlime});
-	entity.addComponent("HurtSubimage", {hurtTimer: 24, subimage: 1});
-	entity.addComponent("HurtColor",    {hurtTimer: 24});
-	entity.addComponent("DefaultShader");
-	entity.addComponent("DebugDjikstra");
-	entity.addComponent("BillboardMesh");
-	entity.addComponent("DeathParticle");
+	var slimeX = 192;
+	var slimeY = 448;
+	var slimeZ =   0;
 
-	entity.fireEvent(EntityCreateEvent);
-	entities[? entity.uuid] = entity;
+	var slime = new Entity("Slime");
+	slime.addComponent("Physics",      {maxFlash:   24});
+	slime.addComponent("Impassable",   {bumping: false});
+	slime.addComponent("Health",       {deathTimer: 24});
+	slime.addComponent("ShakeScreen",  {screenShake: 12, screenShakeIntensity: .1});
+	slime.addComponent("Position",     {x: slimeX, y: slimeY, z: slimeZ});
+	slime.addComponent("Transform",    {x: 16,  y: 16});
+	slime.addComponent("Sprite",       {sprite: sSlime});
+	slime.addComponent("HurtSubimage", {hurtTimer: 24, subimage: 1});
+	slime.addComponent("HurtColor",    {hurtTimer: 24});
+	slime.addComponent("DefaultShader");
+	slime.addComponent("BillboardMesh");
+	slime.addComponent("DeathParticle");
+
+	var brain = instance_create_layer(slimeX, slimeY, "Instances", Brain, {parentEntity: slime});
+
+	slime.fireEvent(EntityCreateEvent);
+	entities[? slime.uuid] = slime;
+	
+	var slimeX = 224;
+	var slimeY = 480;
+	var slimeZ =   0;
+
+	var slime = new Entity("Slime");
+	slime.addComponent("Physics",      {maxFlash:   24});
+	slime.addComponent("Impassable",   {bumping: false});
+	slime.addComponent("Health",       {deathTimer: 24});
+	slime.addComponent("ShakeScreen",  {screenShake: 12, screenShakeIntensity: .1});
+	slime.addComponent("Position",     {x: slimeX, y: slimeY, z: slimeZ});
+	slime.addComponent("Transform",    {x: 16,  y: 16});
+	slime.addComponent("Sprite",       {sprite: sSlime});
+	slime.addComponent("HurtSubimage", {hurtTimer: 24, subimage: 1});
+	slime.addComponent("HurtColor",    {hurtTimer: 24});
+	slime.addComponent("DefaultShader");
+	slime.addComponent("BillboardMesh");
+	slime.addComponent("DeathParticle");
+
+	var brain = instance_create_layer(slimeX, slimeY, "Instances", Brain, {parentEntity: slime});
+
+	slime.fireEvent(EntityCreateEvent);
+	entities[? slime.uuid] = slime;
 #endregion
 
+
+//AI
+entityPositions = ds_map_create();
+
+subscribe("PlayerTurn", id);
+fireEvent = function(_event) {
+	switch _event.type {
+		case "PlayerTurn":			
+			ds_map_add(entityPositions, $"X:{_event.params.x},Y:{_event.params.y},Z:{_event.params.z}", "Player");
+			
+			var moveBrains = new Event("Brain_Move", {positions: entityPositions});
+			moveBrains = moveBrains.fire();
+			delete moveBrains;
+			
+			show_debug_message(ds_map_keys_to_array(entityPositions));
+			
+			ds_map_clear(entityPositions);
+			break;
+	}
+	return _event;
+}

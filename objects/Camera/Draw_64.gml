@@ -1,3 +1,47 @@
+surface_set_target(screenSurf)
+#region Draw minimap deprecated
+	var x1 = 0;
+	var x2 = window_get_width();
+	var y1 = 0;
+	var y2 = window_get_height();
+	
+	//draw_rectangle(x2 - 160, 0, x2, 160, false);
+	for (var i = 0; i < 160; i += TileDim) {
+	    for (var j = 0; j < 160; j += TileDim) {
+			var xx = clamp(x / TileDim + 2 - i / TileDim, 0, array_length(World.tiles)    - 1);
+			var yy = clamp(y / TileDim + 2 - j / TileDim, 0, array_length(World.tiles[0]) - 1);
+	
+		    var tile = World.tiles[xx][yy].tile;
+			draw_sprite(sMetaTiles_Strip, tile, 128 - i + x2 - 160, 128 - j);
+			draw_text(128 - i + x2 - 160, 128 - j, djikstra[xx][yy] ?? "NO")
+		}
+	}
+
+	//Draw enemies on minimap
+	for (var i = 0; i < instance_number(Enemy); ++i) {
+	    var enemy = instance_find(Enemy, i);
+		var enemyX = floor(enemy.x / TileDim) * TileDim;
+		var enemyY = floor(enemy.y / TileDim) * TileDim;
+
+		if (enemyX < x - 96 || enemyY < y - 96 || enemyX > x + 64 || enemyY > y + 64) continue;
+
+		var xx = (floor(x / TileDim) * TileDim) - enemyX;
+		var yy = (floor(y / TileDim) * TileDim) - enemyY;
+
+		draw_sprite(enemy.sprite_index, enemy.image_index, x2 - xx - 96 + 16, 160 - yy - 96 + 24);
+	}
+
+	//Player cursor
+	var cx1 = x2 - 80 -       dcos(lookDir) *  8;
+	var cy1 = 80      +       dsin(lookDir) * 16;
+	var cx2 = cx1     + lengthdir_x(16, lookDir);
+	var cy2 = cy1     + lengthdir_y(16, lookDir);
+
+	draw_set_colour(c_white)
+	draw_arrow(cx1, cy1, cx2, cy2, 16);
+#endregion
+surface_reset_target();
+
 var _time = current_time * 0.001;
 
 /// Fetch the texture handles
@@ -133,9 +177,7 @@ texture_set_interpolation(true);
 
 texture_set_interpolation(false);
 
-
-
-
+if !CRTDebugUI exit;
 /// Update & draw immediate mode UI
 iui_begin();
 /// ====================================================
@@ -184,6 +226,12 @@ switch (UI_TAB_IDX)
         var _logoy = _UI_CURRENT_Y + _logoosc * 8 * UIScale;
         draw_sprite_ext(sprLogo, 0, _UI_CENTER_X, _logoy, _titlescale, _titlescale, 0, c_white, 1.0);
         
+		draw_set_halign(fa_center);
+		draw_set_valign(fa_middle);
+		draw_text(_UI_CENTER_X, _UI_CENTER_Y, "Press CTRL to toggle shader editing mode")
+		draw_set_halign(fa_left);
+		draw_set_valign(fa_top);
+		
         // Preset pictures
         var _picname = "PRESET IMG. : " + string(demoBGIdx + 1);
         iui_align_push(fa_left, fa_top);
@@ -203,7 +251,7 @@ switch (UI_TAB_IDX)
         if (_prev || _next)
         {
             var _bgoffset = _next - _prev;
-            var _bglistsz = array_length_1d(demoBGList);
+            var _bglistsz = array_length(demoBGList);
             demoBGIdx = (demoBGIdx + _bgoffset + _bglistsz) % _bglistsz;
             demoState = eDEMO_STATE.DEFAULT;
         }

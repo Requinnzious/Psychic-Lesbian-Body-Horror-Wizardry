@@ -9,35 +9,37 @@ surface3   = surface_create(surface_get_width(application_surface), surface_get_
 
 /// Shader parameters
 // CRT emulation
-crtDistortion = 0.25; // screen distortion intensity
-crtReflection = 0.3; // border reflection intensity
-crtShadowmask = 0.4; // shadow mask intensity
-crtScanline   = 0.6; // scanline intensity
-crtBleed      = 0.35; // bleed intensity
-crtBleedSize  = 64; // bleed size
-crtTint       = 0.1; // dynamic colour tint intensity
-crtVignette   = 0.1; // vignette intensity
-crtFilmgrain  = 0.1; // film grain intensity
-crtBrightness = 0.23; // brightness boost/adjustment
-crtContrast   = 1.0; // contrast adjustment
+crtDistortion   =    0; // screen distortion intensity
+crtReflection   =    0; // border reflection intensity
+crtShadowmask   =    0; // shadow mask intensity
+crtScanline     =  .18; // scanline intensity
+crtBleed        =    0; // bleed intensity
+crtBleedSize    =   64; // bleed size
+crtTint         =  .15; // dynamic colour tint intensity
+crtVignette     =   .1; // vignette intensity
+crtFilmgrain    =   .1; // film grain intensity
+crtBrightness   =    0; // brightness boost/adjustment
+crtContrast     =   .5; // contrast adjustment
 
 // Specular light
 // specular light colour
-crtSpecularR = 0.9;
-crtSpecularG = 0.75;
-crtSpecularB = 1.0;
+crtSpecularR    =   .9;
+crtSpecularG    =  .75;
+crtSpecularB    =  1.0;
+
 // crtSpecularCol = c_white;
-crtSpecularAmp  = 0.1; // specular light amplitude/alpha
-crtSpecularOffX = 0.2; // specular light offset x
-crtSpecularOffY = -0.2; // specular light offset y
+crtSpecularAmp  =  .03; // specular light amplitude/alpha
+crtSpecularOffX =    0; // specular light offset x
+crtSpecularOffY =  .25; // specular light offset y
 
 // Final postprocessing FX
-crtGlowFactor   = 0.75; // factor/multiplier of glow (hard-capped at certain amount)
+crtGlowFactor   =    0; // factor/multiplier of glow (hard-capped at certain amount)
 crtGlowTint     = 0.75; // colour tint amount of blur (like chromatic aberration)
-crtBlurSize     = 8; // half size of blur
-crtBlurZoom     = 0.3; // zoom amount of blur
+crtBlurSize     =    8; // half size of blur
+crtBlurZoom     =  0.3; // zoom amount of blur
 
 #region GUI
+	CRTDebugUI = false;
 	/// Window settings
 	winWid = 1280;
 	winHei =  720;
@@ -51,6 +53,10 @@ crtBlurZoom     = 0.3; // zoom amount of blur
 	UIMsgCtr = 0;
 
 	/// State of the demo
+	enum eDEMO_STATE {
+		DEFAULT,
+		CUSTOM
+	}
 	demoState = eDEMO_STATE.DEFAULT;
 	demoBGList = iui_pack(-1, bgTest1, bgTest2, bgTest3, bgTest4, bgTest5, bgTest6);
 	demoBGCurrent = -1;
@@ -115,6 +121,13 @@ yMoveInc    = 0;
 //This defines a function that can only be used by this object, so the Camera and Menu objects
 //can have different inputState functions for example
 
+endPlayerTurn = function(xx, yy, zz) {
+	djikstra = computeDjikstra(xx, yy);
+	var playerTurnEvent = new Event("PlayerTurn", { x: xx, y: yy, z: zz });
+	playerTurnEvent = playerTurnEvent.fire();
+	delete playerTurnEvent;
+}
+
 stateMachine = new SnowState("step", false)
 	.add("idle", {
 		enter: function() {},
@@ -124,8 +137,7 @@ stateMachine = new SnowState("step", false)
 	.add("step", {
 		enter: function() {
 			Steps++;
-			show_debug_message( $"Steps: {Steps}" );
-			
+			//show_debug_message( $"Steps: {Steps}" );
 			stateMachine.change("input")
 		},
 		update: function() { stateMachine.change("input") }
@@ -169,6 +181,8 @@ stateMachine = new SnowState("step", false)
 		
 				addTimesource("Attack", id, 24, bumpFunc);
 				stateMachine.change("bump");
+				
+				endPlayerTurn(x, y, z - 16);
 				return;
 			}
 	
@@ -198,13 +212,34 @@ stateMachine = new SnowState("step", false)
 			dY = 32 * -dsin(lookDir) * ( GetUpHeld() - GetDownHeld() );
 			if(dX != 0 || dY != 0) {
 				var collis = tilemap_get_at_pixel(World.coll, x + dX, y + dY);
+				var bump   = collis > 0;
+				
+				var entities = ds_map_keys_to_array(World.entities, []);
+				for (var i = 0; i < array_length(entities); ++i) {
+					var entityID = entities[i];
+				    var entity   = World.entities[? entityID];
+			
+					if !entity.has("ImpassableComponent") continue;
+			
+					var entityX  = entity.get("Position", "x");
+					var entityY  = entity.get("Position", "y");
+			
+					if (entityX == x + dX && entityY == y + dY) {
+						if !entity.get("Impassable", "bumping") bump = false;
+						collis = true;
+					}
+				}
+				
 				if collis {
+					if !bump return;
 					xMoveTarget = x + dX;
 					yMoveTarget = y + dY;
 				
 					addTimesource("Bump",          id, moveSpeedFrames,             bumpFunc);
 					addTimesource("BloodSplatter", id, moveSpeedFrames / 4, createBloodDecal);
 					stateMachine.change("bump");
+					
+					endPlayerTurn(x, y, z - 16);
 					return;
 				};
 		
@@ -215,6 +250,8 @@ stateMachine = new SnowState("step", false)
 			
 				addTimesource("Move", id, moveSpeedFrames, moveFunc);
 				stateMachine.change("move");
+				
+				endPlayerTurn(xMoveTarget, yMoveTarget, z - 16);
 				return;
 			}	
 
@@ -224,13 +261,34 @@ stateMachine = new SnowState("step", false)
 			dY = 32 * -dsin(lookDir + 90) * ( GetStrafeLeftHeld() - GetStrafeRightHeld() );
 			if(dX != 0 || dY != 0) {
 				var collis = tilemap_get_at_pixel(World.coll, x + dX, y + dY);
+				var bump   = collis > 0;
+				
+				var entities = ds_map_keys_to_array(World.entities, []);
+				for (var i = 0; i < array_length(entities); ++i) {
+					var entityID = entities[i];
+				    var entity   = World.entities[? entityID];
+			
+					if !entity.has("ImpassableComponent") continue;
+			
+					var entityX  = entity.get("Position", "x");
+					var entityY  = entity.get("Position", "y");
+			
+					if (entityX == x + dX && entityY == y + dY) {
+						if !entity.get("Impassable", "bumping") bump = false;
+						collis = true;
+					}
+				}
+				
 				if collis {
+					if !bump return;
 					xMoveTarget = x + dX;
 					yMoveTarget = y + dY;
 				
 					addTimesource("Bump", id, moveSpeedFrames, bumpFunc);
 					addTimesource("BloodSplatter", id, moveSpeedFrames / 4, createBloodDecal);
 					stateMachine.change("bump");
+					
+					endPlayerTurn(x, y, z - 16);
 					return;
 				};
 		
@@ -241,6 +299,8 @@ stateMachine = new SnowState("step", false)
 			
 				addTimesource("Move", id, moveSpeedFrames, moveFunc);
 				stateMachine.change("move");
+				
+				endPlayerTurn(xMoveTarget, yMoveTarget, z - 16);				
 				return;
 			}
 
@@ -307,8 +367,6 @@ moveFunc  = function() {
 	y = yMoveTarget;
 	xPrevious = x;
 	yPrevious = y;
-	
-	djikstra = computeDjikstra(x, y);
 	
 	var event = new Event("Step", {x: x, y: y, z: z - 16});
 	event.fire();

@@ -1,7 +1,10 @@
-function Entity() constructor {
+function Entity(name = "") constructor {
 	uuid = ++EntityUUID;
-	components    = [];
-	subscriptions = [];
+	
+	entityName    = name;
+	
+	components    =   [];
+	subscriptions =   [];
 	
 	addComponent = function(componentName, args = {}) {
 		var component = constructComponent(componentName + "Component", args);
@@ -60,9 +63,13 @@ function Entity() constructor {
 	}
 	
 	destroy = function() {
-		var event = fireEvent(new Event("Death", {}))
 		for (var i = 0; i < array_length(subscriptions); ++i) {
 		    mute(subscriptions[i]);
+		}
+		var event = fireEvent(new Event("Death", {}));
+		var _uuid = uuid;
+		with Brain {
+			if parentEntity.uuid == _uuid destroy();
 		}
 	}
 	
@@ -73,6 +80,10 @@ function destroyEntity(entity) {
 	entity.fireEvent(EntityDestroyEvent);
 	ds_map_delete(World.entities, entity.uuid);
 	entity.destroy();
+	if variable_struct_exists(entity, "brain") {
+		entity.brain.destroy();
+		delete entity.brain;
+	}
 	delete entity;
 }
 
@@ -241,6 +252,8 @@ function DebugDjikstraComponent(c_Name) : Component(c_Name) constructor {
 				var dist = Camera.djikstra[xx][yy]
 				matrix_set(matrix_world, matrix_build(_event.params.x, _event.params.y, _event.params.z + 3, 90, 90, Camera.lookDir, 1, 1, 1));
 	
+				draw_set_colour(c_white)
+	
 				draw_set_halign(fa_center);
 				draw_set_valign(fa_bottom);
 				draw_text(0, 0, dist)
@@ -279,6 +292,17 @@ function HealthComponent(c_Name) : Component(c_Name) constructor {
 				
 				//This is temporary but look!
 				if(hp == 0) addTimesource("IDied", World, deathTimer, function(){destroyEntity(World.entities[? parent])});
+				break;
+		}
+		return _event;
+	}
+}
+function ImpassableComponent(c_Name) : Component(c_Name) constructor {
+	bumping = true;
+	
+	fireEvent = function(_event) {		
+		switch(_event.type) {			
+			default:
 				break;
 		}
 		return _event;
@@ -383,10 +407,10 @@ function LootComponent(c_Name) : Component(c_Name) constructor {
 		return _event;
 	}
 }
-function PhysicsComponent(c_Name) : Component(c_Name) constructor {
-	flash    = 0;
-	color    = c_white;
-	maxFlash = 12;
+function PhysicsComponent(c_Name) : Component(c_Name) constructor {	
+	flash      = 0;
+	color      = c_white;
+	maxFlash   = 12;
 	
 	fireEvent = function(_event) {		
 		switch(_event.type) {
@@ -410,14 +434,16 @@ function PositionComponent(c_Name) : Component(c_Name) constructor {
 	x = undefined; y = undefined; z = undefined;
 	
 	fireEvent = function(_event) {		
-		switch(_event.type) {	
-			case "AtPosition":
-				
-				break;
+		switch(_event.type) {
 			case "Move":
 				self.x += _event.params.x;
 				self.y += _event.params.y;
 				self.z += _event.params.z;
+				break;
+			case "Place":
+				self.x = _event.params.x;
+				self.y = _event.params.y;
+				self.z = _event.params.z;
 				break;
 			case "Render":
 				_event.params.x = self.x;
