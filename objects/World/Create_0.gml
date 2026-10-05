@@ -494,11 +494,11 @@ fireEvent = function(_event) {
 		case "PlayerTurn":			
 			ds_map_add(entityPositions, $"X:{_event.params.x},Y:{_event.params.y},Z:{_event.params.z}", "Player");
 			
-			var moveBrains = new Event("Brain_Move", {positions: entityPositions});
+			var moveBrains = new Event("Brain_Move", { positions: entityPositions });
 			moveBrains = moveBrains.fire();
 			delete moveBrains;
 			
-			show_debug_message(ds_map_keys_to_array(entityPositions));
+			//show_debug_message(ds_map_keys_to_array(entityPositions));
 			
 			ds_map_clear(entityPositions);
 			break;

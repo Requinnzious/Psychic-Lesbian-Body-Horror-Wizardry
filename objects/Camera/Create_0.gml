@@ -128,6 +128,13 @@ endPlayerTurn = function(xx, yy, zz) {
 	delete playerTurnEvent;
 }
 
+checkMoves = function() {
+	ds_map_delete(World.entityPositions, $"X:{xMoveTarget},Y:{yMoveTarget},Z:{0}");
+	var event = new Event("CheckMoves");
+	event = World.fireEvent(event);
+	delete event;
+}
+
 stateMachine = new SnowState("step", false)
 	.add("idle", {
 		enter: function() {},
@@ -369,8 +376,9 @@ moveFunc  = function() {
 	yPrevious = y;
 	
 	var event = new Event("Step", {x: x, y: y, z: z - 16});
-	event.fire();
+	event = event.fire();
 	
+	checkMoves();
 	stateMachine.change("step");
 }
 turnFunc  = function() {
@@ -382,6 +390,7 @@ bumpFunc  = function() {
 	y = yPrevious;	
 	animPos = 0;
 	
+	checkMoves();
 	stateMachine.change("step");
 }
 

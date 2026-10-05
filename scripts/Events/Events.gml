@@ -4,7 +4,7 @@ function setEventUUID() {
 	return _id;
 }
 
-function Event(_type, _params) constructor {
+function Event(_type, _params = {}) constructor {
 	uuid    = setEventUUID();
 	type    = _type;
 	params  = _params;

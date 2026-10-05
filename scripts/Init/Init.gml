@@ -16,8 +16,10 @@ function Init(){
 	#endregion
 	
 	#region Entity Globals
+		globalvar MoveFrames;
 		globalvar EntityUUID;
-		EntityUUID = 0;
+		MoveFrames = 12;
+		EntityUUID =  0;
 	#endregion
 	
 	#region TimeSources
