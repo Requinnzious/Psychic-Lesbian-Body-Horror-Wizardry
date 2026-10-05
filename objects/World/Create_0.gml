@@ -9,8 +9,8 @@ entities       = ds_map_create();
 	for (var i = 0; i < room_width / 32; ++i) {
 	    array_push(tiles, []);
 		for (var j = 0; j < room_height / 32; ++j) {
-			var tile   = tilemap_get_at_pixel(meta, i * 32, j * 32);
-		    array_push(tiles[i], {tile: tile});
+			var _tile   = tilemap_get_at_pixel(meta, i * 32, j * 32);
+		    array_push(tiles[i], {tile: _tile});
 		}
 	}
 	cols = array_length(tiles);

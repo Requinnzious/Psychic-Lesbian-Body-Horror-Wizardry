@@ -258,7 +258,7 @@ stateMachine = new SnowState("step", false)
 				addTimesource("Move", id, moveSpeedFrames, moveFunc);
 				stateMachine.change("move");
 				
-				endPlayerTurn(xMoveTarget, yMoveTarget, z - 16);
+				endPlayerTurn(x + dX, y + dY, z - 16);
 				return;
 			}	
 
@@ -307,7 +307,7 @@ stateMachine = new SnowState("step", false)
 				addTimesource("Move", id, moveSpeedFrames, moveFunc);
 				stateMachine.change("move");
 				
-				endPlayerTurn(xMoveTarget, yMoveTarget, z - 16);				
+				endPlayerTurn(x + dX, y + dY, z - 16);				
 				return;
 			}
 

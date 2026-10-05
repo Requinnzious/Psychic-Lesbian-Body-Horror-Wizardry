@@ -11,8 +11,8 @@ surface_set_target(screenSurf)
 			var xx = clamp(x / TileDim + 2 - i / TileDim, 0, array_length(World.tiles)    - 1);
 			var yy = clamp(y / TileDim + 2 - j / TileDim, 0, array_length(World.tiles[0]) - 1);
 	
-		    var tile = World.tiles[xx][yy].tile;
-			draw_sprite(sMetaTiles_Strip, tile, 128 - i + x2 - 160, 128 - j);
+		    var _tile = World.tiles[xx][yy].tile;
+			draw_sprite(sMetaTiles_Strip, _tile, 128 - i + x2 - 160, 128 - j);
 			draw_text(128 - i + x2 - 160, 128 - j, djikstra[xx][yy] ?? "NO")
 		}
 	}

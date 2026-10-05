@@ -79,7 +79,7 @@ fireEvent = function(_event) {
 			//Get the weight of nearby cells
 			for (var i = 0; i < 3; ++i) {
 			    for (var j = 0; j < 3; ++j) {
-					if abs(i - 1) == abs(j - 1) and i - 1 != 0 continue;
+					if abs(i - 1) == abs(j - 1) continue; // and i - 1 != 0
 					
 				    var indX = xx + i - 1;
 				    var indY = yy + j - 1;
@@ -88,6 +88,11 @@ fireEvent = function(_event) {
 					array_push(cellCosts, {weight: weight, x: indX, y: indY})
 				}
 			}
+			
+			
+			//Sort by distance
+			array_sort(cellCosts, function(current, next) {return current.weight - next.weight});
+			
 			
 			//Check for entity collisions
 			for (var i = 0; i < array_length(cellCosts); ++i) {
@@ -98,15 +103,20 @@ fireEvent = function(_event) {
 				}
 			}
 			
-			//Sort by distance
-			array_sort(cellCosts, function(current, next) {return current.weight - next.weight});
 			
 			//Filter out all distant tiles
 			for (var i = 0; i < array_length(cellCosts); ++i) {
-			    if cellCosts[i].weight == cellCosts[0].weight continue;
+			    if cellCosts[i].weight <= dist continue;
 				array_delete(cellCosts, i, array_length(cellCosts) - i)
 			}
-						
+
+			
+			if array_length(cellCosts) == 0 {
+				_event.params.positions[? $"X:{x},Y:{y},Z:{z}"] = "Slime";
+				break;
+			}
+			
+			
 			//Enter movement state
 			var targetCell = cellCosts[irandom(array_length(cellCosts) - 1)];
 			var targetCellX = targetCell.x * TileDim

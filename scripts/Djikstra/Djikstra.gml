@@ -6,7 +6,7 @@ enum DjikstraMode {
 function computeDjikstra(targetX, targetY, tileDim = 32, mode = DjikstraMode.UDLR) {
 	var djikstra;
 		var collisions = layer_tilemap_get_id("Collisions");
-		var xx    = targetX / tileDim, yy = targetY / tileDim;
+		var xx    = floor(targetX / tileDim), yy = floor(targetY / tileDim);
 		
 		var dist  = 1;
 		var queue = [{xx: xx, yy: yy, d: 0}];
@@ -17,6 +17,7 @@ function computeDjikstra(targetX, targetY, tileDim = 32, mode = DjikstraMode.UDL
 			    djikstra[i][j] = undefined;
 			}
 		}
+		
 		if xx < 0 or xx >= array_length(djikstra)    or 
 		   yy < 0 or yy >= array_length(djikstra[0]) return self.djikstra;
 		djikstra[xx][yy] = 0;
@@ -34,7 +35,7 @@ function computeDjikstra(targetX, targetY, tileDim = 32, mode = DjikstraMode.UDL
 							if i == 1 and j == 1 continue;
 							break;
 						case DjikstraMode.UDLR:
-							if !(abs(i - 1) xor abs(j - 1)) continue;
+							if (abs(i - 1) == abs(j - 1)) continue;
 							break;
 					}
 				
