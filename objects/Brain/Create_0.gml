@@ -65,7 +65,8 @@ mute = function(eventName) {
 fireEvent = function(_event) {
 	switch _event.type {
 		case "Brain_Move":
-			if !parentEntity.get("Health", "hp") break;
+			//if we're dead we probably shouldn't move :>
+			if parentEntity.get("Health", "hp") == 0 break;
 		
 			var djikstraWidth  = array_length(Camera.djikstra);
 			var djikstraHeight = array_length(Camera.djikstra[0]);
@@ -90,18 +91,32 @@ fireEvent = function(_event) {
 			}
 			
 			
-			//Sort by distance
-			array_sort(cellCosts, function(current, next) {return current.weight - next.weight});
-			
-			
 			//Check for entity collisions
 			for (var i = 0; i < array_length(cellCosts); ++i) {
-			    if ds_map_exists(_event.params.positions, $"X:{cellCosts[i].x * TileDim},Y:{cellCosts[i].y * TileDim},Z:{z}")
+				show_debug_message($"X:{cellCosts[i].x * TileDim},Y:{cellCosts[i].y * TileDim},Z:{z}");
+				
+				var _delete = false;
+				with Brain {
+					if xTarget == cellCosts[i].x * TileDim and yTarget == cellCosts[i].y * TileDim {
+						_delete = true;
+					}
+				}
+				
+				
+			    if _delete//ds_map_exists(_event.params.positions, $"X:{cellCosts[i].x * TileDim},Y:{cellCosts[i].y * TileDim},Z:{z}")
 				{
 					array_delete(cellCosts, i, 1);
 					i--;
 				}
 			}
+			
+			
+			//Sort by distance
+			array_sort(cellCosts, function(current, next) {return current.weight - next.weight});
+				
+			
+			//Don't move into the player
+			if cellCosts[0].weight == 0 array_delete(cellCosts, 0, 1);
 			
 			
 			//Filter out all distant tiles
@@ -111,6 +126,7 @@ fireEvent = function(_event) {
 			}
 
 			
+			//If we can't move, we don't
 			if array_length(cellCosts) == 0 {
 				_event.params.positions[? $"X:{x},Y:{y},Z:{z}"] = "Slime";
 				break;

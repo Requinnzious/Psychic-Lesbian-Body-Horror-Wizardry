@@ -482,6 +482,29 @@ entities       = ds_map_create();
 
 	slime.fireEvent(EntityCreateEvent);
 	entities[? slime.uuid] = slime;
+	
+	var slimeX = 192;
+	var slimeY = 480;
+	var slimeZ =   0;
+
+	var slime = new Entity("Slime");
+	slime.addComponent("Physics",      {maxFlash:   24});
+	slime.addComponent("Impassable",   {bumping: false});
+	slime.addComponent("Health",       {deathTimer: 24});
+	slime.addComponent("ShakeScreen",  {screenShake: 12, screenShakeIntensity: .1});
+	slime.addComponent("Position",     {x: slimeX, y: slimeY, z: slimeZ});
+	slime.addComponent("Transform",    {x: 16,  y: 16});
+	slime.addComponent("Sprite",       {sprite: sSlime});
+	slime.addComponent("HurtSubimage", {hurtTimer: 24, subimage: 1});
+	slime.addComponent("HurtColor",    {hurtTimer: 24});
+	slime.addComponent("DefaultShader");
+	slime.addComponent("BillboardMesh");
+	slime.addComponent("DeathParticle");
+
+	var brain = instance_create_layer(slimeX, slimeY, "Instances", Brain, {parentEntity: slime});
+
+	slime.fireEvent(EntityCreateEvent);
+	entities[? slime.uuid] = slime;
 #endregion
 
 
