@@ -28,8 +28,8 @@
     {"$GMFolder":"","%Name":"04 Shaders","folderPath":"folders/04 Shaders.yy","name":"04 Shaders","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"05 Tilesets","folderPath":"folders/05 Tilesets.yy","name":"05 Tilesets","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"06 Scenes","folderPath":"folders/06 Scenes.yy","name":"06 Scenes","resourceType":"GMFolder","resourceVersion":"2.0",},
-    {"$GMFolder":"","%Name":"Extensions","folderPath":"folders/Extensions.yy","name":"Extensions","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"07 Sounds","folderPath":"folders/07 Sounds.yy","name":"07 Sounds","resourceType":"GMFolder","resourceVersion":"2.0",},
+    {"$GMFolder":"","%Name":"Extensions","folderPath":"folders/Extensions.yy","name":"Extensions","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Scripts","folderPath":"folders/Scripts.yy","name":"Scripts","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"compatibility","folderPath":"folders/Scripts/compatibility.yy","name":"compatibility","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"background","folderPath":"folders/Scripts/compatibility/background.yy","name":"background","resourceType":"GMFolder","resourceVersion":"2.0",},
@@ -48,7 +48,7 @@
   "isEcma":false,
   "LibraryEmitters":[],
   "MetaData":{
-    "IDEVersion":"2024.14.4.222",
+    "IDEVersion":"2026.0.0.16",
   },
   "name":"Psychic Lesbian Body Horror Wizardry",
   "resources":[

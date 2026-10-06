@@ -306,50 +306,48 @@ entities       = ds_map_create();
 				if !initialize continue;
 				//Entities
 				if tile == TileTypes.WALL {
-					var entity = new Entity("Brick Wall");
-
-					entity.addComponent("Physics");
-					entity.addComponent("Health",    {hp: 1});
-					entity.addComponent("Position",  {x: x1, y: y1, z: 0});
-					entity.addComponent("WorldTile", {gridX: x1/TileDim, gridY: y1/TileDim, isBlocking: true, worldMeshes: ["floor", "wall"]});
+					var entity = new Entity("Brick Wall")
+						.addComponent("Physics")
+						.addComponent("Impassable",   {bumping: true})
+						.addComponent("Health",    {hp: 1})
+						.addComponent("Position",  {x: x1, y: y1, z: 0})
+						.addComponent("WorldTile", {gridX: x1/TileDim, gridY: y1/TileDim, isBlocking: true, worldMeshes: ["floor", "wall"]});
 
 					entity.fireEvent(EntityCreateEvent);
 
 					entities[? entity.uuid] = entity;
 				}	
 				if tile == TileTypes.GRASS {
-					var entity = new Entity("Grass");
-
-					entity.addComponent("Physics");
-					entity.addComponent("Health",    {hp: 1});
-					entity.addComponent("Position",  {x: x1, y: y1, z: 0});
-					entity.addComponent("Transform", {x: 16, y: 16});
-					entity.addComponent("Sprite",    {randomSubimage: true});
-					entity.addComponent("SteppedOn");
-					entity.addComponent("HurtSprite");
-					entity.addComponent("HurtColor");
-					entity.addComponent("WindShader");
-					entity.addComponent("BillboardMesh");
-					entity.addComponent("WorldTile", {gridX: x1/TileDim, gridY: y1/TileDim});
+					var entity = new Entity("Grass")
+						.addComponent("Physics")
+						.addComponent("Health",    {hp: 1})
+						.addComponent("Position",  {x: x1, y: y1, z: 0})
+						.addComponent("Transform", {x: 16, y: 16})
+						.addComponent("Sprite",    {randomSubimage: true})
+						.addComponent("SteppedOn")
+						.addComponent("HurtSprite")
+						.addComponent("HurtColor")
+						.addComponent("WindShader")
+						.addComponent("BillboardMesh")
+						.addComponent("WorldTile", {gridX: x1/TileDim, gridY: y1/TileDim});
 
 					entity.fireEvent(EntityCreateEvent);
 
 					entities[? entity.uuid] = entity;
 				}		
 				if tile == TileTypes.TALLGRASS {
-					var entity = new Entity("Tall Grass");
-			
-					entity.addComponent("Physics");
-					entity.addComponent("Health",     {hp: 2});
-					entity.addComponent("Position",   {x: x1, y: y1, z: 0});
-					entity.addComponent("Transform",  {x: 16, y: 16});
-					entity.addComponent("Sprite",     {sprite: sBBGrass_Tall, randomSubimage: true});
-					entity.addComponent("SteppedOn",  {sprite: sBBGrass_Tall_Stepped});
-					entity.addComponent("HurtSprite", {sprite: sBBGrass_Tall_Stepped});
-					entity.addComponent("HurtColor");
-					entity.addComponent("WindShader");
-					entity.addComponent("BillboardMesh");
-					entity.addComponent("WorldTile", {gridX: x1/TileDim, gridY: y1/TileDim});
+					var entity = new Entity("Tall Grass")
+						.addComponent("Physics")
+						.addComponent("Health",     {hp: 2})
+						.addComponent("Position",   {x: x1, y: y1, z: 0})
+						.addComponent("Transform",  {x: 16, y: 16})
+						.addComponent("Sprite",     {sprite: sBBGrass_Tall, randomSubimage: true})
+						.addComponent("SteppedOn",  {sprite: sBBGrass_Tall_Stepped})
+						.addComponent("HurtSprite", {sprite: sBBGrass_Tall_Stepped})
+						.addComponent("HurtColor")
+						.addComponent("WindShader")
+						.addComponent("BillboardMesh")
+						.addComponent("WorldTile", {gridX: x1/TileDim, gridY: y1/TileDim});
 
 					entity.fireEvent(EntityCreateEvent);
 					
@@ -362,11 +360,11 @@ entities       = ds_map_create();
 						var shroomX = x1 + 16 + lengthdir_x(32, theta) + random_range(-2, 2);
 						var shroomY = y1 + 16 + lengthdir_y(32, theta) + random_range(-2, 2);
 				
-						var entity = new Entity("Fairy Mushroom");
-						entity.addComponent("Position",  {x: shroomX, y: shroomY, z: 0});
-						entity.addComponent("Sprite",    {sprite: sBBShroom, randomSubimage: true});
-						entity.addComponent("WindShader");
-						entity.addComponent("BillboardMesh");
+						var entity = new Entity("Fairy Mushroom")
+							.addComponent("Position",  {x: shroomX, y: shroomY, z: 0})
+							.addComponent("Sprite",    {sprite: sBBShroom, randomSubimage: true})
+							.addComponent("WindShader")
+							.addComponent("BillboardMesh");
 
 						entity.fireEvent(EntityCreateEvent);
 				
@@ -376,15 +374,16 @@ entities       = ds_map_create();
 					}
 				}		
 				if tile == TileTypes.TREE {
-					var entity = new Entity("Tree");
-					entity.addComponent("Physics");
-					entity.addComponent("Health");
-					entity.addComponent("Position",  {x: x1, y: y1, z: 0});
-					entity.addComponent("Transform", {x: TileDim / 2 + random_range(-2, 2), y: TileDim / 2 + random_range(-2, 2), z: 0});
-					entity.addComponent("Sprite",    {sprite: sTreeTexture});
-					entity.addComponent("WindShader");
-					entity.addComponent("BillboardMesh");
-					entity.addComponent("WorldTile", {gridX: x1/TileDim, gridY: y1/TileDim, isBlocking: true, worldMeshes: ["canopy"]});
+					var entity = new Entity("Tree")
+						.addComponent("Physics")
+						.addComponent("Health")
+						.addComponent("Impassable",   {bumping: true})
+						.addComponent("Position",  {x: x1, y: y1, z: 0})
+						.addComponent("Transform", {x: TileDim / 2 + random_range(-2, 2), y: TileDim / 2 + random_range(-2, 2), z: 0})
+						.addComponent("Sprite",    {sprite: sTreeTexture})
+						.addComponent("WindShader")
+						.addComponent("BillboardMesh")
+						.addComponent("WorldTile", {gridX: x1/TileDim, gridY: y1/TileDim, isBlocking: true, worldMeshes: ["canopy"]});
 
 					entity.fireEvent(EntityCreateEvent);
 

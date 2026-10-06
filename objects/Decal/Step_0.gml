@@ -1,0 +1,1 @@
+if !ds_map_exists(World.entities, parentEntity) instance_destroy();

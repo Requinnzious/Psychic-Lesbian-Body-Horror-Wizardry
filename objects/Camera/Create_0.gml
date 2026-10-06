@@ -229,6 +229,7 @@ stateMachine = new SnowState("step", false)
 				var collis = tilemap_get_at_pixel(World.coll, x + dX, y + dY);
 				var bump   = collis > 0;
 				
+				var decalParent = noone;
 				var entities = ds_map_keys_to_array(World.entities, []);
 				for (var i = 0; i < array_length(entities); ++i) {
 					var entityID = entities[i];
@@ -241,6 +242,7 @@ stateMachine = new SnowState("step", false)
 			
 					if (entityX == x + dX && entityY == y + dY) {
 						if !entity.get("Impassable", "bumping") bump = false;
+						decalParent = entityID;
 						collis = true;
 					}
 				}
@@ -251,8 +253,10 @@ stateMachine = new SnowState("step", false)
 					yMoveTarget = y + dY;
 				
 					addTimesource("Bump",          id, moveSpeedFrames,             bumpFunc);
-					addTimesource("BloodSplatter", id, moveSpeedFrames / 4, createBloodDecal);
+					createBloodDecal(decalParent);
 					stateMachine.change("bump");
+					
+					Sound.playSound(SoundTypes.HIT1);
 					
 					endPlayerTurn(x, y, z - 16);
 					return;
@@ -278,12 +282,14 @@ stateMachine = new SnowState("step", false)
 				var collis = tilemap_get_at_pixel(World.coll, x + dX, y + dY);
 				var bump   = collis > 0;
 				
-				var entities = ds_map_keys_to_array(World.entities, []);
+				var decalParent = noone;
+				var entities = ds_map_keys_to_array(World.entities);
 				for (var i = 0; i < array_length(entities); ++i) {
 					var entityID = entities[i];
 				    var entity   = World.entities[? entityID];
 			
 					if !entity.has("ImpassableComponent") continue;
+					show_debug_message(entity);
 			
 					var entityX  = entity.get("Position", "x");
 					var entityY  = entity.get("Position", "y");
@@ -291,6 +297,7 @@ stateMachine = new SnowState("step", false)
 					if (entityX == x + dX && entityY == y + dY) {
 						if !entity.get("Impassable", "bumping") bump = false;
 						collis = true;
+						decalParent = entityID;
 						break;
 					}
 				}
@@ -301,8 +308,11 @@ stateMachine = new SnowState("step", false)
 					yMoveTarget = y + dY;
 				
 					addTimesource("Bump", id, moveSpeedFrames, bumpFunc);
-					addTimesource("BloodSplatter", id, moveSpeedFrames / 4, createBloodDecal);
+					createBloodDecal(decalParent);
+					//addTimesource("BloodSplatter", id, moveSpeedFrames / 4, createBloodDecal);
 					stateMachine.change("bump");
+					
+					Sound.playSound(SoundTypes.HIT1);
 					
 					endPlayerTurn(x, y, z - 16);
 					return;
@@ -346,8 +356,16 @@ stateMachine = new SnowState("step", false)
 			var mx = window_mouse_get_x(), my = window_mouse_get_y();
 			var cx = window_get_width()/2, cy = window_get_height()/2;
 	
-			lookDirOffset -= ( mx - cx ) / 5;
-			lookPitOffset += ( my - cy ) / 5;
+			var dX = mx - cx;
+			var dY = my - cy;
+			if dX == 0 and dY == 0 {
+				var gamepadSensitivity = 20;
+				dX = gamepad_axis_value(0, gp_axisrh) * gamepadSensitivity;
+				dY = gamepad_axis_value(0, gp_axisrv) * gamepadSensitivity;
+			}
+	
+			lookDirOffset -= dX / 5;
+			lookPitOffset += dY / 5;
 	
 			//-80 < lookPit + lookPitOffset < 80
 			lookPitOffset = clamp(lookPitOffset, -80 - lookPit, 80 - lookPit);	
@@ -361,6 +379,8 @@ stateMachine = new SnowState("step", false)
 		
 				stateMachine.change("input");
 			}
+			
+			
 		}
 	})
 
@@ -408,12 +428,13 @@ bumpFunc  = function() {
 }
 
 //Various methods for the player
-createBloodDecal = function() {
+createBloodDecal = function(parentEntity = noone) {
 	hp = max(0, hp - 1);
 	var spr = sBloodDecal;
 	if (hp == 0) spr = sBloodDecal_Death;
 	
 	var blood = instance_create_layer(xPrevious, yPrevious, "Instances", Decal);
+	blood.parentEntity = parentEntity;
 	blood.sprite_index = spr;
 	blood.lookDir      = point_direction(xPrevious, yPrevious, xMoveTarget, yMoveTarget);
 	blood.image_index  = irandom_range(0, image_number - 1);

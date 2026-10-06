@@ -4,6 +4,7 @@ enum SoundTypes {
 	CLAW,
 	
 	HIT,
+	HIT1,
 	CRIT,
 	
 	SLIME,
@@ -26,6 +27,9 @@ playSound = function(soundType = -1) {
 		
 		case SoundTypes.HIT:
 			sound = audio_play_sound(seHit,   5,  false, 1, 0, random_range(.9, 1.1));
+			break;
+		case SoundTypes.HIT1:
+			sound = audio_play_sound(seHit1,  5,  false, 1, 0, random_range(.9, 1.1));
 			break;
 		case SoundTypes.CRIT:
 			sound = audio_play_sound(seCrit,  5,  false, 1, 0, random_range(.9, 1.1));
