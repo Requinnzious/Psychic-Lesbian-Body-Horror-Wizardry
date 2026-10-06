@@ -92,21 +92,16 @@ fireEvent = function(_event) {
 			
 			
 			//Check for entity collisions
-			for (var i = 0; i < array_length(cellCosts); ++i) {
-				show_debug_message($"X:{cellCosts[i].x * TileDim},Y:{cellCosts[i].y * TileDim},Z:{z}");
-				
-				var _delete = false;
-				with Brain {
+			with Brain {
+				for (var i = 0; i < array_length(cellCosts); ++i) {				
+					var _delete = false;
 					if xTarget == cellCosts[i].x * TileDim and yTarget == cellCosts[i].y * TileDim {
 						_delete = true;
 					}
-				}
-				
-				
-			    if _delete//ds_map_exists(_event.params.positions, $"X:{cellCosts[i].x * TileDim},Y:{cellCosts[i].y * TileDim},Z:{z}")
-				{
-					array_delete(cellCosts, i, 1);
-					i--;
+				    if _delete	{
+						array_delete(cellCosts, i, 1);
+						i--;
+					}
 				}
 			}
 			
@@ -116,7 +111,7 @@ fireEvent = function(_event) {
 				
 			
 			//Don't move into the player
-			if cellCosts[0].weight == 0 array_delete(cellCosts, 0, 1);
+			if cellCosts[0].x * TileDim == _event.params.x and cellCosts[0].y * TileDim == _event.params.y array_delete(cellCosts, 0, 1);
 			
 			
 			//Filter out all distant tiles
@@ -127,10 +122,7 @@ fireEvent = function(_event) {
 
 			
 			//If we can't move, we don't
-			if array_length(cellCosts) == 0 {
-				_event.params.positions[? $"X:{x},Y:{y},Z:{z}"] = "Slime";
-				break;
-			}
+			if array_length(cellCosts) == 0 break;
 			
 			
 			//Enter movement state
@@ -139,11 +131,7 @@ fireEvent = function(_event) {
 			var targetCellY = targetCell.y * TileDim
 			
 			//If we're not moving, we don't want to enter the move state
-			//We do - however - still need to register our position to prevent collisions
-			if(targetCellX == x and targetCellY == y) {
-				_event.params.positions[? $"X:{x},Y:{y},Z:{z}"] = "Slime";
-				break;
-			}
+			if targetCellX == x and targetCellY == y break;
 			
 			xTarget = targetCellX;
 			yTarget = targetCellY;
@@ -154,10 +142,6 @@ fireEvent = function(_event) {
 			
 			stateMachine.change("move");
 			addTimesource($"{parentEntity.uuid}Movement", id, MoveFrames, moveFunc);
-			
-			
-			//Add our position to the positions list
-			_event.params.positions[? $"X:{xTarget},Y:{yTarget},Z:{zTarget}"] = "Slime";
 			break;
 	}
 	return _event;

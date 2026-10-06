@@ -1,5 +1,5 @@
 surface_set_target(screenSurf)
-#region Draw minimap deprecated
+#region Draw minimap
 	var x1 = 0;
 	var x2 = window_get_width();
 	var y1 = 0;
@@ -13,7 +13,7 @@ surface_set_target(screenSurf)
 	
 		    var _tile = World.tiles[xx][yy].tile;
 			draw_sprite(sMetaTiles_Strip, _tile, 128 - i + x2 - 160, 128 - j);
-			draw_text(128 - i + x2 - 160, 128 - j, djikstra[xx][yy] ?? "NO")
+			//draw_text(128 - i + x2 - 160, 128 - j, djikstra[xx][yy] ?? "NO")
 		}
 	}
 
@@ -55,8 +55,6 @@ var _texshadowmasktexelw = texture_get_texel_width(_texshadowmask);
 var _texshadowmasktexelh = texture_get_texel_height(_texshadowmask);
 
 texture_set_interpolation(true);
-
-
 
 #region Pass #1 : Screen filter (shadowmask, scanline etc..)
 	// Feed the results into the temp. surface #1
@@ -178,6 +176,8 @@ texture_set_interpolation(true);
 texture_set_interpolation(false);
 
 if !CRTDebugUI exit;
+
+
 /// Update & draw immediate mode UI
 iui_begin();
 /// ====================================================

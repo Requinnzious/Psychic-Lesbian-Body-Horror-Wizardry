@@ -123,16 +123,11 @@ yMoveInc    = 0;
 
 endPlayerTurn = function(xx, yy, zz) {
 	djikstra = computeDjikstra(xx, yy);
+	
 	var playerTurnEvent = new Event("PlayerTurn", { x: xx, y: yy, z: zz });
 	playerTurnEvent = playerTurnEvent.fire();
+	
 	delete playerTurnEvent;
-}
-
-checkMoves = function() {
-	ds_map_delete(World.entityPositions, $"X:{xMoveTarget},Y:{yMoveTarget},Z:{0}");
-	var event = new Event("CheckMoves");
-	event = World.fireEvent(event);
-	delete event;
 }
 
 stateMachine = new SnowState("step", false)
@@ -378,7 +373,6 @@ moveFunc  = function() {
 	var event = new Event("Step", {x: x, y: y, z: z - 16});
 	event = event.fire();
 	
-	checkMoves();
 	stateMachine.change("step");
 }
 turnFunc  = function() {
@@ -389,8 +383,7 @@ bumpFunc  = function() {
 	x = xPrevious;
 	y = yPrevious;	
 	animPos = 0;
-	
-	checkMoves();
+
 	stateMachine.change("step");
 }
 
