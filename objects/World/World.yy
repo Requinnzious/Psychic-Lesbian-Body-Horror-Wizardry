@@ -9,8 +9,8 @@
   "name":"World",
   "overriddenProperties":[],
   "parent":{
-    "name":"02 Objects",
-    "path":"folders/02 Objects.yy",
+    "name":"Controllers",
+    "path":"folders/02 Objects/Controllers.yy",
   },
   "parentObjectId":null,
   "persistent":false,

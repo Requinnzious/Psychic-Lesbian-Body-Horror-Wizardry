@@ -10,7 +10,7 @@ function Entity(name = "") constructor {
 		var component = constructComponent(componentName + "Component", args);
 		component.parent = uuid;
 		array_push( components, component );
-		return component;
+		return self;
 	}
 	
 	removeComponent = function(componentName) {

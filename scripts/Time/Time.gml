@@ -14,6 +14,7 @@ function updateTimesources() {
 		
 		if(timer.frames <= 0) {
 			if(instance_exists(timer.owner)) timer.callback(timer.owner);
+			delete TimeSources[i];
 			array_delete(TimeSources, i, 1);
 		}
 	}

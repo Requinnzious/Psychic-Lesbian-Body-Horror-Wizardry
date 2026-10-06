@@ -66,8 +66,6 @@ crtBlurZoom     =  0.3; // zoom amount of blur
 	demoCustomBG = -1;
 #endregion
 
-Steps = 0;
-
 djikstra = computeDjikstra(x, y);
 
 
@@ -138,8 +136,6 @@ stateMachine = new SnowState("step", false)
 
 	.add("step", {
 		enter: function() {
-			Steps++;
-			//show_debug_message( $"Steps: {Steps}" );
 			stateMachine.change("input")
 		},
 		update: function() { stateMachine.change("input") }
@@ -278,6 +274,7 @@ stateMachine = new SnowState("step", false)
 					if (entityX == x + dX && entityY == y + dY) {
 						if !entity.get("Impassable", "bumping") bump = false;
 						collis = true;
+						break;
 					}
 				}
 				

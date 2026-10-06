@@ -21,7 +21,7 @@ animPos       =   1;
 
 stateMachine = new SnowState("idle")
 	.add("idle", {
-		enter: function()  {show_debug_message("Hi!")},
+		enter: function()  {},
 		update: function() {}
 	})
 	.add("move", {
@@ -104,6 +104,30 @@ fireEvent = function(_event) {
 					}
 				}
 			}
+			#region Manually?
+				//var entities = ds_map_keys_to_array(World.entities, []);
+				//for (var i = 0; i < array_length(entities); ++i) {
+				//	var entityID = entities[i];
+				//    var entity   = World.entities[? entityID];
+				//
+				//	if !entity.has("ImpassableComponent") continue;
+				//
+				//	var entityX  = entity.get("Position", "x");
+				//	var entityY  = entity.get("Position", "y");
+				//
+				//	for (var j = 0; j < array_length(cellCosts); ++j) {				
+				//		var _delete = false;
+				//		if (entityX == cellCosts[j].x * TileDim && entityY == cellCosts[j].y * TileDim) {
+				//			if !entity.get("Impassable", "bumping") bump = false;
+				//			_delete = true;
+				//		}
+				//	    if _delete	{
+				//			array_delete(cellCosts, j, 1);
+				//			j--;
+				//		}
+				//	}
+				//}
+			#endregion
 			
 			
 			//Sort by distance
