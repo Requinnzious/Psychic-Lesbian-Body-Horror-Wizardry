@@ -55,7 +55,7 @@ var _texnoisetexelh      = texture_get_texel_height(_texnoise);
 var _texshadowmasktexelw = texture_get_texel_width(_texshadowmask);
 var _texshadowmasktexelh = texture_get_texel_height(_texshadowmask);
 
-texture_set_interpolation(true);
+gpu_set_tex_filter(true);
 
 #region Pass #1 : Screen filter (shadowmask, scanline etc..)
 	// Feed the results into the temp. surface #1
@@ -174,7 +174,7 @@ texture_set_interpolation(true);
 	draw_surface(surface3, 0, 0);
 #endregion
 
-texture_set_interpolation(false);
+gpu_set_tex_filter(false);
 
 if !CRTDebugUI exit;
 

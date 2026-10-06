@@ -58,7 +58,7 @@ crtBlurZoom     =  0.3; // zoom amount of blur
 		CUSTOM
 	}
 	demoState = eDEMO_STATE.DEFAULT;
-	demoBGList = iui_pack(-1, bgTest1, bgTest2, bgTest3, bgTest4, bgTest5, bgTest6);
+	demoBGList = iui_pack(-1);
 	demoBGCurrent = -1;
 	demoBGIdx = 0;
 
