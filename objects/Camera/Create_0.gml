@@ -170,12 +170,29 @@ stateMachine = new SnowState("step", false)
 			
 					var event = new Event("TakeDamage", {amount: roll("1d6")})
 					event = entity.fireEvent(event);
+					
+					if variable_struct_exists(event.params, "sound") {
+						var func;
+						switch event.params.sound {
+							case SoundTypes.SLIME:
+								func = function() {Sound.playSound(SoundTypes.SLIME)}
+								break;
+							default:
+								func = function() {Sound.playSound(SoundTypes.HIT)}
+								break;
+						}
+						addTimesource("Hit Sound", id, MoveFrames / 2.5, func)
+					}
+					delete event;
+		
 				}
 
 				xPrevious = x;
 				yPrevious = y;
 				xMoveTarget = x + 8 *  dcos(lookDir);
 				yMoveTarget = y + 8 * -dsin(lookDir);
+		
+				Sound.playSound(SoundTypes.SWING);
 		
 				addTimesource("Attack", id, 24, bumpFunc);
 				stateMachine.change("bump");
@@ -369,8 +386,14 @@ moveFunc  = function() {
 	
 	var event = new Event("Step", {x: x, y: y, z: z - 16});
 	event = event.fire();
+	delete event;
 	
 	stateMachine.change("step");
+	
+	//Step sfx
+	var tile = World.tiles[x / TileDim][y / TileDim].tile;
+	if tile != 4 { Sound.playSound(SoundTypes.STEP_DIRT); return;}
+	Sound.playSound(SoundTypes.STEP_STONE);
 }
 turnFunc  = function() {
 	lookDir = targetLookDir;

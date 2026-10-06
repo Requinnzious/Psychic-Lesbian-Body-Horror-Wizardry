@@ -17,7 +17,7 @@ GameState = new SnowState("stepPhase")
 	
 	.add("inputPhase",  {
 		enter:  function() {
-			show_debug_message("We're reading inputs now")
+			//show_debug_message("We're reading inputs now")
 		},
 		leave:  function() {},
 		update: function() {
@@ -45,7 +45,7 @@ GameState = new SnowState("stepPhase")
 	
 	.add("endPhase",    {
 		enter:  function() {
-			show_debug_message("End of turn\n")
+			//show_debug_message("End of turn\n")
 		},
 		leave: function()  {},
 		update: function() {

@@ -84,7 +84,7 @@ function init_config(){
 	#region Sound
 		var masterVolume = 100;
 		var bgmVolume    =  80;
-		var sfxVolume    =  60;
+		var sfxVolume    =  80;
 		var sound = {
 			MASTERVOLUME: masterVolume,
 			BGMVOLUME: bgmVolume,

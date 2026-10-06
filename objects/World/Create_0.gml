@@ -454,6 +454,8 @@ entities       = ds_map_create();
 		.addComponent("DefaultShader")
 		.addComponent("BillboardMesh")
 		.addComponent("DeathParticle")
+		.addComponent("DamageSound")
+		.addComponent("DeathSound")
 
 	var brain = instance_create_layer(slimeX, slimeY, "Instances", Brain, {parentEntity: slime});
 
@@ -477,6 +479,8 @@ entities       = ds_map_create();
 		.addComponent("DefaultShader")
 		.addComponent("BillboardMesh")
 		.addComponent("DeathParticle")
+		.addComponent("DamageSound")
+		.addComponent("DeathSound")
 
 	brain = instance_create_layer(slimeX, slimeY, "Instances", Brain, {parentEntity: slime});
 
@@ -500,6 +504,8 @@ entities       = ds_map_create();
 		.addComponent("DefaultShader")
 		.addComponent("BillboardMesh")
 		.addComponent("DeathParticle")
+		.addComponent("DamageSound")
+		.addComponent("DeathSound")
 
 	brain = instance_create_layer(slimeX, slimeY, "Instances", Brain, {parentEntity: slime});
 

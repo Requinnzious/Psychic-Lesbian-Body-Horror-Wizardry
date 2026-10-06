@@ -1,0 +1,26 @@
+{
+  "$GMSound":"v2",
+  "%Name":"seSwing",
+  "audioGroupId":{
+    "name":"audiogroup_default",
+    "path":"audiogroups/audiogroup_default",
+  },
+  "bitDepth":1,
+  "channelFormat":0,
+  "compression":0,
+  "compressionQuality":4,
+  "conversionMode":0,
+  "duration":0.15342404,
+  "exportDir":"",
+  "name":"seSwing",
+  "parent":{
+    "name":"07 Sounds",
+    "path":"folders/07 Sounds.yy",
+  },
+  "preload":false,
+  "resourceType":"GMSound",
+  "resourceVersion":"2.0",
+  "sampleRate":44100,
+  "soundFile":"seSwing.wav",
+  "volume":1.0,
+}

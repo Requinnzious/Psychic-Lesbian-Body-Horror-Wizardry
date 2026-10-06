@@ -206,6 +206,18 @@ function BillboardSpriteComponent(c_Name) : Component(c_Name) constructor {
 		return _event;
 	}
 }
+function DamageSoundComponent(c_Name) : Component(c_Name) constructor {	
+	sound = SoundTypes.SLIME;
+	
+	fireEvent = function(_event) {		
+		switch(_event.type) {
+			case "TakeDamage":
+				_event.params.sound = sound;
+				break;
+		}
+		return _event;
+	}
+}
 function DefaultShaderComponent(c_Name) : Component(c_Name) constructor {
 	fireEvent = function(_event) {		
 		switch(_event.type) {
@@ -236,6 +248,19 @@ function DeathParticleComponent(c_Name) : Component(c_Name) constructor {
 					height:       height
 				})
 				particle.buildMesh();
+				break;
+		}
+		
+		return _event;
+	}
+}
+function DeathSoundComponent(c_Name) : Component(c_Name) constructor {
+	sound = SoundTypes.CRIT;
+	
+	fireEvent = function(_event) {		
+		switch(_event.type) {
+			case "Destroy":
+				Sound.playSound(sound);
 				break;
 		}
 		
@@ -303,20 +328,6 @@ function ImpassableComponent(c_Name) : Component(c_Name) constructor {
 	fireEvent = function(_event) {		
 		switch(_event.type) {			
 			default:
-				break;
-		}
-		return _event;
-	}
-}
-function ShakeScreenComponent(c_Name) : Component(c_Name) constructor {
-	screenShake          = 6;
-	screenShakeIntensity = 1;
-	
-	fireEvent = function(_event) {		
-		switch(_event.type) {			
-			case "TakeDamage":
-				Camera.screenShake          = screenShake;
-				Camera.screenShakeIntensity = screenShakeIntensity;
 				break;
 		}
 		return _event;
@@ -456,6 +467,20 @@ function PositionComponent(c_Name) : Component(c_Name) constructor {
 				break;
 		}
 		
+		return _event;
+	}
+}
+function ShakeScreenComponent(c_Name) : Component(c_Name) constructor {
+	screenShake          = 6;
+	screenShakeIntensity = 1;
+	
+	fireEvent = function(_event) {		
+		switch(_event.type) {			
+			case "ScreenShake":
+				Camera.screenShake          = screenShake;
+				Camera.screenShakeIntensity = screenShakeIntensity;
+				break;
+		}
 		return _event;
 	}
 }
