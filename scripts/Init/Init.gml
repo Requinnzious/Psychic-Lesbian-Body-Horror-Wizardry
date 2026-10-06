@@ -18,7 +18,7 @@ function Init(){
 	#region Entity Globals
 		globalvar MoveFrames;
 		globalvar EntityUUID;
-		MoveFrames = 12;
+		MoveFrames = 16;
 		EntityUUID =  0;
 	#endregion
 	

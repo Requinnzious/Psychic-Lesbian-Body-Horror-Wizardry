@@ -92,9 +92,6 @@ xToOffset            =   0;	   //And these offsets are for nodding and shaking t
 yToOffset            =   0;
 zToOffset            =   0;
 
-
-moveSpeedFrames = 12;
-
 animPos         =  0;
 bumpAnim = animcurve_get_channel(acBump, 0);
 
@@ -213,10 +210,10 @@ stateMachine = new SnowState("step", false)
 			//Turn
 			dDir = 90 * ( GetLeftHeld() - GetRightHeld() );
 			if(dDir != 0) {		
-				lookDirInc = dDir / moveSpeedFrames;
+				lookDirInc = dDir / MoveFrames;
 				targetLookDir = (lookDir + dDir + 360) mod 360;
 			
-				addTimesource("Turn", id, moveSpeedFrames, turnFunc);
+				addTimesource("Turn", id, MoveFrames, turnFunc);
 				stateMachine.change("turn");
 				return;
 			}	
@@ -252,7 +249,7 @@ stateMachine = new SnowState("step", false)
 					xMoveTarget = x + dX;
 					yMoveTarget = y + dY;
 				
-					addTimesource("Bump",          id, moveSpeedFrames,             bumpFunc);
+					addTimesource("Bump",          id, MoveFrames,             bumpFunc);
 					createBloodDecal(decalParent);
 					stateMachine.change("bump");
 					
@@ -264,10 +261,10 @@ stateMachine = new SnowState("step", false)
 		
 				xMoveTarget = x + dX;
 				yMoveTarget = y + dY;
-				xMoveInc = dX / moveSpeedFrames;
-				yMoveInc = dY / moveSpeedFrames;
+				xMoveInc = dX / MoveFrames;
+				yMoveInc = dY / MoveFrames;
 			
-				addTimesource("Move", id, moveSpeedFrames, moveFunc);
+				addTimesource("Move", id, MoveFrames, moveFunc);
 				stateMachine.change("move");
 				
 				endPlayerTurn(x + dX, y + dY, z - 16);
@@ -289,7 +286,7 @@ stateMachine = new SnowState("step", false)
 				    var entity   = World.entities[? entityID];
 			
 					if !entity.has("ImpassableComponent") continue;
-					show_debug_message(entity);
+					//show_debug_message(entity);
 			
 					var entityX  = entity.get("Position", "x");
 					var entityY  = entity.get("Position", "y");
@@ -307,9 +304,9 @@ stateMachine = new SnowState("step", false)
 					xMoveTarget = x + dX;
 					yMoveTarget = y + dY;
 				
-					addTimesource("Bump", id, moveSpeedFrames, bumpFunc);
+					addTimesource("Bump", id, MoveFrames, bumpFunc);
 					createBloodDecal(decalParent);
-					//addTimesource("BloodSplatter", id, moveSpeedFrames / 4, createBloodDecal);
+					//addTimesource("BloodSplatter", id, MoveFrames / 4, createBloodDecal);
 					stateMachine.change("bump");
 					
 					Sound.playSound(SoundTypes.HIT1);
@@ -320,10 +317,10 @@ stateMachine = new SnowState("step", false)
 		
 				xMoveTarget = x + dX;
 				yMoveTarget = y + dY;
-				xMoveInc = dX / moveSpeedFrames;
-				yMoveInc = dY / moveSpeedFrames;
+				xMoveInc = dX / MoveFrames;
+				yMoveInc = dY / MoveFrames;
 			
-				addTimesource("Move", id, moveSpeedFrames, moveFunc);
+				addTimesource("Move", id, MoveFrames, moveFunc);
 				stateMachine.change("move");
 				
 				endPlayerTurn(x + dX, y + dY, z - 16);				
