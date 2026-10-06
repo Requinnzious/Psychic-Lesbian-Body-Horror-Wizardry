@@ -6,7 +6,7 @@
   "name":"iui_rect_rot",
   "parent":{
     "name":"DRAW",
-    "path":"folders/Scripts/IMNOTGUI/DRAW.yy",
+    "path":"folders/01 Functions/Libraries/IMNOTGUI/DRAW.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

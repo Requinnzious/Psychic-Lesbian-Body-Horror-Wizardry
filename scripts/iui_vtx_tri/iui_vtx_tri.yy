@@ -6,7 +6,7 @@
   "name":"iui_vtx_tri",
   "parent":{
     "name":"VTX",
-    "path":"folders/Scripts/IMNOTGUI/DRAW/VTX.yy",
+    "path":"folders/01 Functions/Libraries/IMNOTGUI/DRAW/VTX.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

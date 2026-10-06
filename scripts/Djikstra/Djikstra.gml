@@ -6,7 +6,7 @@ enum DjikstraMode {
 function computeDjikstra(targetX, targetY, tileDim = 32, mode = DjikstraMode.UDLR) {
 	var djikstra;
 		var collisions = layer_tilemap_get_id("Collisions");
-		var xx    = floor(targetX / tileDim), yy = floor(targetY / tileDim);
+		var xx    = round(targetX / tileDim), yy = round(targetY / tileDim);
 		
 		var dist  = 1;
 		var queue = [{xx: xx, yy: yy, d: 0}];

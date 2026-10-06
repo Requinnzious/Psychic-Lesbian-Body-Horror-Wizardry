@@ -6,7 +6,7 @@
   "name":"iui_textbox_numberonly",
   "parent":{
     "name":"ELEMENT",
-    "path":"folders/Scripts/IMNOTGUI/ELEMENT.yy",
+    "path":"folders/01 Functions/Libraries/IMNOTGUI/ELEMENT.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

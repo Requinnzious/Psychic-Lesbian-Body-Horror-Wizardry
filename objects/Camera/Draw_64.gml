@@ -5,7 +5,6 @@ surface_set_target(screenSurf)
 	var y1 = 0;
 	var y2 = window_get_height();
 	
-	//draw_rectangle(x2 - 160, 0, x2, 160, false);
 	for (var i = 0; i < 160; i += TileDim) {
 	    for (var j = 0; j < 160; j += TileDim) {
 			var xx = clamp(x / TileDim + 2 - i / TileDim, 0, array_length(World.tiles)    - 1);
@@ -13,6 +12,8 @@ surface_set_target(screenSurf)
 	
 		    var _tile = World.tiles[xx][yy].tile;
 			draw_sprite(sMetaTiles_Strip, _tile, 128 - i + x2 - 160, 128 - j);
+			
+			//Debug Djikstra
 			//draw_text(128 - i + x2 - 160, 128 - j, djikstra[xx][yy] ?? "NO")
 		}
 	}

@@ -24,10 +24,6 @@ function Entity(name = "") constructor {
 		}
 	}
 	
-	//insertComponent = function(componentName, index, args = {}) {
-	//	array_insert( components, index, constructComponent(componentName, args) );
-	//}
-	
 	has = function(componentName) {
 		for (var i = 0; i < array_length(components); ++i) {
 		    if(components[i].componentName == componentName) return true;
@@ -129,7 +125,7 @@ function ArmorComponent(c_Name) : Component(c_Name) constructor {
 		return _event;
 	}
 }
-function BillboardMeshComponent(c_Name) : Component(c_Name) constructor {
+function BillboardMeshComponent(c_Name)   : Component(c_Name) constructor {
 	other.listen("Render");
 	
 	color = c_white;
@@ -206,7 +202,7 @@ function BillboardSpriteComponent(c_Name) : Component(c_Name) constructor {
 		return _event;
 	}
 }
-function DamageSoundComponent(c_Name) : Component(c_Name) constructor {	
+function DamageSoundComponent(c_Name)     : Component(c_Name) constructor {	
 	sound = SoundTypes.SLIME;
 	
 	fireEvent = function(_event) {		
@@ -218,7 +214,7 @@ function DamageSoundComponent(c_Name) : Component(c_Name) constructor {
 		return _event;
 	}
 }
-function DefaultShaderComponent(c_Name) : Component(c_Name) constructor {
+function DefaultShaderComponent(c_Name)   : Component(c_Name) constructor {
 	fireEvent = function(_event) {		
 		switch(_event.type) {
 			case "Render":
@@ -229,7 +225,7 @@ function DefaultShaderComponent(c_Name) : Component(c_Name) constructor {
 		return _event;
 	}
 }
-function DeathParticleComponent(c_Name) : Component(c_Name) constructor {
+function DeathParticleComponent(c_Name)   : Component(c_Name) constructor {
 	sprite = sHit;
 	width  = TileDim / 2;
 	height = TileDim / 2;
@@ -254,7 +250,7 @@ function DeathParticleComponent(c_Name) : Component(c_Name) constructor {
 		return _event;
 	}
 }
-function DeathSoundComponent(c_Name) : Component(c_Name) constructor {
+function DeathSoundComponent(c_Name)      : Component(c_Name) constructor {
 	sound = SoundTypes.CRIT;
 	
 	fireEvent = function(_event) {		
@@ -267,31 +263,7 @@ function DeathSoundComponent(c_Name) : Component(c_Name) constructor {
 		return _event;
 	}
 }
-function DebugDjikstraComponent(c_Name) : Component(c_Name) constructor {
-	fireEvent = function(_event) {		
-		switch(_event.type) {
-			case "Render":
-				//Debug Djikstra
-				var xx = floor(_event.params.x / TileDim);
-				var yy = floor(_event.params.y / TileDim);
-				var dist = Camera.djikstra[xx][yy]
-				matrix_set(matrix_world, matrix_build(_event.params.x, _event.params.y, _event.params.z + 3, 90, 90, Camera.lookDir, 1, 1, 1));
-	
-				draw_set_colour(c_white)
-	
-				draw_set_halign(fa_center);
-				draw_set_valign(fa_bottom);
-				draw_text(0, 0, dist)
-				draw_set_halign(fa_left);
-				draw_set_valign(fa_top);
-				matrix_set(matrix_world, matrix_build_identity());
-				break;
-		}
-		
-		return _event;
-	}
-}
-function FireElementComponent(c_Name) : Component(c_Name) constructor {
+function FireElementComponent(c_Name)     : Component(c_Name) constructor {
 	hitDice = "1d6";
 	fireEvent = function(_event) {
 		switch(_event.type) {
@@ -303,7 +275,7 @@ function FireElementComponent(c_Name) : Component(c_Name) constructor {
 		return _event;
 	}
 }
-function HealthComponent(c_Name) : Component(c_Name) constructor {
+function HealthComponent(c_Name)          : Component(c_Name) constructor {
 	hp         = 10;
 	maxHp      = 10;
 	
@@ -322,7 +294,7 @@ function HealthComponent(c_Name) : Component(c_Name) constructor {
 		return _event;
 	}
 }
-function ImpassableComponent(c_Name) : Component(c_Name) constructor {
+function ImpassableComponent(c_Name)      : Component(c_Name) constructor {
 	bumping = true;
 	
 	fireEvent = function(_event) {		
@@ -333,7 +305,7 @@ function ImpassableComponent(c_Name) : Component(c_Name) constructor {
 		return _event;
 	}
 }
-function HurtColorComponent(c_Name) : Component(c_Name) constructor {
+function HurtColorComponent(c_Name)       : Component(c_Name) constructor {
 	hurtTimer = 12;
 	
 	fireEvent = function(_event) {		
@@ -353,7 +325,7 @@ function HurtColorComponent(c_Name) : Component(c_Name) constructor {
 		return _event;
 	}
 }
-function HurtSpriteComponent(c_Name) : Component(c_Name) constructor {
+function HurtSpriteComponent(c_Name)      : Component(c_Name) constructor {
 	sprite    = sBBGrass_Stepped;
 	hurt      = false;
 	hurtTimer = 12;
@@ -375,7 +347,7 @@ function HurtSpriteComponent(c_Name) : Component(c_Name) constructor {
 		return _event;
 	}
 }
-function HurtSubimageComponent(c_Name) : Component(c_Name) constructor {
+function HurtSubimageComponent(c_Name)    : Component(c_Name) constructor {
 	subimage  = 0;
 	hurt      = false;
 	hurtTimer = 12;
@@ -397,7 +369,7 @@ function HurtSubimageComponent(c_Name) : Component(c_Name) constructor {
 		return _event;
 	}
 }
-function InvulnComponent(c_Name) : Component(c_Name) constructor {
+function InvulnComponent(c_Name)          : Component(c_Name) constructor {
 	fireEvent = function(_event) {
 		switch(_event.type) {
 			case "TakeDamage":
@@ -407,7 +379,7 @@ function InvulnComponent(c_Name) : Component(c_Name) constructor {
 		return _event;
 	}
 }
-function LootComponent(c_Name) : Component(c_Name) constructor {
+function LootComponent(c_Name)            : Component(c_Name) constructor {
 	items = [];
 	fireEvent = function(_event) {
 		switch(_event.type) {
@@ -418,7 +390,7 @@ function LootComponent(c_Name) : Component(c_Name) constructor {
 		return _event;
 	}
 }
-function PhysicsComponent(c_Name) : Component(c_Name) constructor {	
+function PhysicsComponent(c_Name)         : Component(c_Name) constructor {	
 	flash      = 0;
 	color      = c_white;
 	maxFlash   = 12;
@@ -441,7 +413,7 @@ function PhysicsComponent(c_Name) : Component(c_Name) constructor {
 		return _event;
 	}
 }
-function PositionComponent(c_Name) : Component(c_Name) constructor {
+function PositionComponent(c_Name)        : Component(c_Name) constructor {
 	x = undefined; y = undefined; z = undefined;
 	
 	fireEvent = function(_event) {		
@@ -470,7 +442,7 @@ function PositionComponent(c_Name) : Component(c_Name) constructor {
 		return _event;
 	}
 }
-function ShakeScreenComponent(c_Name) : Component(c_Name) constructor {
+function ShakeScreenComponent(c_Name)     : Component(c_Name) constructor {
 	screenShake          = 6;
 	screenShakeIntensity = 1;
 	
@@ -484,7 +456,7 @@ function ShakeScreenComponent(c_Name) : Component(c_Name) constructor {
 		return _event;
 	}
 }
-function SpriteComponent(c_Name) : Component(c_Name) constructor {
+function SpriteComponent(c_Name)          : Component(c_Name) constructor {
 	sprite    =  sBBGrass;
 	subimage  =         0;
 	randomSubimage = false;
@@ -510,7 +482,7 @@ function SpriteComponent(c_Name) : Component(c_Name) constructor {
 		return _event;
 	}
 }
-function SteppedOnComponent(c_Name) : Component(c_Name) constructor {
+function SteppedOnComponent(c_Name)       : Component(c_Name) constructor {
 	sprite = sBBGrass_Stepped;
 	steppedOn = false;
 	
@@ -530,7 +502,7 @@ function SteppedOnComponent(c_Name) : Component(c_Name) constructor {
 		return _event;
 	}
 }
-function TransformComponent(c_Name) : Component(c_Name) constructor {
+function TransformComponent(c_Name)       : Component(c_Name) constructor {
 	x = 0;
 	y = 0;
 	z = 0;
@@ -554,7 +526,7 @@ function TransformComponent(c_Name) : Component(c_Name) constructor {
 		return _event;
 	}
 }
-function WeaponComponent(c_Name) : Component(c_Name) constructor {
+function WeaponComponent(c_Name)          : Component(c_Name) constructor {
 	hitDice = "1d6";
 	damageType = "slashing";
 	fireEvent = function(_event) {
@@ -567,7 +539,7 @@ function WeaponComponent(c_Name) : Component(c_Name) constructor {
 		return _event;
 	}
 }
-function WindShaderComponent(c_Name) : Component(c_Name) constructor {
+function WindShaderComponent(c_Name)      : Component(c_Name) constructor {
 	sway = 500;
 	
 	fireEvent = function(_event) {		
@@ -582,7 +554,7 @@ function WindShaderComponent(c_Name) : Component(c_Name) constructor {
 		return _event;
 	}
 }
-function WorldTileComponent(c_Name) : Component(c_Name) constructor {
+function WorldTileComponent(c_Name)       : Component(c_Name) constructor {
 	gridX         =              0;
 	gridY         =              0;
 	worldMeshes   =             [];

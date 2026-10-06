@@ -41,7 +41,7 @@ playSound = function(soundType = -1) {
 			audio_sound_gain(sound, Config.SOUND.SFXVOLUME / 100 * .8, 0);
 			
 			sound = audio_play_sound(seSlime, 4,  false, 1, 0, random_range(.9, 1.1));
-			gainMult = .3;
+			gainMult = .6;
 			break;			
 		
 		

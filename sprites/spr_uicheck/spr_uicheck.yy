@@ -26,7 +26,7 @@
   "origin":4,
   "parent":{
     "name":"imnotgui",
-    "path":"folders/Sprites/imnotgui.yy",
+    "path":"folders/03 Textures/imnotgui.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",

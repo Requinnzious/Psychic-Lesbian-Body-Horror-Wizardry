@@ -3,8 +3,8 @@
   "%Name":"shd_retroscreen_postprocessing",
   "name":"shd_retroscreen_postprocessing",
   "parent":{
-    "name":"Shaders",
-    "path":"folders/Shaders.yy",
+    "name":"CRT",
+    "path":"folders/04 Shaders/CRT.yy",
   },
   "resourceType":"GMShader",
   "resourceVersion":"2.0",

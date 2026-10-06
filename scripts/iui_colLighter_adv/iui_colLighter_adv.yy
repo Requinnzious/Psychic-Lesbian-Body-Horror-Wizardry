@@ -6,7 +6,7 @@
   "name":"iui_colLighter_adv",
   "parent":{
     "name":"IMNOTGUI",
-    "path":"folders/Scripts/IMNOTGUI.yy",
+    "path":"folders/01 Functions/Libraries/IMNOTGUI.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

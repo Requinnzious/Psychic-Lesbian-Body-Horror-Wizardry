@@ -119,6 +119,9 @@ yMoveInc    = 0;
 endPlayerTurn = function(xx, yy, zz) {
 	djikstra = computeDjikstra(xx, yy);
 	
+	show_debug_message(xx);
+	show_debug_message(yy);
+	
 	var playerTurnEvent = new Event("PlayerTurn", { x: xx, y: yy, z: zz });
 	playerTurnEvent = playerTurnEvent.fire();
 	
