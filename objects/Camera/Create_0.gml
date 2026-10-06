@@ -1,81 +1,12 @@
-gpu_set_ztestenable(true); //We just have to set these so openGL knows we're using 3D rendering
-gpu_set_zwriteenable(true);
-application_surface_draw_enable(false);
+x                    =  SixOfCups.get("Position",  "x");
+y                    =  SixOfCups.get("Position",  "y");
+z                    =  SixOfCups.get("Transform", "z");
 
-screenSurf = surface_create(surface_get_width(application_surface), surface_get_height(application_surface));
-surface1   = surface_create(surface_get_width(application_surface), surface_get_height(application_surface));
-surface2   = surface_create(surface_get_width(application_surface), surface_get_height(application_surface));
-surface3   = surface_create(surface_get_width(application_surface), surface_get_height(application_surface));
+djikstra             = computeDjikstra(x, y);
 
-/// Shader parameters
-// CRT emulation
-crtDistortion   =    0; // screen distortion intensity
-crtReflection   =    0; // border reflection intensity
-crtShadowmask   =    0; // shadow mask intensity
-crtScanline     =  .18; // scanline intensity
-crtBleed        =    0; // bleed intensity
-crtBleedSize    =   64; // bleed size
-crtTint         =  .15; // dynamic colour tint intensity
-crtVignette     =   .1; // vignette intensity
-crtFilmgrain    =   .1; // film grain intensity
-crtBrightness   =    0; // brightness boost/adjustment
-crtContrast     =   .5; // contrast adjustment
-
-// Specular light
-// specular light colour
-crtSpecularR    =   .9;
-crtSpecularG    =  .75;
-crtSpecularB    =  1.0;
-
-// crtSpecularCol = c_white;
-crtSpecularAmp  =  .03; // specular light amplitude/alpha
-crtSpecularOffX =    0; // specular light offset x
-crtSpecularOffY =  .25; // specular light offset y
-
-// Final postprocessing FX
-crtGlowFactor   =    0; // factor/multiplier of glow (hard-capped at certain amount)
-crtGlowTint     = 0.75; // colour tint amount of blur (like chromatic aberration)
-crtBlurSize     =    8; // half size of blur
-crtBlurZoom     =  0.3; // zoom amount of blur
-
-#region GUI
-	CRTDebugUI = false;
-	/// Window settings
-	winWid = 1280;
-	winHei =  720;
-	winTargetW = 800;
-	winTargetH = 600;
-
-	/// Init the UI
-	iui_init();
-	UIScale = 1.0;
-	UIMsg = "";
-	UIMsgCtr = 0;
-
-	/// State of the demo
-	enum eDEMO_STATE {
-		DEFAULT,
-		CUSTOM
-	}
-	demoState = eDEMO_STATE.DEFAULT;
-	demoBGList = iui_pack(-1);
-	demoBGCurrent = -1;
-	demoBGIdx = 0;
-
-	demoCustomBGDir = "";
-	demoCustomBG = -1;
-#endregion
-
-djikstra = computeDjikstra(x, y);
-
-
-hp    = 6;
-maxHP = 6;
-
-z                    =  16;       //GM doesn't give objects a default z so we have to define it every time :(
-lookDir              = 270;       //Since we're locked to a grid, lookDir is always going to be a multiple of 90					       
-lookPit              =   0;       //We may want to script the player looking up or down, so we'll keep track of the pitch					       
-lookDirOffset        =   0;       //Offsets used for the lookState
+lookDir              = 270;    //Since we're locked to a grid, lookDir is always going to be a multiple of 90					       
+lookPit              =   0;    //We may want to script the player looking up or down, so we'll keep track of the pitch					       
+lookDirOffset        =   0;    //Offsets used for the lookState
 lookPitOffset        =   0;
 
 screenShake          =   0;
@@ -103,6 +34,80 @@ xMoveInc    = 0;           //How many pixels we move every frame of the moveStat
 yMoveInc    = 0;
 
 
+
+gpu_set_ztestenable(true); //We just have to set these so openGL knows we're using 3D rendering
+gpu_set_zwriteenable(true);
+application_surface_draw_enable(false);
+
+
+#region CRT Shader Parameters
+	screenSurf = surface_create(surface_get_width(application_surface), surface_get_height(application_surface));
+	surface1   = surface_create(surface_get_width(application_surface), surface_get_height(application_surface));
+	surface2   = surface_create(surface_get_width(application_surface), surface_get_height(application_surface));
+	surface3   = surface_create(surface_get_width(application_surface), surface_get_height(application_surface));
+
+	/// Shader parameters
+	// CRT emulation
+	crtDistortion   =    0; // screen distortion intensity
+	crtReflection   =    0; // border reflection intensity
+	crtShadowmask   =    0; // shadow mask intensity
+	crtScanline     =  .18; // scanline intensity
+	crtBleed        =    0; // bleed intensity
+	crtBleedSize    =   64; // bleed size
+	crtTint         =  .15; // dynamic colour tint intensity
+	crtVignette     =   .1; // vignette intensity
+	crtFilmgrain    =   .1; // film grain intensity
+	crtBrightness   =    0; // brightness boost/adjustment
+	crtContrast     =   .5; // contrast adjustment
+
+	// Specular light
+	// specular light colour
+	crtSpecularR    =   .9;
+	crtSpecularG    =  .75;
+	crtSpecularB    =  1.0;
+
+	// crtSpecularCol = c_white;
+	crtSpecularAmp  =  .03; // specular light amplitude/alpha
+	crtSpecularOffX =    0; // specular light offset x
+	crtSpecularOffY =  .25; // specular light offset y
+
+	// Final postprocessing FX
+	crtGlowFactor   =    0; // factor/multiplier of glow (hard-capped at certain amount)
+	crtGlowTint     = 0.75; // colour tint amount of blur (like chromatic aberration)
+	crtBlurSize     =    8; // half size of blur
+	crtBlurZoom     =  0.3; // zoom amount of blur
+
+	#region GUI
+		CRTDebugUI = false;
+		/// Window settings
+		winWid = 1280;
+		winHei =  720;
+		winTargetW = 1280;
+		winTargetH =  720;
+
+		/// Init the UI
+		iui_init();
+		UIScale = 1.0;
+		UIMsg = "";
+		UIMsgCtr = 0;
+
+		/// State of the demo
+		enum eDEMO_STATE {
+			DEFAULT,
+			CUSTOM
+		}
+		demoState = eDEMO_STATE.DEFAULT;
+		demoBGList = iui_pack(-1);
+		demoBGCurrent = -1;
+		demoBGIdx = 0;
+
+		demoCustomBGDir = "";
+		demoCustomBG = -1;
+	#endregion
+
+#endregion 
+
+
 //Here I'm using a pattern called a 'state machine'. You don't want to process every action every frame, for example;
 //If you move your character to another square, you don't want to be able to turn mid-animation
 //Similarly you wouldn't want to be reading movement inputs when you are in a menu
@@ -126,7 +131,7 @@ endPlayerTurn = function(xx, yy, zz) {
 }
 
 stateMachine = new SnowState("step", false)
-	.add("idle", {
+	.add("wait", {
 		enter: function() {},
 		update: function() {}
 	})
@@ -195,6 +200,8 @@ stateMachine = new SnowState("step", false)
 				stateMachine.change("bump");
 				
 				endPlayerTurn(x, y, z - 16);
+				
+				Game.entityTurns[? $"Six of Cups: {SixOfCups.uuid}"] = {x: x, y: y, brain: Camera};
 				return;
 			}
 	
@@ -256,6 +263,8 @@ stateMachine = new SnowState("step", false)
 					Sound.playSound(SoundTypes.HIT1);
 					
 					endPlayerTurn(x, y, z - 16);
+				
+					Game.entityTurns[? $"Six of Cups: {SixOfCups.uuid}"] = {x: x , y: y, brain: Camera};
 					return;
 				};
 		
@@ -268,6 +277,8 @@ stateMachine = new SnowState("step", false)
 				stateMachine.change("move");
 				
 				endPlayerTurn(x + dX, y + dY, z - 16);
+				
+				Game.entityTurns[? $"Six of Cups: {SixOfCups.uuid}"] = {x: x + dX, y: y + dY, brain: Camera};
 				return;
 			}	
 
@@ -311,6 +322,8 @@ stateMachine = new SnowState("step", false)
 					Sound.playSound(SoundTypes.HIT1);
 					
 					endPlayerTurn(x, y, z - 16);
+					
+					Game.entityTurns[? $"Six of Cups: {SixOfCups.uuid}"] = {x: x, y: y, brain: Camera};
 					return;
 				};
 		
@@ -322,7 +335,9 @@ stateMachine = new SnowState("step", false)
 				addTimesource("Move", id, MoveFrames, moveFunc);
 				stateMachine.change("move");
 				
-				endPlayerTurn(x + dX, y + dY, z - 16);				
+				endPlayerTurn(x + dX, y + dY, z - 16);		
+				
+				Game.entityTurns[? $"Six of Cups: {SixOfCups.uuid}"] = {x: x + dX, y: y + dY, brain: Camera};		
 				return;
 			}
 
@@ -399,16 +414,12 @@ stateMachine = new SnowState("step", false)
 
 //Callbacks for when states are finished [WIP]
 moveFunc  = function() {
+	stateMachine.change("wait");
+	
 	x = xMoveTarget;
 	y = yMoveTarget;
 	xPrevious = x;
 	yPrevious = y;
-	
-	var event = new Event("Step", {x: x, y: y, z: z - 16});
-	event = event.fire();
-	delete event;
-	
-	stateMachine.change("step");
 	
 	var event = new Event("Place", {x: x, y: y, z: z});
 	event = SixOfCups.fireEvent(event);
@@ -418,6 +429,10 @@ moveFunc  = function() {
 	var tile = World.tiles[x / TileDim][y / TileDim].tile;
 	if tile != 4 { Sound.playSound(SoundTypes.STEP_DIRT); return;}
 	Sound.playSound(SoundTypes.STEP_STONE);
+	
+	var event = new Event("Step", {x: x, y: y, z: z - 16});
+	event = event.fire();
+	delete event;
 }
 turnFunc  = function() {
 	lookDir = targetLookDir;
@@ -428,7 +443,7 @@ bumpFunc  = function() {
 	y = yPrevious;	
 	animPos = 0;
 
-	stateMachine.change("step");
+	stateMachine.change("wait");
 }
 
 //Various methods for the player

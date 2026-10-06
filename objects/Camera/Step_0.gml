@@ -1,5 +1,7 @@
 stateMachine.update();
 
+show_debug_message(stateMachine.get_current_state());
+
 iui_update_io();
 
 if !surface_exists(screenSurf) screenSurf = surface_create(surface_get_width(application_surface), surface_get_height(application_surface));

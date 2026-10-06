@@ -6,8 +6,17 @@ Steps = 0;
 GameState = new SnowState("stepPhase")
 	.add("stepPhase",   {
 		enter:  function() { 
+			show_debug_message("Step Phase");
+			
 			Steps++;
-			if variable_instance_exists(id, "GameState") GameState.change("inputPhase");
+			if !variable_instance_exists(id, "GameState") return;
+			var keys = ds_map_keys_to_array(entityTurns);
+			//WIP
+			for (var i = 0; i < array_length(keys); ++i) {
+			    var brain = entityTurns[? keys[i]].brain;
+				brain.stateMachine.change("step");
+			}
+			GameState.change("inputPhase");
 		},
 		leave:  function() {},
 		update: function() { 
@@ -17,11 +26,20 @@ GameState = new SnowState("stepPhase")
 	
 	.add("inputPhase",  {
 		enter:  function() {
-			//show_debug_message("We're reading inputs now")
+			show_debug_message("Input Phase");
+			
+			if variable_instance_exists(id, "entityTurns") {
+				ds_map_clear(entityTurns);
+				return;
+			}
+			entityTurns = ds_map_create();
 		},
 		leave:  function() {},
 		update: function() {
-			GameState.change("endPhase")
+			var keys = ds_map_keys_to_array(entityTurns);			
+			if array_length(keys) == 0 return;
+			
+			GameState.change("movePhase")
 		}
 	})
 	
@@ -32,20 +50,45 @@ GameState = new SnowState("stepPhase")
 	})
 	
 	.add("movePhase",   {
-		enter:  function() {},
+		enter:  function() {
+			show_debug_message("Move Phase");
+		},
 		leave: function()  {},
-		update: function() {}
+		update: function() {
+			var keys = ds_map_keys_to_array(entityTurns);		
+			
+			var turnComplete = true;
+			
+			//If any of our brains have an "active" state - != "wait" - the phase isn't over
+			for (var i = 0; i < array_length(keys); ++i) {
+			    var brain = entityTurns[? keys[i]].brain;
+				if !brain.stateMachine.state_is("wait") {
+					turnComplete = false;
+					break;
+				}
+			}			
+			if !turnComplete return;
+			
+			
+			
+			//Go to next state
+			GameState.change("attackPhase")
+		}
 	})
 	
 	.add("attackPhase", {
-		enter:  function() {},
+		enter:  function() { 
+			show_debug_message("Attack Phase");
+			GameState.change("endPhase");
+		},
 		leave: function()  {},
-		update: function() {}
+		update: function() { GameState.change("endPhase"); }
 	})
 	
 	.add("endPhase",    {
 		enter:  function() {
-			//show_debug_message("End of turn\n")
+			show_debug_message("End Phase\n");
+			GameState.change("stepPhase");
 		},
 		leave: function()  {},
 		update: function() {
@@ -64,4 +107,3 @@ SixOfCups = new Entity("Six of Cups")
 	//.addComponent("MiniMapSprite", {sprite: sWizard})
 
 SixOfCups.fireEvent(EntityCreateEvent);
-show_debug_message(SixOfCups);
