@@ -1,6 +1,7 @@
 identityMatrix = matrix_build( 0,   0, 0, 0, 0,  0,  1,  1,  1);
 
-entities       = ds_map_create();
+entities = ds_map_create();
+entities[? SixOfCups.uuid] = SixOfCups;
 
 #region Store the tilemap
 	tiles = [];
@@ -452,6 +453,8 @@ entities       = ds_map_create();
 		.addComponent("HurtColor",    {hurtTimer: 24})
 		.addComponent("DefaultShader")
 		.addComponent("BillboardMesh")
+		
+		.addComponent("MiniMapSprite")
 		.addComponent("DeathParticle")
 		.addComponent("DamageSound")
 		.addComponent("DeathSound")
@@ -477,6 +480,8 @@ entities       = ds_map_create();
 		.addComponent("HurtColor",    {hurtTimer: 24})
 		.addComponent("DefaultShader")
 		.addComponent("BillboardMesh")
+		
+		.addComponent("MiniMapSprite")
 		.addComponent("DeathParticle")
 		.addComponent("DamageSound")
 		.addComponent("DeathSound")
@@ -502,6 +507,8 @@ entities       = ds_map_create();
 		.addComponent("HurtColor",    {hurtTimer: 24})
 		.addComponent("DefaultShader")
 		.addComponent("BillboardMesh")
+		
+		.addComponent("MiniMapSprite")
 		.addComponent("DeathParticle")
 		.addComponent("DamageSound")
 		.addComponent("DeathSound")
@@ -511,20 +518,6 @@ entities       = ds_map_create();
 	slime.fireEvent(EntityCreateEvent);
 	entities[? slime.uuid] = slime;
 #endregion
-
-
-SixOfCups = new Entity("Six of Cups")
-	.addComponent("Physics",    { maxFlash:   24 })
-	.addComponent("Impassable", { bumping: false })
-	.addComponent("Health",     { hp:         24, maxHP: 24 })
-	.addComponent("Position",   { x:          96, y:     96, z:  0 })
-	.addComponent("Transform",  { x:           0, y:      0, z: 16 })
-
-	SixOfCups.fireEvent(EntityCreateEvent)
-	entities[? SixOfCups.uuid] = SixOfCups;
-
-show_debug_message(SixOfCups)
-
 
 //AI
 subscribe("PlayerTurn", id);

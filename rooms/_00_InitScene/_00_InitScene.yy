@@ -6,8 +6,8 @@
   "inheritCreationOrder":false,
   "inheritLayers":false,
   "instanceCreationOrder":[
-    {"name":"inst_25DF4754","path":"rooms/_00_InitScene/_00_InitScene.yy",},
     {"name":"inst_21DEA495","path":"rooms/_00_InitScene/_00_InitScene.yy",},
+    {"name":"inst_25DF4754","path":"rooms/_00_InitScene/_00_InitScene.yy",},
     {"name":"inst_3F5A8129","path":"rooms/_00_InitScene/_00_InitScene.yy",},
   ],
   "isDnd":false,

@@ -53,3 +53,15 @@ GameState = new SnowState("stepPhase")
 		}
 	})
 	
+
+SixOfCups = new Entity("Six of Cups")
+	.addComponent("Physics",       { maxFlash:   24 })
+	.addComponent("Impassable",    { bumping: false })
+	.addComponent("Health",        { hp:         24, maxHP: 24 })
+	.addComponent("Position",      { x:          96, y:     96, z:  0 })
+	.addComponent("Transform",     { x:           0, y:      0, z: 16 })
+		
+	//.addComponent("MiniMapSprite", {sprite: sWizard})
+
+SixOfCups.fireEvent(EntityCreateEvent);
+show_debug_message(SixOfCups);

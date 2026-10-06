@@ -119,9 +119,6 @@ yMoveInc    = 0;
 endPlayerTurn = function(xx, yy, zz) {
 	djikstra = computeDjikstra(xx, yy);
 	
-	show_debug_message(xx);
-	show_debug_message(yy);
-	
 	var playerTurnEvent = new Event("PlayerTurn", { x: xx, y: yy, z: zz });
 	playerTurnEvent = playerTurnEvent.fire();
 	
@@ -168,7 +165,7 @@ stateMachine = new SnowState("step", false)
 			
 					if (entityX != x + 32 *  dcos(lookDir) || entityY!= y + 32 * -dsin(lookDir)) continue;
 			
-					var event = new Event("TakeDamage", {amount: roll("1d6")})
+					var event = new Event("TakeDamage", {amount: roll("1d6+2")})
 					event = entity.fireEvent(event);
 					
 					if variable_struct_exists(event.params, "sound") {
@@ -309,7 +306,6 @@ stateMachine = new SnowState("step", false)
 				
 					addTimesource("Bump", id, MoveFrames, bumpFunc);
 					createBloodDecal(decalParent);
-					//addTimesource("BloodSplatter", id, MoveFrames / 4, createBloodDecal);
 					stateMachine.change("bump");
 					
 					Sound.playSound(SoundTypes.HIT1);
@@ -342,6 +338,10 @@ stateMachine = new SnowState("step", false)
 		update: function() {
 			x += xMoveInc; y += yMoveInc;
 			bobHead();
+			
+			var event = new Event("Place", {x: x, y: y, z: z});
+			event = SixOfCups.fireEvent(event);
+			delete event;
 		}
 	})
 
@@ -410,6 +410,10 @@ moveFunc  = function() {
 	
 	stateMachine.change("step");
 	
+	var event = new Event("Place", {x: x, y: y, z: z});
+	event = SixOfCups.fireEvent(event);
+	delete event;
+	
 	//Step sfx
 	var tile = World.tiles[x / TileDim][y / TileDim].tile;
 	if tile != 4 { Sound.playSound(SoundTypes.STEP_DIRT); return;}
@@ -429,9 +433,11 @@ bumpFunc  = function() {
 
 //Various methods for the player
 createBloodDecal = function(parentEntity = noone) {
-	hp = max(0, hp - 1);
+	var event = new Event("TakeDamage", {amount: 1});
+	event = SixOfCups.fireEvent(event);
 	var spr = sBloodDecal;
-	if (hp == 0) spr = sBloodDecal_Death;
+	if event.params.hp < 0 spr = sBloodDecal_Death;
+	delete event;
 	
 	var blood = instance_create_layer(xPrevious, yPrevious, "Instances", Decal);
 	blood.parentEntity = parentEntity;

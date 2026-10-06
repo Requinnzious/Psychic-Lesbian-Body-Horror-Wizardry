@@ -285,7 +285,9 @@ function HealthComponent(c_Name)          : Component(c_Name) constructor {
 		switch(_event.type) {			
 			case "TakeDamage":
 				hp = max(0, hp - _event.params.amount);
-				show_debug_message($"Took {_event.params.amount} damage");
+				show_debug_message($"{getParent().entityName} took {_event.params.amount} damage");
+				
+				_event.params.hp = hp;
 				
 				//This is temporary but look!
 				if(hp == 0) addTimesource("IDied", World, deathTimer, function(){destroyEntity(World.entities[? parent])});
@@ -385,6 +387,25 @@ function LootComponent(c_Name)            : Component(c_Name) constructor {
 		switch(_event.type) {
 			case "Destroy":
 				_event.params.items = self.items;
+				break;
+		}
+		return _event;
+	}
+}
+function MiniMapSpriteComponent(c_Name)   : Component(c_Name) constructor {
+	other.listen("Minimap");
+	
+	sprite   = sSlime;
+	subimage =      0;
+	
+	fireEvent = function(_event) {
+		switch(_event.type) {
+			case "Minimap":
+				var parentEntity = getParent();
+				var xx = parentEntity.get("Position", "x");
+				var yy = parentEntity.get("Position", "y");
+				
+				array_push(_event.params.minimapIcons, {sprite: sprite, subimage: subimage, x: xx, y: yy});
 				break;
 		}
 		return _event;

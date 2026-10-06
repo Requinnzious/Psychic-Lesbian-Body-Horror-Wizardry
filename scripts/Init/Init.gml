@@ -20,6 +20,8 @@ function Init(){
 		globalvar EntityUUID;
 		MoveFrames = 16;
 		EntityUUID =  0;
+		
+		globalvar SixOfCups;
 	#endregion
 	
 	#region TimeSources

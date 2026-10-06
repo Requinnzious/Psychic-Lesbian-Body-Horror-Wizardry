@@ -18,28 +18,32 @@ surface_set_target(screenSurf)
 		}
 	}
 
+	var event = new Event("Minimap", {minimapIcons: []});
+	event = event.fire();
 	//Draw enemies on minimap
-	for (var i = 0; i < instance_number(Enemy); ++i) {
-	    var enemy = instance_find(Enemy, i);
-		var enemyX = floor(enemy.x / TileDim) * TileDim;
-		var enemyY = floor(enemy.y / TileDim) * TileDim;
-
-		if (enemyX < x - 96 || enemyY < y - 96 || enemyX > x + 64 || enemyY > y + 64) continue;
-
-		var xx = (floor(x / TileDim) * TileDim) - enemyX;
-		var yy = (floor(y / TileDim) * TileDim) - enemyY;
-
-		draw_sprite(enemy.sprite_index, enemy.image_index, x2 - xx - 96 + 16, 160 - yy - 96 + 24);
+	for (var i = 0; i < array_length(event.params.minimapIcons); ++i) {
+		var icon  = event.params.minimapIcons[i];
+		var iconX = floor(icon.x / TileDim) * TileDim;
+		var iconY = floor(icon.y / TileDim) * TileDim;
+		
+		if (iconX < x - 96 || iconY < y - 96 || iconX > x + 64 || iconY > y + 64) continue;
+		
+		var xx = (floor(x / TileDim) * TileDim) - iconX;
+		var yy = (floor(y / TileDim) * TileDim) - iconY;
+		
+		draw_sprite(icon.sprite, icon.subimage, x2 - xx - 96 + 16, 160 - yy - 96 + 24);
 	}
+	delete event;
 
 	//Player cursor
-	var cx1 = x2 - 80 -       dcos(lookDir) *  8;
-	var cy1 = 80      +       dsin(lookDir) * 16;
-	var cx2 = cx1     + lengthdir_x(16, lookDir);
-	var cy2 = cy1     + lengthdir_y(16, lookDir);
+	var cx1 = x2 - 80 -       dcos(lookDir + lookDirOffset) * 16;
+	var cy1 = 80      +       dsin(lookDir + lookDirOffset) * 16;
+	var cx2 = cx1     + lengthdir_x(32, lookDir + lookDirOffset);
+	var cy2 = cy1     + lengthdir_y(32, lookDir + lookDirOffset);
 
 	draw_set_colour(c_white)
 	draw_arrow(cx1, cy1, cx2, cy2, 16);
+	
 #endregion
 surface_reset_target();
 
