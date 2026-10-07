@@ -98,7 +98,7 @@ GameState = new SnowState("stepPhase")
 subscribe("PlayerTurn", id);
 fireEvent = function(_event) {
 	switch _event.type {
-		case "PlayerTurn":			
+		case "PlayerTurn":
 			var moveBrains = new Event("Brain_Move", _event.params);
 			moveBrains = moveBrains.fire();
 			delete moveBrains;
@@ -110,7 +110,7 @@ fireEvent = function(_event) {
 }
 
 
-SixOfCups = new Entity("Six of Cups")
+SixOfCups = new Entity(PlayerName)
 	.addComponent("Physics",       { maxFlash:   24 })
 	.addComponent("Impassable",    { bumping: false })
 	.addComponent("Health",        { hp:         24, maxHP: 24 })

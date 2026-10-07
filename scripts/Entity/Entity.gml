@@ -128,7 +128,7 @@ function ArmorComponent(c_Name) : Component(c_Name) constructor {
 function BillboardMeshComponent(c_Name)   : Component(c_Name) constructor {
 	other.listen("Render");
 	
-	color = c_white;
+	baseColor = c_white;
 	
 	buildMesh = function(color) {
 		mesh = vertex_create_buffer();
@@ -154,7 +154,7 @@ function BillboardMeshComponent(c_Name)   : Component(c_Name) constructor {
 				tex    = sprite_get_texture(_event.params.sprite, _event.params.subimage);
 				width  = sprite_get_width(_event.params.sprite);
 				height = sprite_get_height(_event.params.sprite);
-				buildMesh(c_white);
+				buildMesh(baseColor);
 				break;
 			
 			case "Render":
@@ -162,14 +162,14 @@ function BillboardMeshComponent(c_Name)   : Component(c_Name) constructor {
 					var flash = variable_struct_get(_event.params, "flash");
 					if(flash mod 6) > 1 {
 						_event.params.flash = 0;
-						_event.params.color = c_white;
+						_event.params.color = baseColor;
 						break;
 					}
 				}
 				
-				if(_event.params.color != color) {
-					color = _event.params.color;
-					rebuildMesh(color);
+				if(_event.params.color != baseColor) {
+					baseColor = _event.params.color;
+					rebuildMesh(baseColor);
 				}
 				
 				var zRot = Camera.lookDir + Camera.lookDirOffset + 90;
@@ -309,18 +309,20 @@ function ImpassableComponent(c_Name)      : Component(c_Name) constructor {
 }
 function HurtColorComponent(c_Name)       : Component(c_Name) constructor {
 	hurtTimer = 12;
+	baseColor = c_white;
+	colors = [
+		#0000ff,
+		#00ff00,
+		#ff0000
+	]
 	
 	fireEvent = function(_event) {		
 		switch(_event.type) {			
 			case "Render":
-				var col = #ffffff;
-				if (_event.params.flash > hurtTimer * .25) col = #ff00ff;
-				if (_event.params.flash > hurtTimer * .33) col = #aa00ff;
-				if (_event.params.flash > hurtTimer * .41) col = #0000ff;
-				if (_event.params.flash > hurtTimer * .50) col = #00ff00;
-				if (_event.params.flash > hurtTimer * .66) col = #ffff00;
-				if (_event.params.flash > hurtTimer * .82) col = #ffaa00;
-				if (_event.params.flash > hurtTimer * .75) col = #ff0000;
+				var col = baseColor;
+				if (_event.params.flash > hurtTimer * .25) col = colors[2];
+				if (_event.params.flash > hurtTimer * .50) col = colors[1];
+				if (_event.params.flash > hurtTimer * .75) col = colors[0];
 				_event.params.color = col;
 				break;
 		}

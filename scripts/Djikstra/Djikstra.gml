@@ -54,5 +54,7 @@ function computeDjikstra(targetX, targetY, tileDim = 32, mode = DjikstraMode.UDL
 		
 			array_delete(queue, 0, 1);
 		}
+	
+	
 	return djikstra;
 	}

@@ -79,7 +79,10 @@ fireEvent = function(_event) {
 			var xx   = floor(x / TileDim);
 			var yy   = floor(y / TileDim);
 			var dist = Camera.djikstra[xx][yy];
-			
+			//Camera.djikstra[xx - 1][yy + 1] = ( (Camera.djikstra[xx - 1][yy + 1]) ?? 42069 ) + 1;
+			//Camera.djikstra[xx + 1][yy - 1] = ( (Camera.djikstra[xx + 1][yy - 1]) ?? 42069 ) + 1;
+			//Camera.djikstra[xx + 1][yy + 1] = ( (Camera.djikstra[xx + 1][yy + 1]) ?? 42069 ) + 1;
+			//Camera.djikstra[xx - 1][yy - 1] = ( (Camera.djikstra[xx - 1][yy - 1]) ?? 42069 ) + 1;
 			
 			//Get the weight of nearby cells
 			for (var i = 0; i < 3; ++i) {
@@ -124,6 +127,17 @@ fireEvent = function(_event) {
 						if (entityX == cellCosts[j].x * TileDim && entityY == cellCosts[j].y * TileDim) {
 							if !entity.get("Impassable", "bumping") bump = false;
 							_delete = true;
+							
+							//YOOOOOO!!!!!!
+							if entity.entityName == PlayerName _delete = false;
+							Camera.djikstra[cellCosts[j].x + 1][cellCosts[j].y + 0] = max(1, ( (Camera.djikstra[cellCosts[j].x + 1][cellCosts[j].y + 0]) ?? 42069 ) - 1);
+							Camera.djikstra[cellCosts[j].x - 1][cellCosts[j].y - 0] = max(1, ( (Camera.djikstra[cellCosts[j].x - 1][cellCosts[j].y - 0]) ?? 42069 ) - 1);
+							Camera.djikstra[cellCosts[j].x + 0][cellCosts[j].y + 1] = max(1, ( (Camera.djikstra[cellCosts[j].x + 0][cellCosts[j].y + 1]) ?? 42069 ) - 1);
+							Camera.djikstra[cellCosts[j].x - 0][cellCosts[j].y - 1] = max(1, ( (Camera.djikstra[cellCosts[j].x - 0][cellCosts[j].y - 1]) ?? 42069 ) - 1);
+							Camera.djikstra[cellCosts[j].x + 1][cellCosts[j].y + 1] = max(1, ( (Camera.djikstra[cellCosts[j].x + 1][cellCosts[j].y + 1]) ?? 42069 ) - 1);
+							Camera.djikstra[cellCosts[j].x - 1][cellCosts[j].y - 1] = max(1, ( (Camera.djikstra[cellCosts[j].x - 1][cellCosts[j].y - 1]) ?? 42069 ) - 1);
+							Camera.djikstra[cellCosts[j].x + 1][cellCosts[j].y - 1] = max(1, ( (Camera.djikstra[cellCosts[j].x + 1][cellCosts[j].y - 1]) ?? 42069 ) - 1);
+							Camera.djikstra[cellCosts[j].x - 1][cellCosts[j].y + 1] = max(1, ( (Camera.djikstra[cellCosts[j].x - 1][cellCosts[j].y + 1]) ?? 42069 ) - 1);
 						}
 					    if _delete	{
 							array_delete(cellCosts, j, 1);
@@ -139,22 +153,24 @@ fireEvent = function(_event) {
 				
 			
 			//Don't move into the player
-			if cellCosts[0].x * TileDim == _event.params.x and cellCosts[0].y * TileDim == _event.params.y array_delete(cellCosts, 0, 1);
+			if cellCosts[0].x * TileDim == _event.params.x and cellCosts[0].y * TileDim == _event.params.y break;//array_delete(cellCosts, 0, 1);
 			
+			
+			var targetCell = cellCosts[irandom(array_length(cellCosts) - 1)];
 			
 			//Filter out all distant tiles
 			for (var i = 0; i < array_length(cellCosts); ++i) {
 			    if cellCosts[i].weight <= dist continue;
+				if array_length(cellCosts) == 1 targetCell = cellCosts[0];
 				array_delete(cellCosts, i, array_length(cellCosts) - i)
 			}
 
 			
 			//If we can't move, we don't
-			if array_length(cellCosts) == 0 break;
+			if array_length(cellCosts) > 0 targetCell = cellCosts[irandom(array_length(cellCosts) - 1)];
 			
 			
 			//Enter movement state
-			var targetCell = cellCosts[irandom(array_length(cellCosts) - 1)];
 			var targetCellX = targetCell.x * TileDim
 			var targetCellY = targetCell.y * TileDim
 			

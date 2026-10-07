@@ -23,6 +23,9 @@ function Init(){
 		MoveFrames = 16;
 		EntityUUID =  0;
 		
+		globalvar PlayerName;
+		PlayerName = "Six of Cups";
+		
 		globalvar SixOfCups;
 	#endregion
 	

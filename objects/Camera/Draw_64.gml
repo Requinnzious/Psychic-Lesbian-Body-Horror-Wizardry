@@ -14,7 +14,7 @@ surface_set_target(screenSurf)
 			draw_sprite(sMetaTiles_Strip, _tile, 128 - i + x2 - 160, 128 - j);
 			
 			//Debug Djikstra
-			//draw_text(128 - i + x2 - 160, 128 - j, djikstra[xx][yy] ?? "NO")
+			draw_text(128 - i + x2 - 160, 128 - j, djikstra[xx][yy] ?? "NO")
 		}
 	}
 
