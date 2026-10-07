@@ -519,15 +519,3 @@ entities[? SixOfCups.uuid] = SixOfCups;
 	entities[? slime.uuid] = slime;
 #endregion
 
-//AI
-subscribe("PlayerTurn", id);
-fireEvent = function(_event) {
-	switch _event.type {
-		case "PlayerTurn":			
-			var moveBrains = new Event("Brain_Move", _event.params);
-			moveBrains = moveBrains.fire();
-			delete moveBrains;
-			break;
-	}
-	return _event;
-}

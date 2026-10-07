@@ -19,8 +19,12 @@ zMoveInc      =   0;
 
 animPos       =   1;
 
-stateMachine = new SnowState("idle")
-	.add("idle", {
+stateMachine = new SnowState("wait")
+	.add("wait", {
+		enter: function()  {},
+		update: function() {}
+	})
+	.add("step", {
 		enter: function()  {},
 		update: function() {}
 	})
@@ -104,29 +108,29 @@ fireEvent = function(_event) {
 					}
 				}
 			}
-			#region Manually?
-				//var entities = ds_map_keys_to_array(World.entities, []);
-				//for (var i = 0; i < array_length(entities); ++i) {
-				//	var entityID = entities[i];
-				//    var entity   = World.entities[? entityID];
-				//
-				//	if !entity.has("ImpassableComponent") continue;
-				//
-				//	var entityX  = entity.get("Position", "x");
-				//	var entityY  = entity.get("Position", "y");
-				//
-				//	for (var j = 0; j < array_length(cellCosts); ++j) {				
-				//		var _delete = false;
-				//		if (entityX == cellCosts[j].x * TileDim && entityY == cellCosts[j].y * TileDim) {
-				//			if !entity.get("Impassable", "bumping") bump = false;
-				//			_delete = true;
-				//		}
-				//	    if _delete	{
-				//			array_delete(cellCosts, j, 1);
-				//			j--;
-				//		}
-				//	}
-				//}
+			#region Manually Check Impassable Entities (?)
+				var entities = ds_map_keys_to_array(World.entities, []);
+				for (var i = 0; i < array_length(entities); ++i) {
+					var entityID = entities[i];
+				    var entity   = World.entities[? entityID];
+				
+					if !entity.has("ImpassableComponent") continue;
+				
+					var entityX  = entity.get("Position", "x");
+					var entityY  = entity.get("Position", "y");
+				
+					for (var j = 0; j < array_length(cellCosts); ++j) {				
+						var _delete = false;
+						if (entityX == cellCosts[j].x * TileDim && entityY == cellCosts[j].y * TileDim) {
+							if !entity.get("Impassable", "bumping") bump = false;
+							_delete = true;
+						}
+					    if _delete	{
+							array_delete(cellCosts, j, 1);
+							j--;
+						}
+					}
+				}
 			#endregion
 			
 			
@@ -187,7 +191,7 @@ moveFunc  = function() {
 	yPrevious = y;
 	zPrevious = z;
 	
-	stateMachine.change("idle");
+	stateMachine.change("wait");
 }
 
 

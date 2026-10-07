@@ -38,8 +38,6 @@ GameState = new SnowState("stepPhase")
 		update: function() {
 			var keys = ds_map_keys_to_array(entityTurns);			
 			if array_length(keys) == 0 return;
-			
-			GameState.change("movePhase")
 		}
 	})
 	
@@ -96,6 +94,21 @@ GameState = new SnowState("stepPhase")
 		}
 	})
 	
+	
+subscribe("PlayerTurn", id);
+fireEvent = function(_event) {
+	switch _event.type {
+		case "PlayerTurn":			
+			var moveBrains = new Event("Brain_Move", _event.params);
+			moveBrains = moveBrains.fire();
+			delete moveBrains;
+			
+			GameState.change("movePhase")
+			break;
+	}
+	return _event;
+}
+
 
 SixOfCups = new Entity("Six of Cups")
 	.addComponent("Physics",       { maxFlash:   24 })

@@ -2,8 +2,7 @@
 function Init(){
 	globalvar WebSocket;
 	WebSocket = network_create_socket(network_socket_ws);
-	network_connect_raw_async(WebSocket, "ws://minipc-owkhu.taile068a6.ts.net/", 3000);
-
+	network_connect_raw_async(WebSocket, "ws://minipc-owkhu.taile068a6.ts.net/?room=the Lobby&user=Six of Cups", 3000);
 	
 	globalvar Config;
 	Config = init_config();

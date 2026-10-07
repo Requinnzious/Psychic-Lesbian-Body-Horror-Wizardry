@@ -490,3 +490,4 @@ relaxHead        = function() {
 	yToOffset = lerp(yToOffset, 0, 0.5);
 	zToOffset = lerp(zToOffset, 0, 0.5);
 }
+
