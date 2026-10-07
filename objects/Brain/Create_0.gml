@@ -79,10 +79,7 @@ fireEvent = function(_event) {
 			var xx   = floor(x / TileDim);
 			var yy   = floor(y / TileDim);
 			var dist = Camera.djikstra[xx][yy];
-			//Camera.djikstra[xx - 1][yy + 1] = ( (Camera.djikstra[xx - 1][yy + 1]) ?? 42069 ) + 1;
-			//Camera.djikstra[xx + 1][yy - 1] = ( (Camera.djikstra[xx + 1][yy - 1]) ?? 42069 ) + 1;
-			//Camera.djikstra[xx + 1][yy + 1] = ( (Camera.djikstra[xx + 1][yy + 1]) ?? 42069 ) + 1;
-			//Camera.djikstra[xx - 1][yy - 1] = ( (Camera.djikstra[xx - 1][yy - 1]) ?? 42069 ) + 1;
+			
 			
 			//Get the weight of nearby cells
 			for (var i = 0; i < 3; ++i) {
@@ -134,10 +131,10 @@ fireEvent = function(_event) {
 							Camera.djikstra[cellCosts[j].x - 1][cellCosts[j].y - 0] = max(1, ( (Camera.djikstra[cellCosts[j].x - 1][cellCosts[j].y - 0]) ?? 42069 ) - 1);
 							Camera.djikstra[cellCosts[j].x + 0][cellCosts[j].y + 1] = max(1, ( (Camera.djikstra[cellCosts[j].x + 0][cellCosts[j].y + 1]) ?? 42069 ) - 1);
 							Camera.djikstra[cellCosts[j].x - 0][cellCosts[j].y - 1] = max(1, ( (Camera.djikstra[cellCosts[j].x - 0][cellCosts[j].y - 1]) ?? 42069 ) - 1);
-							Camera.djikstra[cellCosts[j].x + 1][cellCosts[j].y + 1] = max(1, ( (Camera.djikstra[cellCosts[j].x + 1][cellCosts[j].y + 1]) ?? 42069 ) - 1);
-							Camera.djikstra[cellCosts[j].x - 1][cellCosts[j].y - 1] = max(1, ( (Camera.djikstra[cellCosts[j].x - 1][cellCosts[j].y - 1]) ?? 42069 ) - 1);
-							Camera.djikstra[cellCosts[j].x + 1][cellCosts[j].y - 1] = max(1, ( (Camera.djikstra[cellCosts[j].x + 1][cellCosts[j].y - 1]) ?? 42069 ) - 1);
-							Camera.djikstra[cellCosts[j].x - 1][cellCosts[j].y + 1] = max(1, ( (Camera.djikstra[cellCosts[j].x - 1][cellCosts[j].y + 1]) ?? 42069 ) - 1);
+							Camera.djikstra[cellCosts[j].x + 1][cellCosts[j].y + 1] = max(1, ( (Camera.djikstra[cellCosts[j].x + 1][cellCosts[j].y + 1]) ?? 42069 ) - 2);
+							Camera.djikstra[cellCosts[j].x - 1][cellCosts[j].y - 1] = max(1, ( (Camera.djikstra[cellCosts[j].x - 1][cellCosts[j].y - 1]) ?? 42069 ) - 2);
+							Camera.djikstra[cellCosts[j].x + 1][cellCosts[j].y - 1] = max(1, ( (Camera.djikstra[cellCosts[j].x + 1][cellCosts[j].y - 1]) ?? 42069 ) - 2);
+							Camera.djikstra[cellCosts[j].x - 1][cellCosts[j].y + 1] = max(1, ( (Camera.djikstra[cellCosts[j].x - 1][cellCosts[j].y + 1]) ?? 42069 ) - 2);
 						}
 					    if _delete	{
 							array_delete(cellCosts, j, 1);

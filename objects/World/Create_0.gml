@@ -325,9 +325,9 @@ entities[? SixOfCups.uuid] = SixOfCups;
 						.addComponent("Position",  {x: x1, y: y1, z: 0})
 						.addComponent("Transform", {x: 16, y: 16})
 						.addComponent("Sprite",    {randomSubimage: true})
-						.addComponent("SteppedOn")
 						.addComponent("HurtSprite")
 						.addComponent("HurtColor")
+						.addComponent("SteppedOn")
 						.addComponent("WindShader")
 						.addComponent("BillboardMesh")
 						.addComponent("WorldTile", {gridX: x1/TileDim, gridY: y1/TileDim});

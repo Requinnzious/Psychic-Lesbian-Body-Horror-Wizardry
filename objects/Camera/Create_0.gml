@@ -413,7 +413,7 @@ stateMachine = new SnowState("step", false)
 	})
 
 //Callbacks for when states are finished [WIP]
-moveFunc  = function() {
+moveFunc  = function() {	
 	stateMachine.change("wait");
 	
 	x = xMoveTarget;
@@ -421,18 +421,20 @@ moveFunc  = function() {
 	xPrevious = x;
 	yPrevious = y;
 	
+	//Step on step-on-able entities
+	var event = new Event("Step", {x: x, y: y, z: 0});
+	event = event.fire();
+	delete event;
+	
+	//Put Six of Cups where she belongs
 	var event = new Event("Place", {x: x, y: y, z: z});
 	event = SixOfCups.fireEvent(event);
 	delete event;
 	
-	//Step sfx
+	//Boing
 	var tile = World.tiles[x / TileDim][y / TileDim].tile;
 	if tile != 4 { Sound.playSound(SoundTypes.STEP_DIRT); return;}
 	Sound.playSound(SoundTypes.STEP_STONE);
-	
-	var event = new Event("Step", {x: x, y: y, z: z - 16});
-	event = event.fire();
-	delete event;
 }
 turnFunc  = function() {
 	lookDir = targetLookDir;

@@ -103,7 +103,7 @@ fireEvent = function(_event) {
 			moveBrains = moveBrains.fire();
 			delete moveBrains;
 			
-			GameState.change("movePhase")
+			GameState.change("movePhase");
 			break;
 	}
 	return _event;

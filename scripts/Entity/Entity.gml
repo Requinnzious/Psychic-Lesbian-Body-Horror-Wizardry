@@ -457,8 +457,10 @@ function PositionComponent(c_Name)        : Component(c_Name) constructor {
 				_event.params.z = self.z;
 				break;
 			case "Step":
-				variable_struct_set(_event.params, "steppedOn", false)
-				if(_event.params.x == self.x and _event.params.y == self.y and _event.params.z == self.z)  variable_struct_set(_event.params, "steppedOn", true);
+				variable_struct_set(_event.params, "steppedOn", false);
+				if(_event.params.x == x and _event.params.y == y and _event.params.z == z)  {
+					variable_struct_set(_event.params, "steppedOn", true);
+				}
 				break;
 		}
 		
