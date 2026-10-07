@@ -1,6 +1,6 @@
 stateMachine.update();
 
-show_debug_message(stateMachine.get_current_state());
+//show_debug_message(stateMachine.get_current_state());
 
 iui_update_io();
 

@@ -1,7 +1,7 @@
 Init();
 room_goto_next();
 
-Steps = 0;
+Steps = 0;	
 
 GameState = new SnowState("stepPhase")
 	.add("stepPhase",   {

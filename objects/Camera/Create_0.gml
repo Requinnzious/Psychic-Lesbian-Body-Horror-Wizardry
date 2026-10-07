@@ -121,7 +121,7 @@ application_surface_draw_enable(false);
 //This defines a function that can only be used by this object, so the Camera and Menu objects
 //can have different inputState functions for example
 
-endPlayerTurn = function(xx, yy, zz) {
+endPlayerTurn = function(xx, yy, zz) {	
 	djikstra = computeDjikstra(xx, yy);
 	
 	var playerTurnEvent = new Event("PlayerTurn", { x: xx, y: yy, z: zz });

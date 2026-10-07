@@ -1,6 +1,9 @@
-// Script assets have changed for v2.3.0 see
-// https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
+
 function Init(){
+	globalvar WebSocket;
+	WebSocket = network_create_socket(network_socket_ws);
+	network_connect_raw_async(WebSocket, "ws://minipc-owkhu.taile068a6.ts.net/", 3000);
+
 	
 	globalvar Config;
 	Config = init_config();
