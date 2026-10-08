@@ -1,0 +1,26 @@
+{
+  "$GMSound":"v2",
+  "%Name":"ostShroomCave",
+  "audioGroupId":{
+    "name":"audiogroup_default",
+    "path":"audiogroups/audiogroup_default",
+  },
+  "bitDepth":1,
+  "channelFormat":0,
+  "compression":0,
+  "compressionQuality":4,
+  "conversionMode":0,
+  "duration":223.79599,
+  "exportDir":"",
+  "name":"ostShroomCave",
+  "parent":{
+    "name":"Songs",
+    "path":"folders/07 Sounds/Songs.yy",
+  },
+  "preload":false,
+  "resourceType":"GMSound",
+  "resourceVersion":"2.0",
+  "sampleRate":44100,
+  "soundFile":"ostShroomCave.ogg",
+  "volume":1.0,
+}

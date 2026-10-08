@@ -123,6 +123,11 @@ application_surface_draw_enable(false);
 
 endPlayerTurn = function(xx, yy, zz) {	
 	djikstra = computeDjikstra(xx, yy);
+					
+	//Put Six of Cups where she belongs
+	var event = new Event("Place", {x: xx, y: yy, z: 0});
+	event = SixOfCups.fireEvent(event);
+	delete event;
 	
 	var playerTurnEvent = new Event("PlayerTurn", { x: xx, y: yy, z: zz });
 	playerTurnEvent = playerTurnEvent.fire();
@@ -179,6 +184,9 @@ stateMachine = new SnowState("step", false)
 							case SoundTypes.SLIME:
 								func = function() {Sound.playSound(SoundTypes.SLIME)}
 								break;
+							case SoundTypes.GRASS:
+								func = function() {Sound.playSound(SoundTypes.GRASS)}
+								break;
 							default:
 								func = function() {Sound.playSound(SoundTypes.HIT)}
 								break;
@@ -186,7 +194,6 @@ stateMachine = new SnowState("step", false)
 						addTimesource("Hit Sound", id, MoveFrames / 2.5, func)
 					}
 					delete event;
-		
 				}
 
 				xPrevious = x;
