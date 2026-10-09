@@ -342,15 +342,15 @@ entities[? SixOfCups.uuid] = SixOfCups;
 						_hp = 1;
 					}
 					
-					var deadColor = lerp(color, #ff0e00, .75)
+					var deadColor = #ffaeae
 					
 					var entity = new Entity("Brick Wall")
 						.addComponent("Physics")
 						.addComponent("Impassable",   {bumping: true})
-						.addComponent("Health",       {hp: _hp, maxHP: _hp, deadColor: deadColor})
+						.addComponent("Health",       {hp: _hp, maxHP: _hp})
 						.addComponent("Position",     {x: x1, y: y1, z: 0})
 						.addComponent("Transform",    {x: 16, y: 16, z: 16})
-						.addComponent("HealthColor",  {color: color, baseColor: color})
+						.addComponent("HealthColor",  {color: color, baseColor: color, deadColor: deadColor})
 						.addComponent("WorldTile",    {gridX: x1/TileDim, gridY: y1/TileDim, isBlocking: true, worldMeshes: ["floor", "wall"], color: color});
 
 					if coll == 2 {

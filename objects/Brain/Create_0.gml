@@ -3,7 +3,7 @@ hopAnimation = animcurve_get_channel(acHop, 0);
 subscriptions = [];
 
 z             =   0;
-movePoints    =   0;
+movePoints    = 100;
 
 xPrevious     =   x;
 yPrevious     =   y;
@@ -72,6 +72,7 @@ fireEvent = function(_event) {
 			//if we're dead we probably shouldn't move :>
 			if parentEntity.get("Health", "hp") == 0 {
 				mp_grid_add_cell(World.aStar, x/TileDim, y/TileDim);
+				movePoints = 0;
 				break;
 			}
 			
@@ -100,7 +101,7 @@ fireEvent = function(_event) {
 			yMoveInc = (yTarget - y) / MoveFrames;
 			
 			stateMachine.change("move");
-			
+			movePoints -= 100;
 			var ts = time_source_create(time_source_game, MoveFrames, time_source_units_frames, moveFunc);
 			time_source_start(ts);
 			break;

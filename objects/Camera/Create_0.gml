@@ -179,6 +179,10 @@ stateMachine = new SnowState("step", false)
 					var event = new Event("TakeDamage", {amount: roll("1d6+2")})
 					event = entity.fireEvent(event);
 					
+					if event.params.hp == 0 {
+						mp_grid_clear_cell(World.aStar, entityX/TileDim, entityY/TileDim);
+					}
+					
 					if variable_struct_exists(event.params, "sound") {
 						var func;
 						switch event.params.sound {

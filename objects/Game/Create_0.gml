@@ -77,16 +77,22 @@ GameState = new SnowState("stepPhase")
 	.add("attackPhase", {
 		enter:  function() { 
 			show_debug_message("Attack Phase");
-			with Brain show_debug_message($"{parentEntity.entityName}: has {movePoints} move points")
+			with Brain {
+				if movePoints <= 0 continue;
+				
+				show_debug_message($"Entity {parentEntity.uuid} ({parentEntity.entityName}) wants to attack Six of Cups")
+			}
 		},
 		leave: function()  {},
 		update: function() {
-			var dirty = false;
-			with Brain {
-				if movePoints <= 0 continue;
-				dirty = true;
-			}
-			if dirty return;
+			//var dirty = false;
+			//with Brain {
+			//	if movePoints <= 0 continue;
+			//	dirty = true;
+			//	
+			//	show_debug_message($"Entity {parentEntity.uuid} ({parentEntity.entityName}) wants to attack Six of Cups")
+			//}
+			//if dirty //return;
 			GameState.change("endPhase");
 		}
 	})
@@ -109,6 +115,7 @@ fireEvent = function(_event) {
 		case "PlayerTurn":
 			with Brain {
 				mp_grid_add_cell(World.aStar, x/TileDim, y/TileDim);
+				movePoints = 100;
 			}
 		
 			var moveBrains = new Event("Brain_Move", _event.params);
