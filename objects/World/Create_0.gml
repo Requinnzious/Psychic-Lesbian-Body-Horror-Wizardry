@@ -5,13 +5,20 @@ entities[? SixOfCups.uuid] = SixOfCups;
 
 #region Store the tilemap
 	tiles = [];
-	var meta  = layer_tilemap_get_id("Meta");
+	meta  = layer_tilemap_get_id("Meta");
 	coll  = layer_tilemap_get_id("Collisions");
-	for (var i = 0; i < room_width / 32; ++i) {
+	
+	cols  = room_width  / TileDim;
+	rows  = room_height / TileDim;
+	
+	aStar = mp_grid_create(0, 0, cols, rows, TileDim, TileDim);
+	path  = path_add();
+	
+	for (var i = 0; i < cols; ++i) {
 	    array_push(tiles, []);
-		for (var j = 0; j < room_height / 32; ++j) {
-			var _tile   = tilemap_get_at_pixel(meta, i * 32, j * 32);
-			var _collis = tilemap_get_at_pixel(coll, i * 32, j * 32);
+		for (var j = 0; j < rows; ++j) {
+			var _tile   = tilemap_get_at_pixel(meta, i * TileDim, j * TileDim);
+			var _collis = tilemap_get_at_pixel(coll, i * TileDim, j * TileDim);
 			var r = random_range(225, 255);
 			var g = random_range(225, 255);
 			var b = random_range(225, 255);
@@ -35,10 +42,10 @@ entities[? SixOfCups.uuid] = SixOfCups;
 			var tileVariation = irandom_range(0, sprite_get_number(spr) - 1)
 			
 		    array_push(tiles[i], {tile: _tile, collis: _collis, variation: tileVariation, color: _color});
+			
+			if _collis > 0 mp_grid_add_cell(aStar, i, j);
 		}
 	}
-	cols = array_length(tiles);
-	rows = array_length(tiles[0]);
 #endregion
 
 #region Construct the mesh of the level

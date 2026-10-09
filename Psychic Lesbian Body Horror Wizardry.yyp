@@ -52,6 +52,7 @@
   "name":"Psychic Lesbian Body Horror Wizardry",
   "resources":[
     {"id":{"name":"acBump","path":"animcurves/acBump/acBump.yy",},},
+    {"id":{"name":"acFlip","path":"animcurves/acFlip/acFlip.yy",},},
     {"id":{"name":"acHop","path":"animcurves/acHop/acHop.yy",},},
     {"id":{"name":"ImNotGUI","path":"extensions/ImNotGUI/ImNotGUI.yy",},},
     {"id":{"name":"Billboard","path":"objects/Billboard/Billboard.yy",},},

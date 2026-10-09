@@ -1,0 +1,30 @@
+{
+  "$GMAnimCurve":"",
+  "%Name":"acFlip",
+  "channels":[
+    {"$GMAnimCurveChannel":"","%Name":"curve1","colour":4290799884,"name":"curve1","points":[
+        {"th0":-0.1,"th1":0.026445573,"tv0":0.0,"tv1":0.0,"x":0.0,"y":0.0,},
+        {"th0":-0.09853475,"th1":0.17858382,"tv0":0.0,"tv1":0.0,"x":0.25,"y":1.0,},
+        {"th0":-0.17567724,"th1":0.09388906,"tv0":0.0,"tv1":0.0,"x":0.75,"y":-1.0,},
+        {"th0":-0.025577664,"th1":0.1,"tv0":0.0,"tv1":0.0,"x":1.0,"y":0.0,},
+      ],"resourceType":"GMAnimCurveChannel","resourceVersion":"2.0","visible":true,},
+    {"$GMAnimCurveChannel":"","%Name":"curve2","colour":4281083598,"name":"curve2","points":[
+        {"th0":-0.1,"th1":0.017249482,"tv0":0.0,"tv1":0.0,"x":0.0,"y":-1.0,},
+        {"th0":0.0,"th1":0.0,"tv0":0.0,"tv1":0.0132889915,"x":0.4923664,"y":0.016611325,},
+        {"th0":-0.050283074,"th1":0.1,"tv0":0.0,"tv1":0.0,"x":1.0,"y":-1.0,},
+      ],"resourceType":"GMAnimCurveChannel","resourceVersion":"2.0","visible":true,},
+    {"$GMAnimCurveChannel":"","%Name":"curve3","colour":4279025727,"name":"curve3","points":[
+        {"th0":-0.1,"th1":0.0018413564,"tv0":0.0,"tv1":0.0,"x":0.0,"y":0.0,},
+        {"th0":-0.18645236,"th1":0.0,"tv0":0.0,"tv1":0.0,"x":0.4980916,"y":-38.856636,},
+        {"th0":-0.0072386265,"th1":0.1,"tv0":0.0,"tv1":0.0,"x":1.0,"y":0.0,},
+      ],"resourceType":"GMAnimCurveChannel","resourceVersion":"2.0","visible":true,},
+  ],
+  "function":2,
+  "name":"acFlip",
+  "parent":{
+    "name":"Animation Curves",
+    "path":"folders/01 Functions/Animation Curves.yy",
+  },
+  "resourceType":"GMAnimCurve",
+  "resourceVersion":"2.0",
+}

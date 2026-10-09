@@ -24,7 +24,7 @@ yToOffset            =   0;
 zToOffset            =   0;
 
 animPos         =  0;
-bumpAnim = animcurve_get_channel(acBump, 0);
+bumpAnim        = animcurve_get_channel(acBump, 0);
 
 xMoveTarget = x;           //When we're moving, xyMoveTarget keeps track of the grid position we're moving to
 yMoveTarget = y;
@@ -33,7 +33,8 @@ yPrevious   = y;
 xMoveInc    = 0;           //How many pixels we move every frame of the moveState
 yMoveInc    = 0;
 
-
+yUp =  0;
+zUp = -1;
 
 gpu_set_ztestenable(true); //We just have to set these so openGL knows we're using 3D rendering
 gpu_set_zwriteenable(true);
@@ -291,7 +292,10 @@ stateMachine = new SnowState("step", false)
 				var ts = time_source_create(time_source_game, MoveFrames, time_source_units_frames, moveFunc);
 				time_source_start(ts);
 				
-				stateMachine.change("move");
+				var _statename = "move";
+				if GetUpHeld() - GetDownHeld() == -1 _statename = "backflip";
+				
+				stateMachine.change(_statename);
 				
 				endPlayerTurn(x + dX, y + dY, z - 16);
 				
@@ -379,6 +383,17 @@ stateMachine = new SnowState("step", false)
 			delete event;
 		}
 	})
+	
+	.add("backflip", {
+		enter: function() {animPos = 0},
+		update: function() {
+			x += xMoveInc; y += yMoveInc;
+			
+			var event = new Event("Place", {x: x, y: y, z: z});
+			event = SixOfCups.fireEvent(event);
+			delete event;
+		}
+	})
 
 	.add("turn", {
 		enter: function() {},
@@ -435,6 +450,8 @@ stateMachine = new SnowState("step", false)
 //Callbacks for when states are finished [WIP]
 moveFunc  = function() {	
 	stateMachine.change("wait");
+	
+	animPos = 0;
 	
 	x = xMoveTarget;
 	y = yMoveTarget;
@@ -511,5 +528,7 @@ relaxHead        = function() {
 	xToOffset = lerp(xToOffset, 0, 0.5);
 	yToOffset = lerp(yToOffset, 0, 0.5);
 	zToOffset = lerp(zToOffset, 0, 0.5);
+	yUp =  0;
+	zUp = -1;
 }
 

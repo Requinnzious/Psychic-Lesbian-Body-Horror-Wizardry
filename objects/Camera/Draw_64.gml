@@ -1,4 +1,5 @@
 surface_set_target(screenSurf)
+
 #region Draw minimap
 	var x1 = 0;
 	var x2 = view_get_wport(view_current);

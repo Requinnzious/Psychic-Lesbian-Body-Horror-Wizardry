@@ -107,10 +107,17 @@ subscribe("PlayerTurn", id);
 fireEvent = function(_event) {
 	switch _event.type {
 		case "PlayerTurn":
+			with Brain {
+				mp_grid_add_cell(World.aStar, x/TileDim, y/TileDim);
+			}
 		
 			var moveBrains = new Event("Brain_Move", _event.params);
 			moveBrains = moveBrains.fire();
 			delete moveBrains;
+			
+			with Brain {
+				mp_grid_clear_cell(World.aStar, x/TileDim, y/TileDim);
+			}
 			
 			GameState.change("movePhase");
 			break;
