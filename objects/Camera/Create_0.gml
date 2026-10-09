@@ -191,7 +191,9 @@ stateMachine = new SnowState("step", false)
 								func = function() {Sound.playSound(SoundTypes.HIT)}
 								break;
 						}
-						addTimesource("Hit Sound", id, MoveFrames / 2.5, func)
+			
+						var ts = time_source_create(time_source_game, MoveFrames / 2.5, time_source_units_frames, func);
+						time_source_start(ts);
 					}
 					delete event;
 				}
@@ -202,8 +204,10 @@ stateMachine = new SnowState("step", false)
 				yMoveTarget = y + 8 * -dsin(lookDir);
 		
 				Sound.playSound(SoundTypes.SWING);
-		
-				addTimesource("Attack", id, 24, bumpFunc);
+			
+				var ts = time_source_create(time_source_game, MoveFrames, time_source_units_frames, bumpFunc);
+				time_source_start(ts);
+				
 				stateMachine.change("bump");
 				
 				endPlayerTurn(x, y, z - 16);
@@ -227,7 +231,9 @@ stateMachine = new SnowState("step", false)
 				lookDirInc = dDir / MoveFrames;
 				targetLookDir = (lookDir + dDir + 360) mod 360;
 			
-				addTimesource("Turn", id, MoveFrames, turnFunc);
+				var ts = time_source_create(time_source_game, MoveFrames, time_source_units_frames, turnFunc);
+				time_source_start(ts);
+				
 				stateMachine.change("turn");
 				return;
 			}	
@@ -262,8 +268,10 @@ stateMachine = new SnowState("step", false)
 					if !bump return;
 					xMoveTarget = x + dX;
 					yMoveTarget = y + dY;
-				
-					addTimesource("Bump",          id, MoveFrames,             bumpFunc);
+			
+					var ts = time_source_create(time_source_game, MoveFrames, time_source_units_frames, bumpFunc);
+					time_source_start(ts);
+					
 					createBloodDecal(decalParent);
 					stateMachine.change("bump");
 					
@@ -280,7 +288,9 @@ stateMachine = new SnowState("step", false)
 				xMoveInc = dX / MoveFrames;
 				yMoveInc = dY / MoveFrames;
 			
-				addTimesource("Move", id, MoveFrames, moveFunc);
+				var ts = time_source_create(time_source_game, MoveFrames, time_source_units_frames, moveFunc);
+				time_source_start(ts);
+				
 				stateMachine.change("move");
 				
 				endPlayerTurn(x + dX, y + dY, z - 16);
@@ -304,7 +314,6 @@ stateMachine = new SnowState("step", false)
 				    var entity   = World.entities[? entityID];
 			
 					if !entity.has("ImpassableComponent") continue;
-					//show_debug_message(entity);
 			
 					var entityX  = entity.get("Position", "x");
 					var entityY  = entity.get("Position", "y");
@@ -321,8 +330,10 @@ stateMachine = new SnowState("step", false)
 					if !bump return;
 					xMoveTarget = x + dX;
 					yMoveTarget = y + dY;
-				
-					addTimesource("Bump", id, MoveFrames, bumpFunc);
+			
+					var ts = time_source_create(time_source_game, MoveFrames, time_source_units_frames, bumpFunc);
+					time_source_start(ts);
+					
 					createBloodDecal(decalParent);
 					stateMachine.change("bump");
 					
@@ -338,8 +349,10 @@ stateMachine = new SnowState("step", false)
 				yMoveTarget = y + dY;
 				xMoveInc = dX / MoveFrames;
 				yMoveInc = dY / MoveFrames;
-			
-				addTimesource("Move", id, MoveFrames, moveFunc);
+							
+				var ts = time_source_create(time_source_game, MoveFrames, time_source_units_frames, moveFunc);
+				time_source_start(ts);
+				
 				stateMachine.change("move");
 				
 				endPlayerTurn(x + dX, y + dY, z - 16);		

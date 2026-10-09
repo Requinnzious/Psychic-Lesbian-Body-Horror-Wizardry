@@ -290,7 +290,10 @@ function HealthComponent(c_Name)          : Component(c_Name) constructor {
 				_event.params.hp = hp;
 				
 				//This is temporary but look!
-				if(hp == 0) addTimesource("IDied", World, deathTimer, function(){destroyEntity(World.entities[? parent])});
+				if(hp == 0) {
+					var ts = time_source_create(time_source_game, deathTimer, time_source_units_frames, function(){destroyEntity(World.entities[? parent])});
+					time_source_start(ts);
+				}
 				break;
 		}
 		return _event;
@@ -342,7 +345,8 @@ function HurtSpriteComponent(c_Name)      : Component(c_Name) constructor {
 		switch(_event.type) {			
 			case "TakeDamage":
 				hurt = true;
-				addTimesource($"{componentName}isHurting", World, hurtTimer, unhurt);
+				var ts = time_source_create(time_source_game, hurtTimer, time_source_units_frames, unhurt);
+				time_source_start(ts);
 				break;
 			case "Render":
 				if hurt _event.params.sprite = self.sprite;
@@ -364,7 +368,8 @@ function HurtSubimageComponent(c_Name)    : Component(c_Name) constructor {
 		switch(_event.type) {			
 			case "TakeDamage":
 				hurt = true;
-				addTimesource($"{componentName}isHurting", World, hurtTimer, unhurt);
+				var ts = time_source_create(time_source_game, hurtTimer, time_source_units_frames, unhurt);
+				time_source_start(ts);
 				break;
 			case "Render":
 				if hurt _event.params.subimage = self.subimage;

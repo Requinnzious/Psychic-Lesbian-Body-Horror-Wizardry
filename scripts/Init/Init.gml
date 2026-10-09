@@ -18,10 +18,11 @@ function Init(){
 	#endregion
 	
 	#region Entity Globals
-		globalvar MoveFrames;
+		globalvar MoveFrames, MoveSeconds;
 		globalvar EntityUUID;
-		MoveFrames = 16;
-		EntityUUID =  0;
+		MoveFrames  =  16;
+		MoveSeconds = .25;
+		EntityUUID =    0;
 		
 		globalvar PlayerName;
 		PlayerName = "Six of Cups";

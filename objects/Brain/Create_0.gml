@@ -184,7 +184,9 @@ fireEvent = function(_event) {
 			yMoveInc = (yTarget - y) / MoveFrames;
 			
 			stateMachine.change("move");
-			addTimesource($"{parentEntity.uuid}Movement", id, MoveFrames, moveFunc);
+			
+			var ts = time_source_create(time_source_game, MoveFrames, time_source_units_frames, moveFunc);
+			time_source_start(ts);
 			break;
 	}
 	return _event;
