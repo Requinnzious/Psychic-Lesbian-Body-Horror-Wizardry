@@ -3,7 +3,7 @@ hopAnimation = animcurve_get_channel(acHop, 0);
 subscriptions = [];
 
 z             =   0;
-movePoints    = 100;
+movePoints    =   0;
 
 xPrevious     =   x;
 yPrevious     =   y;
@@ -84,7 +84,7 @@ fireEvent = function(_event) {
 			//Get the weight of nearby cells
 			for (var i = 0; i < 3; ++i) {
 			    for (var j = 0; j < 3; ++j) {
-					if abs(i - 1) == abs(j - 1) continue; // and i - 1 != 0
+					if abs(i - 1) == abs(j - 1) continue; //  || i - 1 != 0
 					
 				    var indX = xx + i - 1;
 				    var indY = yy + j - 1;
@@ -126,16 +126,17 @@ fireEvent = function(_event) {
 							_delete = true;
 							
 							//YOOOOOO!!!!!!
-							if entity.entityName == PlayerName {_delete = false;} else {
-								Camera.djikstra[cellCosts[j].x + 1][cellCosts[j].y + 0] = max(1, ( (Camera.djikstra[cellCosts[j].x + 1][cellCosts[j].y + 0]) ?? 42069 ) - 2);
-								Camera.djikstra[cellCosts[j].x - 1][cellCosts[j].y - 0] = max(1, ( (Camera.djikstra[cellCosts[j].x - 1][cellCosts[j].y - 0]) ?? 42069 ) - 2);
-								Camera.djikstra[cellCosts[j].x + 0][cellCosts[j].y + 1] = max(1, ( (Camera.djikstra[cellCosts[j].x + 0][cellCosts[j].y + 1]) ?? 42069 ) - 2);
-								Camera.djikstra[cellCosts[j].x - 0][cellCosts[j].y - 1] = max(1, ( (Camera.djikstra[cellCosts[j].x - 0][cellCosts[j].y - 1]) ?? 42069 ) - 2);
-								Camera.djikstra[cellCosts[j].x + 1][cellCosts[j].y + 1] = max(1, ( (Camera.djikstra[cellCosts[j].x + 1][cellCosts[j].y + 1]) ?? 42069 ) - 1);
-								Camera.djikstra[cellCosts[j].x - 1][cellCosts[j].y - 1] = max(1, ( (Camera.djikstra[cellCosts[j].x - 1][cellCosts[j].y - 1]) ?? 42069 ) - 1);
-								Camera.djikstra[cellCosts[j].x + 1][cellCosts[j].y - 1] = max(1, ( (Camera.djikstra[cellCosts[j].x + 1][cellCosts[j].y - 1]) ?? 42069 ) - 1);
-								Camera.djikstra[cellCosts[j].x - 1][cellCosts[j].y + 1] = max(1, ( (Camera.djikstra[cellCosts[j].x - 1][cellCosts[j].y + 1]) ?? 42069 ) - 1);
-							}
+							if entity.entityName == PlayerName { _delete = false; continue; }
+							
+							Camera.djikstra[cellCosts[j].x + 1][cellCosts[j].y + 0] = max(2, ( (Camera.djikstra[cellCosts[j].x + 1][cellCosts[j].y + 0]) ?? 42069 ) - 2);
+							Camera.djikstra[cellCosts[j].x - 1][cellCosts[j].y - 0] = max(2, ( (Camera.djikstra[cellCosts[j].x - 1][cellCosts[j].y - 0]) ?? 42069 ) - 2);
+							Camera.djikstra[cellCosts[j].x + 0][cellCosts[j].y + 1] = max(2, ( (Camera.djikstra[cellCosts[j].x + 0][cellCosts[j].y + 1]) ?? 42069 ) - 2);
+							Camera.djikstra[cellCosts[j].x - 0][cellCosts[j].y - 1] = max(2, ( (Camera.djikstra[cellCosts[j].x - 0][cellCosts[j].y - 1]) ?? 42069 ) - 2);
+							Camera.djikstra[cellCosts[j].x + 1][cellCosts[j].y + 1] = max(2, ( (Camera.djikstra[cellCosts[j].x + 1][cellCosts[j].y + 1]) ?? 42069 ) - 1);
+							Camera.djikstra[cellCosts[j].x - 1][cellCosts[j].y - 1] = max(2, ( (Camera.djikstra[cellCosts[j].x - 1][cellCosts[j].y - 1]) ?? 42069 ) - 1);
+							Camera.djikstra[cellCosts[j].x + 1][cellCosts[j].y - 1] = max(2, ( (Camera.djikstra[cellCosts[j].x + 1][cellCosts[j].y - 1]) ?? 42069 ) - 1);
+							Camera.djikstra[cellCosts[j].x - 1][cellCosts[j].y + 1] = max(2, ( (Camera.djikstra[cellCosts[j].x - 1][cellCosts[j].y + 1]) ?? 42069 ) - 1);
+							
 						}
 						
 					    if _delete	{

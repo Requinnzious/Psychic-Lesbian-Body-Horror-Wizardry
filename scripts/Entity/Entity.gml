@@ -277,7 +277,7 @@ function FireElementComponent(c_Name)     : Component(c_Name) constructor {
 }
 function HealthComponent(c_Name)          : Component(c_Name) constructor {
 	hp         = 10;
-	maxHp      = 10;
+	maxHP      = 10;
 	
 	deathTimer = 12;
 	
@@ -287,13 +287,43 @@ function HealthComponent(c_Name)          : Component(c_Name) constructor {
 				hp = max(0, hp - _event.params.amount);
 				show_debug_message($"{getParent().entityName} took {_event.params.amount} damage");
 				
-				_event.params.hp = hp;
+				_event.params.hp    = hp;
+				_event.params.maxHP = maxHP;
 				
 				//This is temporary but look!
 				if(hp == 0) {
 					var ts = time_source_create(time_source_game, deathTimer, time_source_units_frames, function(){destroyEntity(World.entities[? parent])});
 					time_source_start(ts);
 				}
+				break;
+		}
+		return _event;
+	}
+}
+function HealthColorComponent(c_Name)     : Component(c_Name) constructor {
+	color     = #ffffff;
+	baseColor = #ffffff;
+	deadColor = #ff0000;
+	
+	fireEvent = function(_event) {		
+		switch(_event.type) {			
+			case "TakeDamage":
+				var hp = _event.params.hp / _event.params.maxHP;
+				
+				var baseR = colour_get_red(baseColor);
+				var baseG = colour_get_green(baseColor);
+				var baseB = colour_get_blue(baseColor);
+				var deadR = colour_get_red(deadColor);
+				var deadG = colour_get_green(deadColor);
+				var deadB = colour_get_blue(deadColor);
+				
+				var colorR = lerp(baseR, deadR, 1 - hp);
+				var colorG = lerp(baseG, deadG, 1 - hp);
+				var colorB = lerp(baseB, deadB, 1 - hp);
+				
+				color = make_colour_rgb(colorR, colorG, colorB);
+				
+				_event.params.color = color;
 				break;
 		}
 		return _event;
@@ -590,9 +620,15 @@ function WorldTileComponent(c_Name)       : Component(c_Name) constructor {
 	worldMeshes   =             [];
 	isBlocking    =          false;
 	destroyedTile = TileTypes.NULL;
+	color         = #ffffff;
 	
 	fireEvent = function(_event) {		
 		switch(_event.type) {
+			case "TakeDamage":
+				if !variable_struct_exists(_event.params, "color") break;
+				World.tiles[gridX][gridY].color   = _event.params.color ?? color;
+				if !array_length(worldMeshes) == 0 World.buildMesh(worldMeshes, floor(gridX/5), floor(gridY/5));
+				break;
 			case "Destroy":
 				World.tiles[gridX][gridY].tile   = destroyedTile;
 				if !array_length(worldMeshes) == 0 World.buildMesh(worldMeshes, floor(gridX/5), floor(gridY/5));

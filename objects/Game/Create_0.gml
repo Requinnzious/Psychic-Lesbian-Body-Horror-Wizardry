@@ -77,10 +77,18 @@ GameState = new SnowState("stepPhase")
 	.add("attackPhase", {
 		enter:  function() { 
 			show_debug_message("Attack Phase");
-			GameState.change("endPhase");
+			with Brain show_debug_message($"{parentEntity.entityName}: has {movePoints} move points")
 		},
 		leave: function()  {},
-		update: function() { GameState.change("endPhase"); }
+		update: function() {
+			var dirty = false;
+			with Brain {
+				if movePoints <= 0 continue;
+				dirty = true;
+			}
+			if dirty return;
+			GameState.change("endPhase");
+		}
 	})
 	
 	.add("endPhase",    {
@@ -99,6 +107,7 @@ subscribe("PlayerTurn", id);
 fireEvent = function(_event) {
 	switch _event.type {
 		case "PlayerTurn":
+		
 			var moveBrains = new Event("Brain_Move", _event.params);
 			moveBrains = moveBrains.fire();
 			delete moveBrains;

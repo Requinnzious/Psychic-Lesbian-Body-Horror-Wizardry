@@ -11,8 +11,30 @@ entities[? SixOfCups.uuid] = SixOfCups;
 	    array_push(tiles, []);
 		for (var j = 0; j < room_height / 32; ++j) {
 			var _tile   = tilemap_get_at_pixel(meta, i * 32, j * 32);
-			var _coll   = tilemap_get_at_pixel(coll, i * 32, j * 32);
-		    array_push(tiles[i], {tile: _tile, coll: _coll});
+			var _collis = tilemap_get_at_pixel(coll, i * 32, j * 32);
+			var r = random_range(225, 255);
+			var g = random_range(225, 255);
+			var b = random_range(225, 255);
+			var _color  = make_colour_rgb(r,g,b);
+			
+			var spr = sNull;
+			switch(_tile) {
+				case TileTypes.GRASS:
+					spr = sGrassTexture;
+					break;
+				case TileTypes.TREE:
+					spr = sGrassTexture;
+					break;
+				case TileTypes.PATH:
+					spr = sPathTexture;
+					break;
+				case TileTypes.WALL:
+					spr = sBrickTexture;
+					break;
+			}
+			var tileVariation = irandom_range(0, sprite_get_number(spr) - 1)
+			
+		    array_push(tiles[i], {tile: _tile, collis: _collis, variation: tileVariation, color: _color});
 		}
 	}
 	cols = array_length(tiles);
@@ -49,7 +71,10 @@ entities[? SixOfCups.uuid] = SixOfCups;
 		for (var i = meshX * meshDim; i < meshW and i < array_length(World.tiles); ++i) {
 		    for (var j = meshY * meshDim; j < meshH and j < array_length(World.tiles[0]); ++j) {				
 				var tile   = tiles[i][j].tile;
-				var coll   = tiles[i][j].coll;
+				var coll   = tiles[i][j].collis;
+				var vari   = tiles[i][j].variation;
+				var color  = tiles[i][j].color;
+				
 				var spr = sNull;
 				var norm;
 				
@@ -93,7 +118,7 @@ entities[? SixOfCups.uuid] = SixOfCups;
 							uvs = nullUVs;
 							break;
 						default:
-							uvs = sprite_get_uvs(spr, irandom_range(0, sprite_get_number(spr) - 1));
+							uvs = sprite_get_uvs(spr, vari/*irandom_range(0, sprite_get_number(spr) - 1)*/);
 							break;
 					}
 		
@@ -111,43 +136,39 @@ entities[? SixOfCups.uuid] = SixOfCups;
 							//Make walls
 							if(nWall) {
 								norm = [0, -1, 0];
-								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x2, y1, zz],               norm, [uvs[0], uvs[1]], c_white, 1);
-								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x1, y1, zz],               norm, [uvs[2], uvs[1]], c_white, 1);
-								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x1, y1, zz - TileDim * 1.5], norm, [uvs[2], uvs[3]], c_white, 1);
-								
-								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x2, y1, zz],               norm, [uvs[0], uvs[1]], c_white, 1);
-								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x1, y1, zz - TileDim * 1.5], norm, [uvs[2], uvs[3]], c_white, 1);
-								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x2, y1, zz - TileDim * 1.5], norm, [uvs[0], uvs[3]], c_white, 1);
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x2, y1, zz],                 norm, [uvs[0], uvs[1]], color, 1);
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x1, y1, zz],                 norm, [uvs[2], uvs[1]], color, 1);
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x1, y1, zz - TileDim * 1.5], norm, [uvs[2], uvs[3]], color, 1);
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x2, y1, zz],                 norm, [uvs[0], uvs[1]], color, 1);
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x1, y1, zz - TileDim * 1.5], norm, [uvs[2], uvs[3]], color, 1);
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x2, y1, zz - TileDim * 1.5], norm, [uvs[0], uvs[3]], color, 1);
 							}
 							if(sWall) {
 								norm = [0, 1, 0];
-								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x1, y2, zz],               norm, [uvs[0], uvs[1]], c_white, 1);
-								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x2, y2, zz],               norm, [uvs[2], uvs[1]], c_white, 1);
-								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x2, y2, zz - TileDim * 1.5], norm, [uvs[2], uvs[3]], c_white, 1);
-			
-								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x1, y2, zz],               norm, [uvs[0], uvs[1]], c_white, 1);
-								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x2, y2, zz - TileDim * 1.5], norm, [uvs[2], uvs[3]], c_white, 1);
-								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x1, y2, zz - TileDim * 1.5], norm, [uvs[0], uvs[3]], c_white, 1);
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x1, y2, zz],                 norm, [uvs[0], uvs[1]], color, 1);
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x2, y2, zz],                 norm, [uvs[2], uvs[1]], color, 1);
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x2, y2, zz - TileDim * 1.5], norm, [uvs[2], uvs[3]], color, 1);
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x1, y2, zz],                 norm, [uvs[0], uvs[1]], color, 1);
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x2, y2, zz - TileDim * 1.5], norm, [uvs[2], uvs[3]], color, 1);
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x1, y2, zz - TileDim * 1.5], norm, [uvs[0], uvs[3]], color, 1);
 							}
 							if(eWall) {
 								norm = [1, 0, 0];
-								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x2, y2, zz],               norm, [uvs[0], uvs[1]], c_white, 1);
-								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x2, y1, zz],               norm, [uvs[2], uvs[1]], c_white, 1);
-								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x2, y1, zz - TileDim * 1.5], norm, [uvs[2], uvs[3]], c_white, 1);
-			
-								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x2, y2, zz],               norm, [uvs[0], uvs[1]], c_white, 1);
-								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x2, y1, zz - TileDim * 1.5], norm, [uvs[2], uvs[3]], c_white, 1);
-								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x2, y2, zz - TileDim * 1.5], norm, [uvs[0], uvs[3]], c_white, 1);
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x2, y2, zz],                 norm, [uvs[0], uvs[1]], color, 1);
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x2, y1, zz],                 norm, [uvs[2], uvs[1]], color, 1);
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x2, y1, zz - TileDim * 1.5], norm, [uvs[2], uvs[3]], color, 1);
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x2, y2, zz],                 norm, [uvs[0], uvs[1]], color, 1);
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x2, y1, zz - TileDim * 1.5], norm, [uvs[2], uvs[3]], color, 1);
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x2, y2, zz - TileDim * 1.5], norm, [uvs[0], uvs[3]], color, 1);
 							}
 							if(wWall) {
 								norm = [-1, 0, 0];
-								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x1, y1, zz],               norm, [uvs[0], uvs[1]], c_white, 1);
-								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x1, y2, zz],               norm, [uvs[2], uvs[1]], c_white, 1);
-								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x1, y2, zz - TileDim * 1.5], norm, [uvs[2], uvs[3]], c_white, 1);
-			
-								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x1, y1, zz],               norm, [uvs[0], uvs[1]], c_white, 1);
-								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x1, y2, zz - TileDim * 1.5], norm, [uvs[2], uvs[3]], c_white, 1);
-								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x1, y1, zz - TileDim * 1.5], norm, [uvs[0], uvs[3]], c_white, 1);
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x1, y1, zz],                 norm, [uvs[0], uvs[1]], color, 1);
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x1, y2, zz],                 norm, [uvs[2], uvs[1]], color, 1);
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x1, y2, zz - TileDim * 1.5], norm, [uvs[2], uvs[3]], color, 1);
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x1, y1, zz],                 norm, [uvs[0], uvs[1]], color, 1);
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x1, y2, zz - TileDim * 1.5], norm, [uvs[2], uvs[3]], color, 1);
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x1, y1, zz - TileDim * 1.5], norm, [uvs[0], uvs[3]], color, 1);
 							}
 										
 							//Mountains
@@ -313,13 +334,17 @@ entities[? SixOfCups.uuid] = SixOfCups;
 					if coll == 2 {
 						_hp = 1;
 					}
+					
+					var deadColor = lerp(color, #ff0e00, .75)
+					
 					var entity = new Entity("Brick Wall")
 						.addComponent("Physics")
 						.addComponent("Impassable",   {bumping: true})
-						.addComponent("Health",    {hp: _hp})
-						.addComponent("Position",  {x: x1, y: y1, z: 0})
-						.addComponent("Transform", {x: 16, y: 16, z: 16})
-						.addComponent("WorldTile", {gridX: x1/TileDim, gridY: y1/TileDim, isBlocking: true, worldMeshes: ["floor", "wall"]});
+						.addComponent("Health",       {hp: _hp, maxHP: _hp, deadColor: deadColor})
+						.addComponent("Position",     {x: x1, y: y1, z: 0})
+						.addComponent("Transform",    {x: 16, y: 16, z: 16})
+						.addComponent("HealthColor",  {color: color, baseColor: color})
+						.addComponent("WorldTile",    {gridX: x1/TileDim, gridY: y1/TileDim, isBlocking: true, worldMeshes: ["floor", "wall"], color: color});
 
 					if coll == 2 {
 						entity.addComponent("DeathParticle", {sprite: sBrickTexture_Illusory})
