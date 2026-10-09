@@ -332,7 +332,7 @@ function HealthComponent(c_Name)          : Component(c_Name) constructor {
 	}
 }
 function HealthRegenComponent(c_Name)     : Component(c_Name) constructor {
-	regenTimer   =    5;
+	regenTimer   =   10;
 	regenAmount  =    1;
 	regenerating = true;
 	
