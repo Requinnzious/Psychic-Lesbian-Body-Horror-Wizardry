@@ -1,5 +1,9 @@
 surface_set_target(screenSurf)
 
+var healthString = $"HP: {SixOfCups.get("Health", "hp")} / {SixOfCups.get("Health", "maxHP")}";
+
+draw_text_transformed_colour(16, 16, healthString, 2, 2, 0, c_white, c_white, c_white, c_white, 1);
+
 #region Draw minimap
 	var x1 = 0;
 	var x2 = view_get_wport(view_current);
@@ -12,10 +16,10 @@ surface_set_target(screenSurf)
 			var yy = clamp(y / TileDim + 2 - j / TileDim, 0, array_length(World.tiles[0]) - 1);
 	
 		    var _tile = World.tiles[xx][yy].tile;
-			draw_sprite(sMetaTiles_Strip, _tile, 128 - i + x2 - 160, 128 - j);
+			draw_sprite(sMetaTiles_Strip_DQ, _tile, 128 - i + x2 - 160, 128 - j);
 			
 			//Debug Djikstra
-			draw_text(128 - i + x2 - 160, 128 - j, djikstra[xx][yy] ?? "NO")
+			//draw_text(128 - i + x2 - 160, 128 - j, djikstra[xx][yy] ?? "NO")
 		}
 	}
 
@@ -29,21 +33,17 @@ surface_set_target(screenSurf)
 		
 		if (iconX < x - 96 || iconY < y - 96 || iconX > x + 64 || iconY > y + 64) continue;
 		
-		var xx = (floor(x / TileDim) * TileDim) - iconX;
-		var yy = (floor(y / TileDim) * TileDim) - iconY;
+		var xx = (round(x / TileDim) * TileDim) - iconX;
+		var yy = (round(y / TileDim) * TileDim) - iconY;
 		
-		draw_sprite(icon.sprite, icon.subimage, x2 - xx - 96 + 16, 160 - yy - 96 + 24);
+		var dir = point_direction(iconX + 16, iconY + 16, x + 16, y + 16);
+		
+		draw_sprite(icon.sprite, floor(dir / 90)*2 + (image_index mod 2), x2 - xx - 96, 160 - yy - 96);
 	}
 	delete event;
 
 	//Player cursor
-	var cx1 = x2 - 80 -       dcos(lookDir + lookDirOffset) * 16;
-	var cy1 = 80      +       dsin(lookDir + lookDirOffset) * 16;
-	var cx2 = cx1     + lengthdir_x(32, lookDir + lookDirOffset);
-	var cy2 = cy1     + lengthdir_y(32, lookDir + lookDirOffset);
-
-	draw_set_colour(c_white)
-	draw_arrow(cx1, cy1, cx2, cy2, 16);
+	draw_sprite(sSixMap, floor((lookDir + lookDirOffset) / 90)*2 + (image_index mod 2), x2 - 96, 64);
 	
 #endregion
 surface_reset_target();

@@ -175,8 +175,13 @@ stateMachine = new SnowState("step", false)
 					var entityY  = entity.get("Position", "y");
 			
 					if (entityX != x + 32 *  dcos(lookDir) || entityY!= y + 32 * -dsin(lookDir)) continue;
+									
+					var event = new Event("DealMeleeDamage")
+					event = SixOfCups.fireEvent(event);
+					var hitDie = event.params.hitDie;
+					delete event;
 			
-					var event = new Event("TakeDamage", {amount: roll("1d6+2")})
+					var event = new Event("TakeDamage", {amount: roll(hitDie)})
 					event = entity.fireEvent(event);
 					
 					if event.params.hp == 0 {
@@ -494,7 +499,7 @@ createBloodDecal = function(parentEntity = noone) {
 	var event = new Event("TakeDamage", {amount: 1});
 	event = SixOfCups.fireEvent(event);
 	var spr = sBloodDecal;
-	if event.params.hp < 0 spr = sBloodDecal_Death;
+	if event.params.hp <= 0 spr = sBloodDecal_Death;
 	delete event;
 	
 	var blood = instance_create_layer(xPrevious, yPrevious, "Instances", Decal);

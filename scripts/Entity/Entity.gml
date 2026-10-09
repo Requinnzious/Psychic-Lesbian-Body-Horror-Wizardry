@@ -73,6 +73,8 @@ function Entity(name = "") constructor {
 
 function destroyEntity(entity) {
 	if entity == undefined return;
+	if entity.entityName == "Six of Cups" return;
+	
 	entity.fireEvent(EntityDestroyEvent);
 	ds_map_delete(World.entities, entity.uuid);
 	entity.destroy();
@@ -120,6 +122,25 @@ function ArmorComponent(c_Name) : Component(c_Name) constructor {
 		switch(_event.type) {
 			case "TakeDamage":
 				_event.params.amount = max(0, _event.params.amount - armorValue);
+				break;
+		}
+		return _event;
+	}
+}
+function AttackSubimageComponent(c_Name)    : Component(c_Name) constructor {
+	subimage  =     2;
+	attacking = false;
+	
+	fireEvent = function(_event) {		
+		switch(_event.type) {			
+			case "Attacking":
+				attacking = true;
+				break;
+			case "EndAttack":
+				attacking = false;
+				break;
+			case "Render":
+				if attacking _event.params.subimage = self.subimage;
 				break;
 		}
 		return _event;
@@ -277,12 +298,14 @@ function FireElementComponent(c_Name)     : Component(c_Name) constructor {
 }
 function HealthComponent(c_Name)          : Component(c_Name) constructor {
 	hp         = 10;
-	maxHP      = 10;
 	
 	deathTimer = 12;
 	
 	fireEvent = function(_event) {		
-		switch(_event.type) {			
+		switch(_event.type) {
+			case "Create":
+				maxHP = hp;
+				break;
 			case "TakeDamage":
 				hp = max(0, hp - _event.params.amount);
 				show_debug_message($"{getParent().entityName} took {_event.params.amount} damage");
@@ -295,6 +318,44 @@ function HealthComponent(c_Name)          : Component(c_Name) constructor {
 					var ts = time_source_create(time_source_game, deathTimer, time_source_units_frames, function(){destroyEntity(World.entities[? parent])});
 					time_source_start(ts);
 				}
+				break;
+				
+			case "Heal":
+				hp = min(maxHP, hp + _event.params.amount);
+				show_debug_message($"{getParent().entityName} healed {_event.params.amount} HP");
+				
+				_event.params.hp    = hp;
+				_event.params.maxHP = maxHP;
+				break;
+		}
+		return _event;
+	}
+}
+function HealthRegenComponent(c_Name)     : Component(c_Name) constructor {
+	regenTimer   =    5;
+	regenAmount  =    1;
+	regenerating = true;
+	
+	other.listen("Step");
+	
+	fireEvent = function(_event) {		
+		switch(_event.type) {
+			case "Create":
+				regenMaxTime = regenTimer;
+				break;
+			case "Step":
+				regenTimer --;
+				
+				if regenTimer > 0 || !regenerating break;
+				
+				var _healevent = new Event("Heal", {amount: regenAmount});
+				_healevent = getParent().fireEvent(_healevent)
+				delete _healevent;
+				
+				regenTimer = regenMaxTime;
+				break;
+			case "TakeDamage":
+				regenTimer = regenMaxTime;
 				break;
 		}
 		return _event;
@@ -432,8 +493,8 @@ function LootComponent(c_Name)            : Component(c_Name) constructor {
 function MiniMapSpriteComponent(c_Name)   : Component(c_Name) constructor {
 	other.listen("Minimap");
 	
-	sprite   = sSlime;
-	subimage =      0;
+	sprite   = sSlime_Map;
+	subimage =          0;
 	
 	fireEvent = function(_event) {
 		switch(_event.type) {
@@ -453,8 +514,13 @@ function PhysicsComponent(c_Name)         : Component(c_Name) constructor {
 	color      = c_white;
 	maxFlash   = 12;
 	
+	hitDie     = "1d3";
+	
 	fireEvent = function(_event) {		
 		switch(_event.type) {
+			case "DealMeleeDamage":
+				_event.params.hitDie = hitDie;
+				break;
 			case "TakeDamage":
 				flash = maxFlash;
 				break;

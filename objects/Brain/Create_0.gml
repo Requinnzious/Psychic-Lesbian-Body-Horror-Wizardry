@@ -1,4 +1,5 @@
-hopAnimation = animcurve_get_channel(acHop, 0);
+hopAnimation  = animcurve_get_channel(acHop, 0);
+bumpAnimation = animcurve_get_channel(acBump, 0);
 
 subscriptions = [];
 
@@ -51,6 +52,33 @@ stateMachine = new SnowState("wait")
 			var event = new Event("Place", {x: x, y: y, z: z});
 			event = parentEntity.fireEvent(event);
 			delete event;
+		}
+	})
+	.add("bump", {
+		enter: function() {
+			animPos = 0
+			
+			var event = new Event("Attacking");
+			event = parentEntity.fireEvent(event);
+			delete event;
+		},
+		leave: function() {
+			animPos = 0
+			
+			var event = new Event("EndAttack");
+			event = parentEntity.fireEvent(event);
+			delete event;
+		},
+		update: function() {
+			var delta = animcurve_channel_evaluate(bumpAnimation, animPos / (AttackFrames));
+			x = lerp(xPrevious, xTarget, delta);
+			y = lerp(yPrevious, yTarget, delta);
+			
+			var event = new Event("Place", {x: x, y: y, z: z});
+			event = parentEntity.fireEvent(event);
+			delete event;
+	
+			animPos ++;
 		}
 	})
 
@@ -116,6 +144,8 @@ destroy = function() {
 	instance_destroy();
 }
 
+
+
 moveFunc  = function() {
 	x = xTarget;
 	y = yTarget;
@@ -125,6 +155,18 @@ moveFunc  = function() {
 	yPrevious = y;
 	zPrevious = z;
 	
+	stateMachine.change("wait");
+}
+bumpFunc  = function() {
+	x = xPrevious;
+	y = yPrevious;
+			
+	var event = new Event("Place", {x: x, y: y, z: z});
+	event = parentEntity.fireEvent(event);
+	delete event;	
+	
+	animPos = 0;
+
 	stateMachine.change("wait");
 }
 

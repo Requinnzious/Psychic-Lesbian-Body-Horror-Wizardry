@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":1.114558,
+  "duration":1.1145579,
   "exportDir":"",
   "name":"sePoisoned",
   "parent":{
