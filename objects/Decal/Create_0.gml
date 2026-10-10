@@ -1,24 +1,38 @@
-lookDir = 0;
-z  = 0;
-width  = TileDim / 4;
-height = TileDim / 4;
+lookDir         = 0;
+z               = 0;
+width           = TileDim / 4;
+height          = TileDim / 4;
+		        
+realWidth       = irandom_range(width,  width * 2)
+realHeight      = irandom_range(height, height * 2)
+epsilon         = random(1);
+
+xOffsetFromMesh = 0;
+yOffsetFromMesh = 0;
 
 createMesh = function() {
+	buildMesh();
+}
+
+buildMesh  = function() {
+	uvs  = sprite_get_uvs(sprite_index, image_index);
+	mesh = vertex_create_buffer();
+	
 	norm = [0, 0, 0];
 
 	switch(lookDir) {	
 		case 90:
-			x1 = x + irandom_range(width, width * 2);
+			x1 = x + realWidth;
 			x2 = x1 + width;
 			x3 = x2;
 			x4 = x1;
 		
-			y1 = y + random(1);
+			y1 = y + epsilon;
 			y2 = y1;
 			y3 = y1;
 			y4 = y1;
 		
-			z1 = z + irandom_range(height, height * 2);
+			z1 = z + realHeight;
 			z2 = z1 + height;
 		
 			norm = [0, -1, 0];
@@ -31,12 +45,12 @@ createMesh = function() {
 			x3 = x1;
 			x4 = x1;
 		
-			y1 = y + TileDim - irandom_range(width, width * 2);
+			y1 = y + TileDim - realWidth;
 			y2 = y1 - width;
 			y3 = y2;
 			y4 = y1;
 		
-			z1 = z + irandom_range(height, height * 2);
+			z1 = z + realHeight;
 			z2 = z1 + height;
 		
 			norm = [1, 0, 0];
@@ -44,17 +58,17 @@ createMesh = function() {
 			break;
 		
 		case 270:
-			x1 = x + TileDim - irandom_range(width, width * 2);
+			x1 = x + TileDim - realWidth;
 			x2 = x1 - width;
 			x3 = x2;
 			x4 = x1;
 		
-			y1 = y + TileDim - random(1);
+			y1 = y + TileDim - epsilon;
 			y2 = y1;
 			y3 = y1;
 			y4 = y1;
 		
-			z1 = z + irandom_range(height, height * 2);
+			z1 = z + realHeight;
 			z2 = z1 + height;
 		
 			norm = [0, 1, 0];
@@ -62,29 +76,23 @@ createMesh = function() {
 			break;
 	
 		default: //case 0:
-			x1 = x + TileDim - random(1);
+			x1 = x + TileDim - epsilon;
 			x2 = x1;
 			x3 = x1;
 			x4 = x1;
 		
-			y1 = y + irandom_range(width, width * 2);
+			y1 = y + realWidth;
 			y2 = y1 + width;
 			y3 = y2;
 			y4 = y1;
 		
-			z1 = z + irandom_range(height, height * 2);
+			z1 = z + realHeight;
 			z2 = z1 + height;
 		
 			norm = [-1, 0, 0];
 			break;
 		}
 	
-	buildMesh();
-}
-
-buildMesh  = function() {
-	uvs  = sprite_get_uvs(sprite_index, image_index);
-	mesh = vertex_create_buffer();
 	vertex_begin(mesh, vFormat);
 	
 	addVertex(mesh, [x1, y1, z2], norm, [uvs[0], uvs[1]], c_white, 1);

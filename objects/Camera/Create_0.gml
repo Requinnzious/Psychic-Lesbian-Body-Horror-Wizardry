@@ -184,7 +184,12 @@ stateMachine = new SnowState("step", false)
 					var entityY  = entity.get("Position", "y");
 			
 					if (entityX != x + 32 *  dcos(lookDir) || entityY!= y + 32 * -dsin(lookDir)) continue;
-								
+					
+					if entity.entityName == "Brick Wall" {
+						var event = new Event("Place", {x: entityX, y: entityY + 32, z: 0});
+						event = entity.fireEvent(event);
+						delete event;
+					}
 					
 					var crit = false;
 					var tauntCrit = entity.get("TauntSprite", "taunting");

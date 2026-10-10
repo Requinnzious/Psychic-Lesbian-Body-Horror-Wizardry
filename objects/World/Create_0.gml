@@ -351,7 +351,7 @@ entities[? SixOfCups.uuid] = SixOfCups;
 						.addComponent("Position",     {x: x1, y: y1, z: 0})
 						.addComponent("Transform",    {x: 16, y: 16, z: 16})
 						.addComponent("HealthColor",  {color: color, baseColor: color, deadColor: deadColor})
-						.addComponent("WorldTile",    {gridX: x1/TileDim, gridY: y1/TileDim, isBlocking: true, worldMeshes: ["floor", "wall"], color: color});
+						.addComponent("WorldTile",    {gridX: x1/TileDim, gridY: y1/TileDim, tile: TileTypes.WALL, isBlocking: true, worldMeshes: ["floor", "wall"], color: color});
 
 					if coll == 2 {
 						entity.addComponent("DeathParticle", {sprite: sBrickTexture_Illusory})
@@ -376,7 +376,7 @@ entities[? SixOfCups.uuid] = SixOfCups;
 						.addComponent("DamageSound", {sound: SoundTypes.GRASS})
 						.addComponent("WindShader")
 						.addComponent("BillboardMesh")
-						.addComponent("WorldTile", {gridX: x1/TileDim, gridY: y1/TileDim});
+						.addComponent("WorldTile", {gridX: x1/TileDim, gridY: y1/TileDim, tile: TileTypes.GRASS});
 
 					entity.fireEvent(EntityCreateEvent);
 
@@ -395,7 +395,7 @@ entities[? SixOfCups.uuid] = SixOfCups;
 						.addComponent("HurtColor")
 						.addComponent("WindShader")
 						.addComponent("BillboardMesh")
-						.addComponent("WorldTile", {gridX: x1/TileDim, gridY: y1/TileDim});
+						.addComponent("WorldTile", {gridX: x1/TileDim, gridY: y1/TileDim, tile: TileTypes.TALLGRASS});
 
 					entity.fireEvent(EntityCreateEvent);
 					
@@ -432,7 +432,7 @@ entities[? SixOfCups.uuid] = SixOfCups;
 						.addComponent("WindShader")
 						.addComponent("BillboardMesh")
 						.addComponent("DamageSound", {sound: SoundTypes.HIT})
-						.addComponent("WorldTile", {gridX: x1/TileDim, gridY: y1/TileDim, isBlocking: true, worldMeshes: ["canopy"]});
+						.addComponent("WorldTile", {gridX: x1/TileDim, gridY: y1/TileDim, tile: TileTypes.WALL, isBlocking: true, worldMeshes: ["canopy"]});
 
 					entity.fireEvent(EntityCreateEvent);
 

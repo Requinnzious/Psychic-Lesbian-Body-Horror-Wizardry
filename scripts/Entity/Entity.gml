@@ -702,19 +702,52 @@ function WorldTileComponent(c_Name)       : Component(c_Name) constructor {
 	worldMeshes   =             [];
 	isBlocking    =          false;
 	destroyedTile = TileTypes.NULL;
+	tile          = TileTypes.WALL;
 	color         = #ffffff;
+	
+	sendRebuild = function() {
+		World.buildMesh(worldMeshes, floor(gridX/5),     floor(gridY/5))
+		World.buildMesh(worldMeshes, floor(gridX/5) - 1, floor(gridY/5))
+		World.buildMesh(worldMeshes, floor(gridX/5) + 1, floor(gridY/5))
+		World.buildMesh(worldMeshes, floor(gridX/5) - 1, floor(gridY/5) - 1)
+		World.buildMesh(worldMeshes, floor(gridX/5) + 1, floor(gridY/5) + 1)
+		World.buildMesh(worldMeshes, floor(gridX/5) + 1, floor(gridY/5) - 1)
+		World.buildMesh(worldMeshes, floor(gridX/5) - 1, floor(gridY/5) + 1)
+		World.buildMesh(worldMeshes, floor(gridX/5),     floor(gridY/5) - 1)
+		World.buildMesh(worldMeshes, floor(gridX/5),     floor(gridY/5) + 1)
+	}
 	
 	fireEvent = function(_event) {		
 		switch(_event.type) {
+			case "Place":
+				var variation = World.tiles[gridX][gridY].variation;
+				World.tiles[gridX][gridY].tile = destroyedTile;
+				if isBlocking tilemap_set(World.coll, 0, gridX, gridY);
+				mp_grid_clear_cell(World.aStar, gridX, gridY);
+				
+				gridX = floor(_event.params.x / TileDim);
+				gridY = floor(_event.params.y / TileDim);
+				
+				World.tiles[gridX][gridY].tile      = tile;
+				World.tiles[gridX][gridY].variation = variation
+				if isBlocking {
+					tilemap_set(World.coll, 1, gridX, gridY);
+					mp_grid_add_cell(World.aStar, gridX, gridY);
+				}
+				
+				if !array_length(worldMeshes) == 0 sendRebuild();
+				break;
 			case "TakeDamage":
 				if !variable_struct_exists(_event.params, "color") break;
 				World.tiles[gridX][gridY].color   = _event.params.color ?? color;
-				if !array_length(worldMeshes) == 0 World.buildMesh(worldMeshes, floor(gridX/5), floor(gridY/5));
+				if !array_length(worldMeshes) == 0 sendRebuild();
 				break;
 			case "Destroy":
 				World.tiles[gridX][gridY].tile   = destroyedTile;
-				if !array_length(worldMeshes) == 0 World.buildMesh(worldMeshes, floor(gridX/5), floor(gridY/5));
-				if isBlocking tilemap_set(World.coll, 0, gridX, gridY);
+				if !array_length(worldMeshes) == 0 sendRebuild();
+				if isBlocking {
+					tilemap_set(World.coll, 0, gridX, gridY);
+				}
 				break;
 		}
 		
