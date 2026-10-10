@@ -16,7 +16,7 @@ draw_text_transformed_colour(16, 16, healthString, 2, 2, 0, c_white, c_white, c_
 			var yy = clamp(y / TileDim + 2 - j / TileDim, 0, array_length(World.tiles[0]) - 1);
 	
 		    var _tile = World.tiles[xx][yy].tile;
-			draw_sprite(sMetaTiles_Strip_DQ, _tile, 128 - i + x2 - 160, 128 - j);
+			draw_sprite(sMetaTiles_Strip, _tile, 128 - i + x2 - 160, 128 - j);
 			
 			//Debug Djikstra
 			//draw_text(128 - i + x2 - 160, 128 - j, djikstra[xx][yy] ?? "NO")

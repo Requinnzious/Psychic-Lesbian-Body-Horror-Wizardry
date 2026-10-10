@@ -492,7 +492,7 @@ entities[? SixOfCups.uuid] = SixOfCups;
 	var slime = new Entity("Slime")
 		.addComponent("Physics",      {maxFlash:   24})
 		.addComponent("Impassable",   {bumping: false})
-		.addComponent("Health",       {deathTimer: 24})
+		.addComponent("Health",       {hp: 12, deathTimer: 24})
 		.addComponent("ShakeScreen",  {screenShake: 12, screenShakeIntensity: .1})
 		.addComponent("Position",     {x: slimeX, y: slimeY, z: slimeZ})
 		.addComponent("Transform",    {x: 16,  y: 16})

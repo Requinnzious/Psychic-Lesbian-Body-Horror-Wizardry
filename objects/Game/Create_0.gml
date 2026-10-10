@@ -3,6 +3,62 @@ room_goto_next();
 
 Steps = 0;	
 
+function BrainTryAttack(actingBrain) {
+	with actingBrain {
+		var taunt = random(100) <= tauntChance;
+		
+		if parentEntity.get("TauntSprite", "taunting") taunt = false;
+		
+		if taunt {
+			parentEntity.addComponent("BidirectionalCrit")
+			stateMachine.change("taunt");
+		
+			var ts = time_source_create(time_source_game, AttackFrames, time_source_units_frames, bumpFunc);
+			time_source_start(ts);
+			
+			return;
+		}
+		
+		xPrevious = x;
+		yPrevious = y;
+		xTarget = Camera.x;
+		yTarget = Camera.y;
+	
+		animPos = 0;
+	
+		stateMachine.change("bump");
+		
+		var ts = time_source_create(time_source_game, AttackFrames, time_source_units_frames, bumpFunc);
+		time_source_start(ts);
+		
+		ts = time_source_create(time_source_game, AttackFrames / 2, time_source_units_frames, 
+			function() {
+				var hitDie = "1d3";
+				var sound  = SoundTypes.HIT1;
+				var crit   = false;
+				
+				var event = new Event("DealMeleeDamage")
+				event = parentEntity.fireEvent(event);
+				if variable_struct_exists(event.params, "hitDie") hitDie = event.params.hitDie;
+				if variable_struct_exists(event.params, "sound")  sound  = event.params.sound;
+				if variable_struct_exists(event.params, "crit")   crit   = event.params.crit;
+				delete event;
+				
+				var damageRoll = roll(hitDie)
+				
+				event = new Event("TakeDamage", {amount: damageRoll + (damageRoll * crit)})
+				event = SixOfCups.fireEvent(event);
+				delete event;
+				
+				Sound.playSound(sound);
+				Camera.screenShake          =  4 + (8 * crit);
+				Camera.screenShakeIntensity =  1 + (1 * crit);
+			}
+		);
+		time_source_start(ts);
+	}
+}
+
 GameState = new SnowState("stepPhase")
 	.add("stepPhase",   {
 		enter:  function() { 
@@ -87,63 +143,7 @@ GameState = new SnowState("stepPhase")
 			if array_length(attackQueue) == 0 return;
 			
 			var actingBrain = attackQueue[0];
-			with actingBrain {
-				var taunt = random(100) > 25;
-				
-				if parentEntity.get("TauntSprite", "taunting") taunt = false;
-				
-				
-				
-				if taunt {
-					parentEntity.addComponent("BidirectionalCrit")
-					stateMachine.change("taunt");
-				
-					var ts = time_source_create(time_source_game, AttackFrames, time_source_units_frames, bumpFunc);
-					time_source_start(ts);
-					
-					return;
-				}
-				
-				xPrevious = x;
-				yPrevious = y;
-				xTarget = Camera.x;
-				yTarget = Camera.y;
-			
-				animPos = 0;
-			
-				stateMachine.change("bump");
-				
-				var ts = time_source_create(time_source_game, AttackFrames, time_source_units_frames, bumpFunc);
-				time_source_start(ts);
-				
-				ts = time_source_create(time_source_game, AttackFrames / 2, time_source_units_frames, 
-					function() {
-						var hitDie = "1d3";
-						var sound  = SoundTypes.HIT1;
-						var crit   = false;
-						
-						var event = new Event("DealMeleeDamage")
-						event = parentEntity.fireEvent(event);
-						if variable_struct_exists(event.params, "hitDie") hitDie = event.params.hitDie;
-						if variable_struct_exists(event.params, "sound")  sound  = event.params.sound;
-						if variable_struct_exists(event.params, "crit")   crit   = event.params.crit;
-						delete event;
-						
-						var damageRoll = roll(hitDie)
-						
-						event = new Event("TakeDamage", {amount: damageRoll + (damageRoll * crit)})
-						event = SixOfCups.fireEvent(event);
-						delete event;
-						
-						Sound.playSound(sound);
-						Camera.screenShake          =  4 + (8 * crit);
-						Camera.screenShakeIntensity =  1 + (1 * crit);
-					}
-				);
-				time_source_start(ts);
-			}
-			
-			//show_debug_message(attackQueue[0].stateMachine.get_current_state());
+			BrainTryAttack(actingBrain);
 		},
 		leave: function()  {},
 		update: function() {
@@ -163,43 +163,7 @@ GameState = new SnowState("stepPhase")
 			}
 			
 			actingBrain = attackQueue[0];
-			with actingBrain {
-				xPrevious = x;
-				yPrevious = y;
-				xTarget   = lerp(x, Camera.x, .9);
-				yTarget   = lerp(y, Camera.y, .9);
-			
-				animPos = 0;
-			
-				stateMachine.change("bump");
-				
-				var ts = time_source_create(time_source_game, MoveFrames, time_source_units_frames, bumpFunc);
-				time_source_start(ts);
-				
-				ts = time_source_create(time_source_game, AttackFrames / 2, time_source_units_frames, 
-					function() {
-						var hitDie = "1d3";
-						var sound = SoundTypes.HIT1;
-						var crit  = false;
-						
-						var event = new Event("DealMeleeDamage")
-						event = parentEntity.fireEvent(event);
-						hitDie = event.params.hitDie;
-						if variable_struct_exists(event.params, "sound")  sound  = event.params.sound;
-						if variable_struct_exists(event.params, "crit")   crit   = event.params.crit;
-						delete event;
-						
-						var event = new Event("TakeDamage", {amount: roll(hitDie) * (2 * crit)})
-						event = SixOfCups.fireEvent(event);
-						delete event;
-						
-						Sound.playSound(sound);
-						Camera.screenShake          =  4 + (8 * crit);
-						Camera.screenShakeIntensity =  1 + (1 * crit);
-					}
-				);
-				time_source_start(ts);
-			}
+			BrainTryAttack(actingBrain);
 		}
 	})
 	

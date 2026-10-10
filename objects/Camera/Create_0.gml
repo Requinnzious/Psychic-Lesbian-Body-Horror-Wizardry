@@ -36,6 +36,8 @@ yMoveInc    = 0;
 yUp =  0;
 zUp = -1;
 
+movePoints  = 1;
+
 gpu_set_ztestenable(true); //We just have to set these so openGL knows we're using 3D rendering
 gpu_set_zwriteenable(true);
 application_surface_draw_enable(false);
@@ -122,7 +124,8 @@ application_surface_draw_enable(false);
 //This defines a function that can only be used by this object, so the Camera and Menu objects
 //can have different inputState functions for example
 
-endPlayerTurn = function(xx, yy, zz) {	
+endPlayerTurn = function(xx, yy, zz) {
+	movePoints = 0;
 	djikstra = computeDjikstra(xx, yy);
 					
 	//Put Six of Cups where she belongs
@@ -139,14 +142,20 @@ endPlayerTurn = function(xx, yy, zz) {
 stateMachine = new SnowState("step", false)
 	.add("wait", {
 		enter: function() {},
-		update: function() {}
+		update: function() {
+			if movePoints > 0 stateMachine.change("step");
+		}
 	})
 
 	.add("step", {
 		enter: function() {
+			movePoints = 1;
 			stateMachine.change("input")
 		},
-		update: function() { stateMachine.change("input") }
+		update: function() {
+			movePoints = 1;
+			stateMachine.change("input")
+		}
 	})
 
 	.add("input", {
@@ -179,7 +188,7 @@ stateMachine = new SnowState("step", false)
 					
 					var crit = false;
 					var tauntCrit = entity.get("TauntSprite", "taunting");
-					crit = tauntCrit;
+					crit = tauntCrit ?? false;
 								
 					var event = new Event("DealMeleeDamage")
 					event = SixOfCups.fireEvent(event);
@@ -234,8 +243,8 @@ stateMachine = new SnowState("step", false)
 				
 				stateMachine.change("bump");
 				
+				//If we can no longer move, end the turn
 				endPlayerTurn(x, y, z - 16);
-				
 				Game.entityTurns[? $"Six of Cups: {SixOfCups.uuid}"] = {x: x, y: y, brain: Camera};
 				return;
 			}

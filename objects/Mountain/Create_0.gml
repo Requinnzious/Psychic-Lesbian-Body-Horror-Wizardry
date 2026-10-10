@@ -1,7 +1,7 @@
 z = 0;
 
 width  = random_range(1280, 1920);
-height = random_range(1280, 1920);
+height = width * random_range(.8, 1.2);
 
 createMesh = function() {
 	var x1 = x;

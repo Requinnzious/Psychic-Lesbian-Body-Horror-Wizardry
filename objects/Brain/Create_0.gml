@@ -3,8 +3,9 @@ bumpAnimation = animcurve_get_channel(acBump, 0);
 
 subscriptions = [];
 
-z             =   0;
-movePoints    = 100;
+z             =    0;
+movePoints    =  100;
+tauntChance   = 12.5;
 
 xPrevious     =   x;
 yPrevious     =   y;
