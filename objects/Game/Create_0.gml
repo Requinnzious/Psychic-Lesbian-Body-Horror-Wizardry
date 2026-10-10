@@ -88,6 +88,22 @@ GameState = new SnowState("stepPhase")
 			
 			var actingBrain = attackQueue[0];
 			with actingBrain {
+				var taunt = random(100) > 25;
+				
+				if parentEntity.get("TauntSprite", "taunting") taunt = false;
+				
+				
+				
+				if taunt {
+					parentEntity.addComponent("BidirectionalCrit")
+					stateMachine.change("taunt");
+				
+					var ts = time_source_create(time_source_game, AttackFrames, time_source_units_frames, bumpFunc);
+					time_source_start(ts);
+					
+					return;
+				}
+				
 				xPrevious = x;
 				yPrevious = y;
 				xTarget = Camera.x;
@@ -103,19 +119,25 @@ GameState = new SnowState("stepPhase")
 				ts = time_source_create(time_source_game, AttackFrames / 2, time_source_units_frames, 
 					function() {
 						var hitDie = "1d3";
+						var sound  = SoundTypes.HIT1;
+						var crit   = false;
 						
 						var event = new Event("DealMeleeDamage")
 						event = parentEntity.fireEvent(event);
 						if variable_struct_exists(event.params, "hitDie") hitDie = event.params.hitDie;
+						if variable_struct_exists(event.params, "sound")  sound  = event.params.sound;
+						if variable_struct_exists(event.params, "crit")   crit   = event.params.crit;
 						delete event;
 						
-						event = new Event("TakeDamage", {amount: roll(hitDie)})
+						var damageRoll = roll(hitDie)
+						
+						event = new Event("TakeDamage", {amount: damageRoll + (damageRoll * crit)})
 						event = SixOfCups.fireEvent(event);
 						delete event;
 						
-						Sound.playSound(SoundTypes.HIT1);
-						Camera.screenShake          =  4;
-						Camera.screenShakeIntensity =  1;
+						Sound.playSound(sound);
+						Camera.screenShake          =  4 + (8 * crit);
+						Camera.screenShakeIntensity =  1 + (1 * crit);
 					}
 				);
 				time_source_start(ts);
@@ -131,7 +153,7 @@ GameState = new SnowState("stepPhase")
 			}
 			
 			var actingBrain = attackQueue[0];
-			if actingBrain.stateMachine.get_current_state() == "bump" return;
+			if actingBrain.stateMachine.get_current_state() != "wait" return;
 			
 			array_delete(attackQueue, 0, 1);
 			
@@ -157,19 +179,23 @@ GameState = new SnowState("stepPhase")
 				ts = time_source_create(time_source_game, AttackFrames / 2, time_source_units_frames, 
 					function() {
 						var hitDie = "1d3";
+						var sound = SoundTypes.HIT1;
+						var crit  = false;
 						
 						var event = new Event("DealMeleeDamage")
 						event = parentEntity.fireEvent(event);
 						hitDie = event.params.hitDie;
+						if variable_struct_exists(event.params, "sound")  sound  = event.params.sound;
+						if variable_struct_exists(event.params, "crit")   crit   = event.params.crit;
 						delete event;
 						
-						var event = new Event("TakeDamage", {amount: roll(hitDie)})
+						var event = new Event("TakeDamage", {amount: roll(hitDie) * (2 * crit)})
 						event = SixOfCups.fireEvent(event);
 						delete event;
 						
-						Sound.playSound(SoundTypes.HIT1);
-						Camera.screenShake          =  4;
-						Camera.screenShakeIntensity =  1;
+						Sound.playSound(sound);
+						Camera.screenShake          =  4 + (8 * crit);
+						Camera.screenShakeIntensity =  1 + (1 * crit);
 					}
 				);
 				time_source_start(ts);

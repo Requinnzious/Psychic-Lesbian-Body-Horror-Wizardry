@@ -8,6 +8,7 @@ enum SoundTypes {
 	CRIT,
 	
 	SLIME,
+	SLIMETAUNT,
 	
 	STEP_DIRT,
 	STEP_STONE,
@@ -47,7 +48,14 @@ playSound = function(soundType = -1) {
 			
 			sound = audio_play_sound(seSlime, 4,  false, 1, 0, random_range(.9, 1.1));
 			gainMult = .6;
-			break;			
+			break;		
+			
+		case SoundTypes.SLIMETAUNT:
+			sound = audio_play_sound(seDrip, 4,  false, 1, 0, random_range(.05, .1));
+			audio_sound_gain(sound, Config.SOUND.SFXVOLUME / 100 * .8, 0);
+			sound = audio_play_sound(seSlime, 4,  false, 1, 0, random_range(.45, .6));
+			gainMult = .6;
+			break;		
 		
 		
 		case SoundTypes.STEP_DIRT:

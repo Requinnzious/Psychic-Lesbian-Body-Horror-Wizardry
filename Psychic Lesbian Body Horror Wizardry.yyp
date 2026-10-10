@@ -205,6 +205,7 @@
     {"id":{"name":"sSixMap","path":"sprites/sSixMap/sSixMap.yy",},},
     {"id":{"name":"sSlash","path":"sprites/sSlash/sSlash.yy",},},
     {"id":{"name":"sSlime_Map","path":"sprites/sSlime_Map/sSlime_Map.yy",},},
+    {"id":{"name":"sSlime_Taunt","path":"sprites/sSlime_Taunt/sSlime_Taunt.yy",},},
     {"id":{"name":"sSlime","path":"sprites/sSlime/sSlime.yy",},},
     {"id":{"name":"sTreeTexture","path":"sprites/sTreeTexture/sTreeTexture.yy",},},
     {"id":{"name":"sWizard","path":"sprites/sWizard/sWizard.yy",},},

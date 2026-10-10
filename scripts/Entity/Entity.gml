@@ -223,6 +223,22 @@ function BillboardSpriteComponent(c_Name) : Component(c_Name) constructor {
 		return _event;
 	}
 }
+function BidirectionalCritComponent(c_Name) : Component(c_Name) constructor {
+	fireEvent = function(_event) {
+		switch(_event.type) {
+			case "DealMeleeDamage":
+				_event.params.crit  = true;
+				_event.params.sound = SoundTypes.CRIT;
+				getParent().removeComponent("BidirectionalCrit");				
+				break;
+			case "TakeDamage":
+				_event.params.sound = SoundTypes.CRIT;
+				getParent().removeComponent("BidirectionalCrit");
+				break;
+		}
+		return _event;
+	}
+}
 function DamageSoundComponent(c_Name)     : Component(c_Name) constructor {	
 	sound = SoundTypes.SLIME;
 	
@@ -699,6 +715,44 @@ function WorldTileComponent(c_Name)       : Component(c_Name) constructor {
 				World.tiles[gridX][gridY].tile   = destroyedTile;
 				if !array_length(worldMeshes) == 0 World.buildMesh(worldMeshes, floor(gridX/5), floor(gridY/5));
 				if isBlocking tilemap_set(World.coll, 0, gridX, gridY);
+				break;
+		}
+		
+		return _event;
+	}
+}
+
+function TauntSpriteComponent(c_Name)      : Component(c_Name) constructor {
+	sprite   = sSlime_Taunt;
+	subimage = 0;
+	
+	sound    = SoundTypes.SLIMETAUNT;
+	
+	taunting = false;
+	
+	fireEvent = function(_event) {		
+		switch(_event.type) {
+			case "DealMeleeDamage":
+				taunting = false;
+				break;
+			case "Taunt":
+				taunting = true;
+				_event.params.sprite = sprite;
+				Sound.playSound(SoundTypes.SLIMETAUNT)
+				break;
+			case "TakeDamage":
+				taunting = false;
+				break;
+			case "Step":
+				taunting = false;
+				break;
+			case "Subimage":
+				subimage = _event.params.subimage;
+				break;
+			case "Render":
+				if !taunting break;
+				_event.params.sprite   = sprite;
+				_event.params.subimage = subimage;
 				break;
 		}
 		

@@ -81,7 +81,28 @@ stateMachine = new SnowState("wait")
 			animPos ++;
 		}
 	})
-
+	.add("taunt", {
+		enter: function() {
+			var event = new Event("Taunt");
+			event = parentEntity.fireEvent(event);
+			
+			sprite_index = event.params.sprite;
+			image_index  = 0;
+			delete event;
+			
+			event = new Event("Subimage", {subimage: 0});
+			event = parentEntity.fireEvent(event);
+			delete event;
+		},
+		leave: function() {
+			
+		},
+		update: function() {
+			var event = new Event("Subimage", {subimage: image_index});
+			event = parentEntity.fireEvent(event);
+			delete event;
+		}
+	})
 update = function() {
 	stateMachine.update();
 }	

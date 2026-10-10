@@ -175,13 +175,24 @@ stateMachine = new SnowState("step", false)
 					var entityY  = entity.get("Position", "y");
 			
 					if (entityX != x + 32 *  dcos(lookDir) || entityY!= y + 32 * -dsin(lookDir)) continue;
-									
+								
+					
+					var crit = false;
+					var tauntCrit = entity.get("TauntSprite", "taunting");
+					crit = tauntCrit;
+								
 					var event = new Event("DealMeleeDamage")
 					event = SixOfCups.fireEvent(event);
 					var hitDie = event.params.hitDie;
 					delete event;
+					
+					var damageRoll   = roll(hitDie);
+					var damageAmount = damageRoll + (damageRoll * crit);
 			
-					var event = new Event("TakeDamage", {amount: roll(hitDie)})
+					show_debug_message(tauntCrit)
+					show_debug_message($"Damage Roll: {damageRoll}, Damage Amount: {damageAmount}")
+			
+					var event = new Event("TakeDamage", { amount: damageAmount })
 					event = entity.fireEvent(event);
 					
 					if event.params.hp == 0 {
@@ -193,6 +204,9 @@ stateMachine = new SnowState("step", false)
 						switch event.params.sound {
 							case SoundTypes.SLIME:
 								func = function() {Sound.playSound(SoundTypes.SLIME)}
+								break;
+							case SoundTypes.CRIT:
+								func = function() {Sound.playSound(SoundTypes.CRIT)}
 								break;
 							case SoundTypes.GRASS:
 								func = function() {Sound.playSound(SoundTypes.GRASS)}
