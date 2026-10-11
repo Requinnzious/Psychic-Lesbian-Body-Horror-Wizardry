@@ -43,7 +43,7 @@ draw_text_transformed_colour(16, 16, healthString, 2, 2, 0, c_white, c_white, c_
 	delete event;
 
 	//Player cursor
-	draw_sprite(sSixMap, floor((lookDir + lookDirOffset) / 90)*2 + (image_index mod 2), x2 - 96, 64);
+	draw_sprite(sSixMap, floor((lookDir) / 90)*2 + (image_index mod 2), x2 - 96, 64);
 	
 #endregion
 surface_reset_target();

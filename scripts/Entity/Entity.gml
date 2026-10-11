@@ -706,15 +706,34 @@ function WorldTileComponent(c_Name)       : Component(c_Name) constructor {
 	color         = #ffffff;
 	
 	sendRebuild = function() {
-		World.buildMesh(worldMeshes, floor(gridX/5),     floor(gridY/5))
-		World.buildMesh(worldMeshes, floor(gridX/5) - 1, floor(gridY/5))
-		World.buildMesh(worldMeshes, floor(gridX/5) + 1, floor(gridY/5))
-		World.buildMesh(worldMeshes, floor(gridX/5) - 1, floor(gridY/5) - 1)
-		World.buildMesh(worldMeshes, floor(gridX/5) + 1, floor(gridY/5) + 1)
-		World.buildMesh(worldMeshes, floor(gridX/5) + 1, floor(gridY/5) - 1)
-		World.buildMesh(worldMeshes, floor(gridX/5) - 1, floor(gridY/5) + 1)
-		World.buildMesh(worldMeshes, floor(gridX/5),     floor(gridY/5) - 1)
-		World.buildMesh(worldMeshes, floor(gridX/5),     floor(gridY/5) + 1)
+		var rebuildGridX = floor(gridX/5);
+		var rebuildGridY = floor(gridY/5);
+		
+		World.buildMesh(worldMeshes, rebuildGridX,     rebuildGridY)
+		
+		if rebuildGridX > 0 {
+			World.buildMesh(worldMeshes, rebuildGridX - 1, rebuildGridY);
+			if rebuildGridY > 0 {
+				World.buildMesh(worldMeshes, rebuildGridX - 1, rebuildGridY - 1)
+			}
+			if rebuildGridY < array_length(World.tiles[0]) {
+				World.buildMesh(worldMeshes, rebuildGridX - 1, rebuildGridY + 1)
+			}
+		}
+		
+		if rebuildGridX < array_length(World.tiles) {
+			World.buildMesh(worldMeshes, rebuildGridX + 1, rebuildGridY);
+			if rebuildGridY > 0 {
+				World.buildMesh(worldMeshes, rebuildGridX + 1, rebuildGridY - 1)
+			}
+			if rebuildGridY < array_length(World.tiles[0]) {
+				World.buildMesh(worldMeshes, rebuildGridX + 1, rebuildGridY + 1)
+			}
+		}
+		
+		if rebuildGridY < array_length(World.tiles[0]) {
+			World.buildMesh(worldMeshes, rebuildGridX,     rebuildGridY + 1)
+		}
 	}
 	
 	fireEvent = function(_event) {		

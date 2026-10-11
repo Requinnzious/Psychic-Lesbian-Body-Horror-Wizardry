@@ -37,6 +37,13 @@ yUp =  0;
 zUp = -1;
 
 movePoints  = 1;
+queuedInput = {
+	attack: undefined,
+	move:   undefined,
+	turn:   undefined,
+	look:   undefined,
+	strafe: undefined
+};
 
 gpu_set_ztestenable(true); //We just have to set these so openGL knows we're using 3D rendering
 gpu_set_zwriteenable(true);
@@ -161,6 +168,12 @@ stateMachine = new SnowState("step", false)
 	.add("input", {
 		enter: function() {},
 		update: function() {
+			
+			var attackInput = GetAttackHeld();
+			var lookInput   = GetLookPressed();
+			var turnInput   = GetLeftHeld() - GetRightHeld();
+			var moveInput   = GetUpHeld() - GetDownHeld();
+			var strafeInput = GetStrafeLeftHeld() - GetStrafeRightHeld();
 			//These are our deltas - eg if we press left or right our dDir will be + or - 90
 			var dX   = 0, dY = 0;  
 			var dDir = 0;	
@@ -168,7 +181,7 @@ stateMachine = new SnowState("step", false)
 			var gridY = floor(y / TileDim);	
 	
 			//Attack
-			if(GetAttackHeld()) {
+			if(attackInput) {
 				var xx = 30 *  dcos(lookDir) + xOffset
 				var yy = 30 * -dsin(lookDir) + yOffset
 				var slash = instance_create_layer(x + xx, y + yy, "Instances", WeaponSlash);
@@ -184,12 +197,6 @@ stateMachine = new SnowState("step", false)
 					var entityY  = entity.get("Position", "y");
 			
 					if (entityX != x + 32 *  dcos(lookDir) || entityY!= y + 32 * -dsin(lookDir)) continue;
-					
-					if entity.entityName == "Brick Wall" {
-						var event = new Event("Place", {x: entityX, y: entityY + 32, z: 0});
-						event = entity.fireEvent(event);
-						delete event;
-					}
 					
 					var crit = false;
 					var tauntCrit = entity.get("TauntSprite", "taunting");
@@ -256,7 +263,7 @@ stateMachine = new SnowState("step", false)
 	
 	
 			//Look around
-			if(GetLookPressed()) {
+			if(lookInput) {
 				stateMachine.change("look");                                  //Set our state and reset our mouse position
 				window_mouse_set(window_get_width()/2, window_get_height()/2);
 				return;
@@ -264,7 +271,7 @@ stateMachine = new SnowState("step", false)
 	
 	
 			//Turn
-			dDir = 90 * ( GetLeftHeld() - GetRightHeld() );
+			dDir = 90 * ( turnInput );
 			if(dDir != 0) {		
 				lookDirInc = dDir / MoveFrames;
 				targetLookDir = (lookDir + dDir + 360) mod 360;
@@ -278,8 +285,8 @@ stateMachine = new SnowState("step", false)
 		
 		
 			//Move forward and back
-			dX = 32 *  dcos(lookDir) * ( GetUpHeld() - GetDownHeld() );
-			dY = 32 * -dsin(lookDir) * ( GetUpHeld() - GetDownHeld() );
+			dX = 32 *  dcos(lookDir) * ( moveInput );
+			dY = 32 * -dsin(lookDir) * ( moveInput );
 			if(dX != 0 || dY != 0) {
 				var collis = tilemap_get_at_pixel(World.coll, x + dX, y + dY);
 				var bump   = collis > 0;
@@ -334,16 +341,16 @@ stateMachine = new SnowState("step", false)
 				
 				stateMachine.change(_statename);
 				
-				endPlayerTurn(x + dX, y + dY, z - 16);
+				endPlayerTurn(xMoveTarget, yMoveTarget, z - 16);
 				
-				Game.entityTurns[? $"Six of Cups: {SixOfCups.uuid}"] = {x: x + dX, y: y + dY, brain: Camera};
+				Game.entityTurns[? $"Six of Cups: {SixOfCups.uuid}"] = {x: xMoveTarget, y: yMoveTarget, brain: Camera};
 				return;
 			}	
 
 
 			//Strafe
-			dX = 32 *  dcos(lookDir + 90) * ( GetStrafeLeftHeld() - GetStrafeRightHeld() );
-			dY = 32 * -dsin(lookDir + 90) * ( GetStrafeLeftHeld() - GetStrafeRightHeld() );
+			dX = 32 *  dcos(lookDir + 90) * ( strafeInput );
+			dY = 32 * -dsin(lookDir + 90) * ( strafeInput );
 			if(dX != 0 || dY != 0) {
 				var collis = tilemap_get_at_pixel(World.coll, x + dX, y + dY);
 				var bump   = collis > 0;
@@ -406,6 +413,16 @@ stateMachine = new SnowState("step", false)
 			bobHead();
 			nodHead();
 			shakeHead();
+		},
+		
+		leave: function() {
+			queuedInput = {
+				attack: undefined,
+				move:   undefined,
+				turn:   undefined,
+				look:   undefined,
+				strafe: undefined
+			};
 		}
 	})
 

@@ -126,6 +126,7 @@ fireEvent = function(_event) {
 				break;
 			}
 			
+			if (Camera.djikstra[x/TileDim][y/TileDim] == 1) break;
 			
 			mp_grid_clear_cell(World.aStar, x/TileDim, y/TileDim);
 			

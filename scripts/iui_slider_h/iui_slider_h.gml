@@ -34,9 +34,9 @@ function iui_slider_h(argument0, argument1, argument2, argument3, argument4, arg
 
 	var ID    = iui_get_id(argument6);
 	var IDSTR = string(ID);
-	var relativePos = iui_varmap[? IDSTR + "_relativepos"];
-	if (relativePos == undefined)
-	    relativePos = 0;
+	var relativePos = iui_varmap[? IDSTR + "_relativepos"] ?? 0;
+	//if (relativePos == undefined)
+	//    relativePos = 0;
     
 	var sliderPos = (relativePos * length);
 	var btnHalfW  = (iuiSliderHWid / 2);
