@@ -1,8 +1,19 @@
 surface_set_target(screenSurf)
 
-var healthString = $"HP: {SixOfCups.get("Health", "hp")} / {SixOfCups.get("Health", "maxHP")}";
+for (var i = 0; i < maxMovePoints; ++i) {
+	var _subimg = (animPos / MoveFrames) * sprite_get_number(sTurnIcon);
+	if i >= movePoints _subimg = sprite_get_number(sTurnIcon) - 1;
+	if i <= movePoints - 1 _subimg = 0;
+	
+    draw_sprite(sTurnIcon, _subimg, 36 + 72 * i, 64)
+}
 
-draw_text_transformed_colour(16, 16, healthString, 2, 2, 0, c_white, c_white, c_white, c_white, 1);
+var socHP    = SixOfCups.get("Health", "hp");
+var socMaxHP = SixOfCups.get("Health", "maxHP");
+
+var healthString = $"HP: {socHP} / {socMaxHP}";
+draw_healthbar(24 + string_width("HP: ")* 2, 20, 40 + string_width(healthString) * 2, 48, socHP/socMaxHP * 100, c_black, c_red, c_green, 0, true, true);
+draw_text_transformed_colour(32, 16, healthString, 2, 2, 0, c_white, c_white, c_white, c_white, 1);
 
 #region Draw minimap
 	var x1 = 0;
@@ -82,18 +93,19 @@ gpu_set_tex_filter(true);
 		var _u_screentexelsize      = shader_get_uniform(shd_retroscreen_screenfilter, "uScreenTexelSize");
 		var _u_noisetexelsize       = shader_get_uniform(shd_retroscreen_screenfilter, "uNoiseTexelSize");
 		var _u_shadowmasktexelsize  = shader_get_uniform(shd_retroscreen_screenfilter, "uShadowmaskTexelSize");
-		var _samp_noise      = shader_get_sampler_index(shd_retroscreen_screenfilter, "uTexNoise");
-		var _samp_shadowmask = shader_get_sampler_index(shd_retroscreen_screenfilter, "uTexShadowmask");
+		var _samp_noise      = shader_get_sampler_index(shd_retroscreen_screenfilter,  "uTexNoise");
+		var _samp_shadowmask = shader_get_sampler_index(shd_retroscreen_screenfilter,  "uTexShadowmask");
+		
 		shader_set_uniform_f(_u_time, _time); // time
-		shader_set_uniform_f(_u_shadowmaskintensity, crtShadowmask); // intensity of shadow mask effect
-		shader_set_uniform_f(_u_scanlineintensity, crtScanline); // intensity of scanline
-		shader_set_uniform_f(_u_bleendintensity, crtBleed); // intensity of colour bleed
-		shader_set_uniform_f(_u_bleendsize, crtBleedSize); // size of colour bleed
-		shader_set_uniform_f(_u_tintintensity, crtTint); // intensity of dynamic colour tint
-		shader_set_uniform_f(_u_vignetteintensity, crtVignette); // intensity of vignette
-		shader_set_uniform_f(_u_grainintensity, crtFilmgrain); // intensity of film grain
-		shader_set_uniform_f(_u_brightness, crtBrightness); // brightness boost adjustment
-		shader_set_uniform_f(_u_contrast, crtContrast); // contrast adjustment
+		shader_set_uniform_f(_u_shadowmaskintensity, crtShadowmask + ( .1 * (1 - (socHP / socMaxHP) * (socHP / socMaxHP)) )); // intensity of shadow mask effect
+		shader_set_uniform_f(_u_scanlineintensity,   crtScanline); // intensity of scanline
+		shader_set_uniform_f(_u_bleendintensity,     crtBleed + ( .3 * (1 - (socHP / socMaxHP) * (socHP / socMaxHP)) )); // intensity of colour bleed
+		shader_set_uniform_f(_u_bleendsize,          crtBleedSize); // size of colour bleed
+		shader_set_uniform_f(_u_tintintensity,       crtTint + ( .1 * (1 - (socHP / socMaxHP) * (socHP / socMaxHP)) )); // intensity of dynamic colour tint
+		shader_set_uniform_f(_u_vignetteintensity,   crtVignette); // intensity of vignette
+		shader_set_uniform_f(_u_grainintensity,      crtFilmgrain); // intensity of film grain
+		shader_set_uniform_f(_u_brightness,          crtBrightness); // brightness boost adjustment
+		shader_set_uniform_f(_u_contrast,            crtContrast); // contrast adjustment
 		shader_set_uniform_f(_u_screentexelsize, 1 / _surfw, 1 / _surfh); // texel size on surface that's being drawn
 		shader_set_uniform_f(_u_noisetexelsize, _texnoisetexelw, _texnoisetexelh); // texel size of noise texture
 		shader_set_uniform_f(_u_shadowmasktexelsize, _texshadowmasktexelw, _texshadowmasktexelh); // texel size of shadow mask texture
@@ -124,8 +136,8 @@ gpu_set_tex_filter(true);
 		_samp_noise             = shader_get_sampler_index(shd_retroscreen_distortion, "uTexNoise");
 	
 		shader_set_uniform_f(_u_time, _time); // time
-		shader_set_uniform_f(_u_distortionintensity, crtDistortion); // screen distortion intensity
-		shader_set_uniform_f(_u_reflectionintensity, crtReflection); // border reflection intensity
+		shader_set_uniform_f(_u_distortionintensity, crtDistortion + ( .5 * (1 - (socHP / socMaxHP) * (socHP / socMaxHP)) )); // screen distortion intensity
+		shader_set_uniform_f(_u_reflectionintensity, crtReflection + ( .5 * (1 - (socHP / socMaxHP) * (socHP / socMaxHP)) )); // border reflection intensity
 
 		shader_set_uniform_f(_u_specularcol, crtSpecularR, crtSpecularG, crtSpecularB, crtSpecularAmp); // specular light colour properties (in vec4 format, rgb colour [in 0..1 range] with intensity)
 		shader_set_uniform_f(_u_specularpos, crtSpecularOffX, crtSpecularOffY); // specular light's offset from center
@@ -157,7 +169,7 @@ gpu_set_tex_filter(true);
 		_u_noisetexelsize   = shader_get_uniform(shd_retroscreen_postprocessing, "uNoiseTexelSize");
 		_samp_noise         = shader_get_sampler_index(shd_retroscreen_postprocessing, "uTexNoise");
 		shader_set_uniform_f(_u_time, _time); // time
-		shader_set_uniform_f(_u_glowfactor, crtGlowFactor); // factor/multiplier of glow (hard-capped at certain amount)
+		shader_set_uniform_f(_u_glowfactor, crtGlowFactor + ( .5 * (1 - (socHP / socMaxHP) * (socHP / socMaxHP)) )); // factor/multiplier of glow (hard-capped at certain amount)
 		shader_set_uniform_f(_u_glowtint, crtGlowTint); // colour tint amount of blur (like chromatic aberration)
 		shader_set_uniform_f(_u_blursize, crtBlurSize); // half size of blur
 		shader_set_uniform_f(_u_blurzoom, crtBlurZoom); // zoom amount of blur

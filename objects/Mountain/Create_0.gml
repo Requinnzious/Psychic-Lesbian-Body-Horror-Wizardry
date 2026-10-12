@@ -1,9 +1,20 @@
 z = 0;
 
-width  = random_range(1280, 1920);
+width  = random_range(1200, 1900);
 height = width * random_range(.8, 1.2);
 
 createMesh = function() {
+	switch(image_angle) {
+		case  90:
+			y -= width;
+			break;
+		case 180:
+			x -= width;
+			break;
+		default:
+			break;
+	}
+	
 	var x1 = x;
 	var x2 = x1 +  width;
 	var y1 = y;

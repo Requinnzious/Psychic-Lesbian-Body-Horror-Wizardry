@@ -1,3 +1,7 @@
+font_add_enable_aa(false);
+font = font_add("Silver.ttf", 16, false, false, 32, 128);
+draw_set_font(font);
+
 x                    =  SixOfCups.get("Position",  "x");
 y                    =  SixOfCups.get("Position",  "y");
 z                    =  SixOfCups.get("Transform", "z");
@@ -36,7 +40,11 @@ yMoveInc    = 0;
 yUp =  0;
 zUp = -1;
 
-movePoints  = 1;
+movePoints     = 2;
+//This should be a function later
+//We can fire an event into Six of Cups and see how many turns she can move
+maxMovePoints  = 2;
+
 queuedInput = {
 	attack: undefined,
 	move:   undefined,
@@ -150,17 +158,17 @@ stateMachine = new SnowState("step", false)
 	.add("wait", {
 		enter: function() {},
 		update: function() {
-			if movePoints > 0 stateMachine.change("step");
+			if movePoints > 0 stateMachine.change("input");
 		}
 	})
 
 	.add("step", {
 		enter: function() {
-			movePoints = 1;
+			movePoints = maxMovePoints;
 			stateMachine.change("input")
 		},
 		update: function() {
-			movePoints = 1;
+			movePoints = maxMovePoints;
 			stateMachine.change("input")
 		}
 	})
@@ -202,7 +210,7 @@ stateMachine = new SnowState("step", false)
 					var tauntCrit = entity.get("TauntSprite", "taunting");
 					crit = tauntCrit ?? false;
 								
-					var event = new Event("DealMeleeDamage")
+					event = new Event("DealMeleeDamage")
 					event = SixOfCups.fireEvent(event);
 					var hitDie = event.params.hitDie;
 					delete event;
@@ -256,8 +264,11 @@ stateMachine = new SnowState("step", false)
 				stateMachine.change("bump");
 				
 				//If we can no longer move, end the turn
-				endPlayerTurn(x, y, z - 16);
-				Game.entityTurns[? $"Six of Cups: {SixOfCups.uuid}"] = {x: x, y: y, brain: Camera};
+				movePoints--;
+				if (movePoints <= 0) {
+					endPlayerTurn(x, y, z - 16);
+					Game.entityTurns[? $"Six of Cups: {SixOfCups.uuid}"] = {x: x, y: y, brain: Camera};
+				}
 				return;
 			}
 	
@@ -322,9 +333,11 @@ stateMachine = new SnowState("step", false)
 					
 					Sound.playSound(SoundTypes.HIT1);
 					
-					endPlayerTurn(x, y, z - 16);
-				
-					Game.entityTurns[? $"Six of Cups: {SixOfCups.uuid}"] = {x: x , y: y, brain: Camera};
+					movePoints--;
+					if (movePoints <= 0) {
+						endPlayerTurn(x, y, z - 16);
+						Game.entityTurns[? $"Six of Cups: {SixOfCups.uuid}"] = {x: x , y: y, brain: Camera};
+					}
 					return;
 				};
 		
@@ -341,9 +354,11 @@ stateMachine = new SnowState("step", false)
 				
 				stateMachine.change(_statename);
 				
-				endPlayerTurn(xMoveTarget, yMoveTarget, z - 16);
-				
-				Game.entityTurns[? $"Six of Cups: {SixOfCups.uuid}"] = {x: xMoveTarget, y: yMoveTarget, brain: Camera};
+				movePoints--;
+				if (movePoints <= 0) {
+					endPlayerTurn(xMoveTarget, yMoveTarget, z - 16);
+					Game.entityTurns[? $"Six of Cups: {SixOfCups.uuid}"] = {x: xMoveTarget, y: yMoveTarget, brain: Camera};
+				}
 				return;
 			}	
 
@@ -387,9 +402,11 @@ stateMachine = new SnowState("step", false)
 					
 					Sound.playSound(SoundTypes.HIT1);
 					
-					endPlayerTurn(x, y, z - 16);
-					
-					Game.entityTurns[? $"Six of Cups: {SixOfCups.uuid}"] = {x: x, y: y, brain: Camera};
+					movePoints--;
+					if (movePoints <= 0) {
+						endPlayerTurn(x, y, z - 16);
+						Game.entityTurns[? $"Six of Cups: {SixOfCups.uuid}"] = {x: x, y: y, brain: Camera};
+					}
 					return;
 				};
 		
@@ -403,12 +420,13 @@ stateMachine = new SnowState("step", false)
 				
 				stateMachine.change("move");
 				
-				endPlayerTurn(x + dX, y + dY, z - 16);		
-				
-				Game.entityTurns[? $"Six of Cups: {SixOfCups.uuid}"] = {x: x + dX, y: y + dY, brain: Camera};		
+				movePoints--;
+				if (movePoints <= 0) {
+					endPlayerTurn(x + dX, y + dY, z - 16);
+					Game.entityTurns[? $"Six of Cups: {SixOfCups.uuid}"] = {x: x + dX, y: y + dY, brain: Camera};	
+				}
 				return;
 			}
-
 	
 			bobHead();
 			nodHead();
@@ -427,15 +445,17 @@ stateMachine = new SnowState("step", false)
 	})
 
 	.add("move", {
-		enter: function() {},
+		enter: function() { animPos = 0; },
 		update: function() {
 			x += xMoveInc; y += yMoveInc;
+			animPos ++;
 			bobHead();
 			
 			var event = new Event("Place", {x: x, y: y, z: z});
 			event = SixOfCups.fireEvent(event);
 			delete event;
-		}
+		},
+		leave: function() { animPos = 0; }
 	})
 	
 	.add("backflip", {

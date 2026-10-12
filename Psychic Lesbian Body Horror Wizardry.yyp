@@ -43,7 +43,9 @@
     {"$GMFolder":"","%Name":"SFX","folderPath":"folders/Sounds/SFX.yy","name":"SFX","resourceType":"GMFolder","resourceVersion":"2.0",},
   ],
   "ForcedPrefabProjectReferences":[],
-  "IncludedFiles":[],
+  "IncludedFiles":[
+    {"$GMIncludedFile":"","%Name":"Silver.ttf","CopyToMask":-1,"filePath":"datafiles","name":"Silver.ttf","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+  ],
   "isEcma":false,
   "LibraryEmitters":[],
   "MetaData":{
@@ -55,6 +57,7 @@
     {"id":{"name":"acFlip","path":"animcurves/acFlip/acFlip.yy",},},
     {"id":{"name":"acHop","path":"animcurves/acHop/acHop.yy",},},
     {"id":{"name":"ImNotGUI","path":"extensions/ImNotGUI/ImNotGUI.yy",},},
+    {"id":{"name":"Font1","path":"fonts/Font1/Font1.yy",},},
     {"id":{"name":"Billboard","path":"objects/Billboard/Billboard.yy",},},
     {"id":{"name":"Brain","path":"objects/Brain/Brain.yy",},},
     {"id":{"name":"Camera","path":"objects/Camera/Camera.yy",},},
@@ -208,6 +211,7 @@
     {"id":{"name":"sSlime_Taunt","path":"sprites/sSlime_Taunt/sSlime_Taunt.yy",},},
     {"id":{"name":"sSlime","path":"sprites/sSlime/sSlime.yy",},},
     {"id":{"name":"sTreeTexture","path":"sprites/sTreeTexture/sTreeTexture.yy",},},
+    {"id":{"name":"sTurnIcon","path":"sprites/sTurnIcon/sTurnIcon.yy",},},
     {"id":{"name":"sWizard","path":"sprites/sWizard/sWizard.yy",},},
     {"id":{"name":"texBluenoise","path":"sprites/texBluenoise/texBluenoise.yy",},},
     {"id":{"name":"texRainbowLUT","path":"sprites/texRainbowLUT/texRainbowLUT.yy",},},
