@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":1.63102,
+  "duration":1.6310204,
   "exportDir":"",
   "name":"seStartGame",
   "parent":{

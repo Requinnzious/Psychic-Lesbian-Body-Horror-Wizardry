@@ -508,6 +508,8 @@ entities[? SixOfCups.uuid] = SixOfCups;
 		.addComponent("DeathParticle")
 		.addComponent("DamageSound")
 		.addComponent("DeathSound")
+		
+		.addComponent("ExpDrop")
 
 	var brain = instance_create_layer(slimeX, slimeY, "Instances", Brain, {parentEntity: slime});
 

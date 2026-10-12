@@ -1,6 +1,5 @@
 Init();
 room_goto_next();
-
 Steps = 0;	
 
 function BrainTryAttack(actingBrain) {
@@ -210,6 +209,7 @@ SixOfCups = new Entity(PlayerName)
 	.addComponent("Position",      { x:          96, y:     96, z:  0 })
 	.addComponent("Transform",     { x:           0, y:      0, z: 16 })
 	.addComponent("HealthRegen")
+	.addComponent("Level")
 		
 	//.addComponent("MiniMapSprite", {sprite: sWizard})
 

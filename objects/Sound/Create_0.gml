@@ -1,5 +1,7 @@
 globalvar SoundTypes;
 enum SoundTypes {
+	LEVELUP,
+	
 	SWING,
 	CLAW,
 	
@@ -22,6 +24,14 @@ audio_play_sound(ostCity, 0, true);
 playSound = function(soundType = -1) {
 	var sound, gainMult = 1;
 	switch(soundType) {
+		case SoundTypes.LEVELUP:
+			sound = audio_play_sound(seLevelUp,   6,  false, 1, 0, 1);
+			audio_sound_gain(sound, Config.SOUND.SFXVOLUME / 100 * .5, 0);
+			sound = audio_play_sound(seHeal,      6,  false, 1, 0, random_range(.35, .5));
+			sound = audio_play_sound(seStartGame, 6,  false, 1, 0, random_range(.35, .5));
+			audio_sound_gain(sound, Config.SOUND.SFXVOLUME / 100 * .4, 0);
+			break;
+			
 		case SoundTypes.SWING:
 			sound = audio_play_sound(seSwing, 6,  false, 1, 0, random_range(.9, 1.1));
 			gainMult = 2

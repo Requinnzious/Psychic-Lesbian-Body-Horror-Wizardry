@@ -1,19 +1,66 @@
 surface_set_target(screenSurf)
 
-for (var i = 0; i < maxMovePoints; ++i) {
-	var _subimg = (animPos / MoveFrames) * sprite_get_number(sTurnIcon);
-	if i >= movePoints _subimg = sprite_get_number(sTurnIcon) - 1;
-	if i <= movePoints - 1 _subimg = 0;
-	
-    draw_sprite(sTurnIcon, _subimg, 36 + 72 * i, 64)
-}
+//var sprW = sprite_get_width(Sprite39);
+//var sprH = sprite_get_height(Sprite39);
+//
+//var viewW = view_get_wport(view_current);
+//var viewH = view_get_hport(view_current);
+//
+//draw_sprite_ext(Sprite39, 0, 0, 0, viewW/sprW, viewH/sprH, 0, c_white, 1);
+
+//for (var i = 0; i < maxMovePoints; ++i) {
+//	var _subimg = (animPos / MoveFrames) * sprite_get_number(sTurnIcon);
+//	if i >= movePoints _subimg = sprite_get_number(sTurnIcon) - 1;
+//	if i <= movePoints - 1 _subimg = 0;
+//	
+//    draw_sprite(sTurnIcon, _subimg, 36 + 72 * i, 64)
+//}
 
 var socHP    = SixOfCups.get("Health", "hp");
 var socMaxHP = SixOfCups.get("Health", "maxHP");
 
-var healthString = $"HP: {socHP} / {socMaxHP}";
-draw_healthbar(24 + string_width("HP: ")* 2, 20, 40 + string_width(healthString) * 2, 48, socHP/socMaxHP * 100, c_black, c_red, c_green, 0, true, true);
-draw_text_transformed_colour(32, 16, healthString, 2, 2, 0, c_white, c_white, c_white, c_white, 1);
+var level    = SixOfCups.get("Level", "level");
+var socXP    = SixOfCups.get("Level", "experience");
+var socMaxXP = SixOfCups.get("Level", "experienceReq");
+
+var dungeonFloor = "-";
+dungeonFloor = 1;
+draw_text_transformed_colour(24,                               16, $"   {dungeonFloor}  ",    3, 3, 0, c_white, c_white, c_white, c_white, 1);
+draw_text_transformed_colour(24 + string_width($"   -  ") * 3, 16, "F",          3, 3, 0, c_aqua, c_aqua, c_aqua, c_aqua, 1);
+
+
+draw_text_transformed_colour(210,                               4, $"LV",        2, 2, 0,  c_aqua,  c_aqua,  c_aqua,  c_aqua, 1);
+draw_text_transformed_colour(256,                               4, level,        2, 2, 0, c_white, c_white, c_white, c_white, 1);
+draw_healthbar(208, 40, 320, 56, socXP / socMaxXP * 100, c_dkgray, c_yellow, c_yellow, 0, true, true);
+
+
+
+var healthString = $"{socHP} / {socMaxHP}";
+draw_text_transformed_colour(372,                               4, $"HP",                   2, 2, 0,   c_aqua,  c_aqua,  c_aqua,  c_aqua, 1);
+draw_text_transformed_colour(480,                               4, healthString,            2, 2, 0,   c_aqua,  c_aqua,  c_aqua,  c_aqua, 1);
+draw_text_transformed_colour(480,                               4, $"{socHP}   {socMaxHP}", 2, 2, 0,  c_white, c_white, c_white, c_white, 1);
+
+var maxFood = 100;
+var foodString   = $"{100} / {100}";
+draw_text_transformed_colour(372,                               32, $"FG",          2, 2, 0,   c_aqua,  c_aqua,  c_aqua,  c_aqua, 1);
+draw_text_transformed_colour(480,                               32, "100 / 100",    2, 2, 0,   c_aqua,  c_aqua,  c_aqua,  c_aqua, 1);
+draw_text_transformed_colour(480,                               32, "100   100",    2, 2, 0,  c_white, c_white, c_white, c_white, 1);
+
+var healthbarX = 512 + max(string_width(foodString), string_width(healthString)) * 2;
+
+draw_healthbar(healthbarX, 12, healthbarX + 12 + (socMaxHP * 3), 30, socHP / socMaxHP * 100, c_dkgray, c_red,   c_green, 0, true, true);
+draw_healthbar(healthbarX, 40, healthbarX + 12 + maxFood * 2, 58,                    100, c_dkgray, c_red, c_green, 0, true, true);
+//draw_text_transformed_colour(32, 16, healthString, 2, 2, 0, c_white, c_white, c_white, c_white, 1);
+
+draw_set_halign(fa_right);
+draw_text_transformed_colour(view_get_wport(view_current) - 192, 8, $"$      ", 3, 3, 0, c_aqua, c_aqua, c_aqua, c_aqua, 1);
+
+var money = 12
+draw_text_transformed_colour(view_get_wport(view_current) - 192, 8,      money, 3, 3, 0, c_white, c_white, c_white, c_white, 1);
+
+
+draw_set_halign(fa_left);
+draw_set_valign(fa_top);
 
 #region Draw minimap
 	var x1 = 0;

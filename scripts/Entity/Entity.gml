@@ -300,6 +300,20 @@ function DeathSoundComponent(c_Name)      : Component(c_Name) constructor {
 		return _event;
 	}
 }
+function ExpDropComponent(c_Name)      : Component(c_Name) constructor {
+	amount = 3;
+	
+	fireEvent = function(_event) {		
+		switch(_event.type) {
+			case "TakeDamage":
+				if _event.params.hp > 0 break;
+				_event.params.experience = amount;
+				break;
+		}
+		
+		return _event;
+	}
+}
 function FireElementComponent(c_Name)     : Component(c_Name) constructor {
 	hitDice = "1d6";
 	fireEvent = function(_event) {
@@ -490,6 +504,32 @@ function InvulnComponent(c_Name)          : Component(c_Name) constructor {
 		switch(_event.type) {
 			case "TakeDamage":
 				_event.params.amount = 0;
+				break;
+		}
+		return _event;
+	}
+}
+function LevelComponent(c_Name)           : Component(c_Name) constructor {
+	level         =  1;
+	experience    =  0;
+	experienceReq = 10;
+	
+	fireEvent = function(_event) {
+		switch(_event.type) {
+			case "AddExperience":
+				experience   += _event.params.experience;
+				if experience < experienceReq break;
+				
+				Sound.playSound(SoundTypes.LEVELUP)
+				
+				while experience >= experienceReq {
+					level ++;
+					experience    -= experienceReq;
+					experienceReq += experienceReq;
+				}
+				
+				break;
+			default:
 				break;
 		}
 		return _event;

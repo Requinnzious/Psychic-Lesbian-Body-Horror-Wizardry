@@ -69,11 +69,11 @@ application_surface_draw_enable(false);
 	crtDistortion   =    0; // screen distortion intensity
 	crtReflection   =    0; // border reflection intensity
 	crtShadowmask   =    0; // shadow mask intensity
-	crtScanline     =  .18; // scanline intensity
+	crtScanline     =  .03; // scanline intensity
 	crtBleed        =    0; // bleed intensity
 	crtBleedSize    =   64; // bleed size
-	crtTint         =  .15; // dynamic colour tint intensity
-	crtVignette     =   .1; // vignette intensity
+	crtTint         =  .05; // dynamic colour tint intensity
+	crtVignette     =   .0; // vignette intensity
 	crtFilmgrain    =   .1; // film grain intensity
 	crtBrightness   =    0; // brightness boost/adjustment
 	crtContrast     =   .5; // contrast adjustment
@@ -204,6 +204,8 @@ stateMachine = new SnowState("step", false)
 					var entityX  = entity.get("Position", "x");
 					var entityY  = entity.get("Position", "y");
 			
+					if entity.get("Health", "hp") <= 0 continue;
+			
 					if (entityX != x + 32 *  dcos(lookDir) || entityY!= y + 32 * -dsin(lookDir)) continue;
 					
 					var crit = false;
@@ -226,6 +228,12 @@ stateMachine = new SnowState("step", false)
 					
 					if event.params.hp == 0 {
 						mp_grid_clear_cell(World.aStar, entityX/TileDim, entityY/TileDim);
+					}
+					
+					if variable_struct_exists(event.params, "experience") {
+						var experienceEvent = new Event("AddExperience", {experience: event.params.experience});
+						experienceEvent = SixOfCups.fireEvent(experienceEvent);
+						delete experienceEvent;
 					}
 					
 					if variable_struct_exists(event.params, "sound") {
