@@ -3,7 +3,7 @@ enum DjikstraMode {
 	DIAG
 }
 
-function computeDjikstra(targetX, targetY, tileDim = 32, mode = DjikstraMode.UDLR) {
+function computeDjikstra(targetX, targetY, tileDim = 32, mode = DjikstraMode.DIAG) {
 	var djikstra;
 		var collisions = layer_tilemap_get_id("Collisions");
 		var xx    = round(targetX / tileDim), yy = round(targetY / tileDim);

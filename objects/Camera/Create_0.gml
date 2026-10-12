@@ -40,10 +40,10 @@ yMoveInc    = 0;
 yUp =  0;
 zUp = -1;
 
-movePoints     = 2;
+movePoints     = 1;
 //This should be a function later
 //We can fire an event into Six of Cups and see how many turns she can move
-maxMovePoints  = 2;
+maxMovePoints  = 1;
 
 queuedInput = {
 	attack: undefined,
@@ -182,6 +182,7 @@ stateMachine = new SnowState("step", false)
 			var turnInput   = GetLeftHeld() - GetRightHeld();
 			var moveInput   = GetUpHeld() - GetDownHeld();
 			var strafeInput = GetStrafeLeftHeld() - GetStrafeRightHeld();
+			
 			//These are our deltas - eg if we press left or right our dDir will be + or - 90
 			var dX   = 0, dY = 0;  
 			var dDir = 0;	
@@ -206,7 +207,29 @@ stateMachine = new SnowState("step", false)
 			
 					if entity.get("Health", "hp") <= 0 continue;
 			
-					if (entityX != x + 32 *  dcos(lookDir) || entityY!= y + 32 * -dsin(lookDir)) continue;
+					var xAttackTarg = x + 32 *  dcos(lookDir);
+					var yAttackTarg = y + 32 * -dsin(lookDir);
+			
+					switch lookDir {
+						case 45:
+							xAttackTarg = x + 32;
+							yAttackTarg = y - 32;
+							break;
+						case 135:
+							xAttackTarg = x - 32;
+							yAttackTarg = y - 32;
+							break;
+						case 225:
+							xAttackTarg = x - 32;
+							yAttackTarg = y + 32;
+							break;
+						case 315:
+							xAttackTarg = x + 32;
+							yAttackTarg = y + 32;
+							break;
+					}
+			
+					if (entityX != xAttackTarg || entityY != yAttackTarg) continue;
 					
 					var crit = false;
 					var tauntCrit = entity.get("TauntSprite", "taunting");
@@ -290,12 +313,12 @@ stateMachine = new SnowState("step", false)
 	
 	
 			//Turn
-			dDir = 90 * ( turnInput );
+			dDir = 45 * ( turnInput );
 			if(dDir != 0) {		
-				lookDirInc = dDir / MoveFrames;
+				lookDirInc = dDir / (MoveFrames * .6);
 				targetLookDir = (lookDir + dDir + 360) mod 360;
 			
-				var ts = time_source_create(time_source_game, MoveFrames, time_source_units_frames, turnFunc);
+				var ts = time_source_create(time_source_game, MoveFrames * .6, time_source_units_frames, turnFunc);
 				time_source_start(ts);
 				
 				stateMachine.change("turn");
@@ -304,9 +327,32 @@ stateMachine = new SnowState("step", false)
 		
 		
 			//Move forward and back
-			dX = 32 *  dcos(lookDir) * ( moveInput );
-			dY = 32 * -dsin(lookDir) * ( moveInput );
-			if(dX != 0 || dY != 0) {
+			dX = ( moveInput );
+			dY = ( moveInput );
+			if(dX != 0 || dY != 0) {				
+				switch lookDir {
+					case  45:
+						dX *=  32;
+						dY *= -32;
+						break;
+					case 135:
+						dX *= -32;
+						dY *= -32;
+						break;
+					case 225:
+						dX *= -32;
+						dY *=  32;
+						break;
+					case 315:
+						dX *=  32;
+						dY *=  32;
+						break;
+					default:
+						dX *= 32 *  dcos(lookDir);
+						dY *= 32 * -dsin(lookDir);
+						break;
+				}
+				
 				var collis = tilemap_get_at_pixel(World.coll, x + dX, y + dY);
 				var bump   = collis > 0;
 				
@@ -336,7 +382,7 @@ stateMachine = new SnowState("step", false)
 					var ts = time_source_create(time_source_game, MoveFrames, time_source_units_frames, bumpFunc);
 					time_source_start(ts);
 					
-					createBloodDecal(decalParent);
+					if lookDir mod 90 == 0 createBloodDecal(decalParent);
 					stateMachine.change("bump");
 					
 					Sound.playSound(SoundTypes.HIT1);
@@ -372,9 +418,32 @@ stateMachine = new SnowState("step", false)
 
 
 			//Strafe
-			dX = 32 *  dcos(lookDir + 90) * ( strafeInput );
-			dY = 32 * -dsin(lookDir + 90) * ( strafeInput );
+			dX = ( strafeInput );
+			dY = ( strafeInput );
 			if(dX != 0 || dY != 0) {
+				switch lookDir {
+					case  45:
+						dX *= -32;
+						dY *= -32;
+						break;
+					case 135:
+						dX *= -32;
+						dY *=  32;
+						break;
+					case 225:
+						dX *=  32;
+						dY *=  32;
+						break;
+					case 315:
+						dX *=  32;
+						dY *= -32;
+						break;
+					default:
+						dX *= 32 *  dcos(lookDir + 90);
+						dY *= 32 * -dsin(lookDir + 90);
+						break;
+				}
+				
 				var collis = tilemap_get_at_pixel(World.coll, x + dX, y + dY);
 				var bump   = collis > 0;
 				
@@ -405,7 +474,8 @@ stateMachine = new SnowState("step", false)
 					var ts = time_source_create(time_source_game, MoveFrames, time_source_units_frames, bumpFunc);
 					time_source_start(ts);
 					
-					createBloodDecal(decalParent);
+					if lookDir mod 90 == 0 createBloodDecal(decalParent);
+					
 					stateMachine.change("bump");
 					
 					Sound.playSound(SoundTypes.HIT1);

@@ -126,11 +126,16 @@ fireEvent = function(_event) {
 				break;
 			}
 			
+			if (Camera.djikstra[x/TileDim][y/TileDim] > 12) {
+				movePoints = 0;
+				break;
+			}
+			
 			if (Camera.djikstra[x/TileDim][y/TileDim] == 1) break;
 			
 			mp_grid_clear_cell(World.aStar, x/TileDim, y/TileDim);
 			
-			if !mp_grid_path(World.aStar, World.path, x + 16, y + 16, _event.params.x + 16, _event.params.y + 16, false) break;
+			if !mp_grid_path(World.aStar, World.path, x + 16, y + 16, _event.params.x + 16, _event.params.y + 16, true) break;
 			
 			var len         = path_get_length(World.path);
 			var targetCellX = floor(path_get_x(World.path, TileDim/len) / TileDim) * TileDim;

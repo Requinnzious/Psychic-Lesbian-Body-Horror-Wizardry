@@ -210,6 +210,7 @@ SixOfCups = new Entity(PlayerName)
 	.addComponent("Transform",     { x:           0, y:      0, z: 16 })
 	.addComponent("HealthRegen")
 	.addComponent("Level")
+	.addComponent("Belly")
 		
 	//.addComponent("MiniMapSprite", {sprite: sWizard})
 

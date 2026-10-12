@@ -20,7 +20,7 @@ buildMesh  = function() {
 	
 	norm = [0, 0, 0];
 
-	switch(lookDir) {	
+	switch(lookDir) {
 		case 90:
 			x1 = x + realWidth;
 			x2 = x1 + width;
@@ -39,7 +39,7 @@ buildMesh  = function() {
 		
 			break;
 	
-		case 180: //case 0:
+		case 180:
 			x1 = x + random(1);
 			x2 = x1;
 			x3 = x1;

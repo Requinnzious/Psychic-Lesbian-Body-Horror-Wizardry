@@ -515,5 +515,98 @@ entities[? SixOfCups.uuid] = SixOfCups;
 
 	slime.fireEvent(EntityCreateEvent);
 	entities[? slime.uuid] = slime;
+	
+	slimeX = 640;
+	slimeY = 416;
+	slimeZ =   0;
+
+	slime = new Entity("Slime")
+		.addComponent("Physics",      {maxFlash:   24})
+		.addComponent("Impassable",   {bumping: false})
+		.addComponent("Health",       {hp: 12, deathTimer: 24})
+		.addComponent("ShakeScreen",  {screenShake: 12, screenShakeIntensity: .1})
+		.addComponent("Position",     {x: slimeX, y: slimeY, z: slimeZ})
+		.addComponent("Transform",    {x: 16,  y: 16})
+		.addComponent("Sprite",       {sprite: sSlime})
+		.addComponent("HurtSubimage", {hurtTimer: 24, subimage: 1})
+		.addComponent("TauntSprite")		
+		.addComponent("AttackSubimage")
+		.addComponent("HurtColor",    {hurtTimer: 24})
+		.addComponent("DefaultShader")
+		.addComponent("BillboardMesh")
+		
+		.addComponent("MiniMapSprite")
+		.addComponent("DeathParticle")
+		.addComponent("DamageSound")
+		.addComponent("DeathSound")
+		
+		.addComponent("ExpDrop")
+
+	brain = instance_create_layer(slimeX, slimeY, "Instances", Brain, {parentEntity: slime});
+
+	slime.fireEvent(EntityCreateEvent);
+	entities[? slime.uuid] = slime;
+	
+	slimeX = 1088;
+	slimeY =  256;
+	slimeZ =    0;
+
+	slime = new Entity("Slime")
+		.addComponent("Physics",      {maxFlash:   24})
+		.addComponent("Impassable",   {bumping: false})
+		.addComponent("Health",       {hp: 12, deathTimer: 24})
+		.addComponent("ShakeScreen",  {screenShake: 12, screenShakeIntensity: .1})
+		.addComponent("Position",     {x: slimeX, y: slimeY, z: slimeZ})
+		.addComponent("Transform",    {x: 16,  y: 16})
+		.addComponent("Sprite",       {sprite: sSlime})
+		.addComponent("HurtSubimage", {hurtTimer: 24, subimage: 1})
+		.addComponent("TauntSprite")		
+		.addComponent("AttackSubimage")
+		.addComponent("HurtColor",    {hurtTimer: 24})
+		.addComponent("DefaultShader")
+		.addComponent("BillboardMesh")
+		
+		.addComponent("MiniMapSprite")
+		.addComponent("DeathParticle")
+		.addComponent("DamageSound")
+		.addComponent("DeathSound")
+		
+		.addComponent("ExpDrop")
+
+	brain = instance_create_layer(slimeX, slimeY, "Instances", Brain, {parentEntity: slime});
+
+	slime.fireEvent(EntityCreateEvent);
+	entities[? slime.uuid] = slime;
+	
+	slimeX = 1152;
+	slimeY =  512;
+	slimeZ =    0;
+
+	slime = new Entity("Slime")
+		.addComponent("Physics",      {maxFlash:   24})
+		.addComponent("Impassable",   {bumping: false})
+		.addComponent("Health",       {hp: 12, deathTimer: 24})
+		.addComponent("ShakeScreen",  {screenShake: 12, screenShakeIntensity: .1})
+		.addComponent("Position",     {x: slimeX, y: slimeY, z: slimeZ})
+		.addComponent("Transform",    {x: 16,  y: 16})
+		.addComponent("Sprite",       {sprite: sSlime})
+		.addComponent("HurtSubimage", {hurtTimer: 24, subimage: 1})
+		.addComponent("TauntSprite")		
+		.addComponent("AttackSubimage")
+		.addComponent("HurtColor",    {hurtTimer: 24})
+		.addComponent("DefaultShader")
+		.addComponent("BillboardMesh")
+		
+		.addComponent("MiniMapSprite")
+		.addComponent("DeathParticle")
+		.addComponent("DamageSound")
+		.addComponent("DeathSound")
+		
+		.addComponent("ExpDrop")
+
+	brain = instance_create_layer(slimeX, slimeY, "Instances", Brain, {parentEntity: slime});
+
+	slime.fireEvent(EntityCreateEvent);
+	entities[? slime.uuid] = slime;
 #endregion
 

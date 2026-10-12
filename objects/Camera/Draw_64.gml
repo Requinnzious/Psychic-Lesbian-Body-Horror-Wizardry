@@ -23,6 +23,9 @@ var level    = SixOfCups.get("Level", "level");
 var socXP    = SixOfCups.get("Level", "experience");
 var socMaxXP = SixOfCups.get("Level", "experienceReq");
 
+var socFG    = SixOfCups.get("Belly", "foodAmount");
+var socMaxFG = SixOfCups.get("Belly", "foodMax");
+
 var dungeonFloor = "-";
 dungeonFloor = 1;
 draw_text_transformed_colour(24,                               16, $"   {dungeonFloor}  ",    3, 3, 0, c_white, c_white, c_white, c_white, 1);
@@ -40,16 +43,16 @@ draw_text_transformed_colour(372,                               4, $"HP",       
 draw_text_transformed_colour(480,                               4, healthString,            2, 2, 0,   c_aqua,  c_aqua,  c_aqua,  c_aqua, 1);
 draw_text_transformed_colour(480,                               4, $"{socHP}   {socMaxHP}", 2, 2, 0,  c_white, c_white, c_white, c_white, 1);
 
-var maxFood = 100;
-var foodString   = $"{100} / {100}";
+var maxFood = socMaxFG;
+var foodString   = $"{socFG} / {socMaxFG}";
 draw_text_transformed_colour(372,                               32, $"FG",          2, 2, 0,   c_aqua,  c_aqua,  c_aqua,  c_aqua, 1);
-draw_text_transformed_colour(480,                               32, "100 / 100",    2, 2, 0,   c_aqua,  c_aqua,  c_aqua,  c_aqua, 1);
-draw_text_transformed_colour(480,                               32, "100   100",    2, 2, 0,  c_white, c_white, c_white, c_white, 1);
+draw_text_transformed_colour(480,                               32, foodString,    2, 2, 0,   c_aqua,  c_aqua,  c_aqua,  c_aqua, 1);
+draw_text_transformed_colour(480,                               32, $"{socFG}   {socMaxFG}",    2, 2, 0,  c_white, c_white, c_white, c_white, 1);
 
 var healthbarX = 512 + max(string_width(foodString), string_width(healthString)) * 2;
 
 draw_healthbar(healthbarX, 12, healthbarX + 12 + (socMaxHP * 3), 30, socHP / socMaxHP * 100, c_dkgray, c_red,   c_green, 0, true, true);
-draw_healthbar(healthbarX, 40, healthbarX + 12 + maxFood * 2, 58,                    100, c_dkgray, c_red, c_green, 0, true, true);
+draw_healthbar(healthbarX, 40, healthbarX + 12 + maxFood * 2, 58,    socFG / socMaxFG * 100, c_dkgray, c_red, c_green, 0, true, true);
 //draw_text_transformed_colour(32, 16, healthString, 2, 2, 0, c_white, c_white, c_white, c_white, 1);
 
 draw_set_halign(fa_right);

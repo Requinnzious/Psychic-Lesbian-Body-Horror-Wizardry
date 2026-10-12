@@ -146,6 +146,36 @@ function AttackSubimageComponent(c_Name)    : Component(c_Name) constructor {
 		return _event;
 	}
 }
+function BellyComponent(c_Name)     : Component(c_Name) constructor {
+	foodTimer   =   30;
+	foodAmount  =  100;
+	foodMax     =  100;
+	
+	other.listen("Step");
+	
+	fireEvent = function(_event) {		
+		switch(_event.type) {
+			case "Create":
+				foodMaxTime = foodTimer;
+				break;
+			case "Step":
+				foodTimer --;
+				
+				if foodTimer > 0 break;
+				foodAmount = max(foodAmount - 1, 0);				
+				foodTimer = foodMaxTime;
+				break;
+			case "EatFood":
+				if foodAmount + _event.params.amount > foodMax {
+					foodMax += floor(sqrt(foodAmount + _event.params.amount - foodMax)/2);
+				}
+				foodAmount = max(foodAmount + _event.params.amount, foodMax);
+				foodTimer  = foodMaxTime;
+				break;
+		}
+		return _event;
+	}
+}
 function BillboardMeshComponent(c_Name)   : Component(c_Name) constructor {
 	other.listen("Render");
 	

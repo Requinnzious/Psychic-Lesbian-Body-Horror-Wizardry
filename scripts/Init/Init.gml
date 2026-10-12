@@ -21,9 +21,9 @@ function Init(){
 		globalvar MoveFrames, MoveSeconds;
 		globalvar AttackFrames, AttackSeconds;
 		globalvar EntityUUID;
-		MoveFrames    =   16;
+		MoveFrames    =   15;
 		MoveSeconds   = MoveFrames / 60;
-		AttackFrames  =   16;
+		AttackFrames  =   15;
 		AttackSeconds = AttackFrames / 60;
 		EntityUUID    =    0;
 		
