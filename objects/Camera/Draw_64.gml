@@ -104,9 +104,19 @@ draw_set_valign(fa_top);
 	delete event;
 
 	//Player cursor
-	draw_sprite(sSixMap, floor((lookDir) / 90)*2 + (image_index mod 2), x2 - 96, 64);
-	
+	//draw_sprite(sSixMap, floor((lookDir) / 90)*2 + (image_index mod 2), x2 - 96, 64);
+	//Player cursor
+	var cx1 = x2 - 80 -       dcos(lookDir + lookDirOffset) * 16;
+	var cy1 = 80      +       dsin(lookDir + lookDirOffset) * 16;
+	var cx2 = cx1     + lengthdir_x(32, lookDir + lookDirOffset);
+	var cy2 = cy1     + lengthdir_y(32, lookDir + lookDirOffset);
+
+	draw_set_colour(c_white)
+	draw_arrow(cx1, cy1, cx2, cy2, 16);
 #endregion
+
+Console.render();
+
 surface_reset_target();
 
 var _time = current_time * 0.001;

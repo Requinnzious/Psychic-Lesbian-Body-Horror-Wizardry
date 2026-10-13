@@ -2,6 +2,7 @@ function Entity(name = "") constructor {
 	uuid = ++EntityUUID;
 	
 	entityName    = name;
+	nameColor     = "c_green";
 	
 	components    =   [];
 	subscriptions =   [];
@@ -259,7 +260,10 @@ function BidirectionalCritComponent(c_Name) : Component(c_Name) constructor {
 			case "DealMeleeDamage":
 				_event.params.crit  = true;
 				_event.params.sound = SoundTypes.CRIT;
-				getParent().removeComponent("BidirectionalCrit");				
+				getParent().removeComponent("BidirectionalCrit");	
+				
+				//Console.clear();
+				//Console.log(@"[Font1][scale,3][rainbow][wave]Critical Hit ![/rainbow][/wave]", 240, 1);			
 				break;
 			case "TakeDamage":
 				_event.params.sound = SoundTypes.CRIT;
@@ -337,6 +341,8 @@ function ExpDropComponent(c_Name)      : Component(c_Name) constructor {
 		switch(_event.type) {
 			case "TakeDamage":
 				if _event.params.hp > 0 break;
+				Console.log($"[Font1][scale,2][{getParent().nameColor}]{getParent().entityName}[c_white][/rainbow] was [c_red]defeated[c_white]", 240, 1);
+				
 				_event.params.experience = amount;
 				break;
 		}
@@ -369,13 +375,16 @@ function HealthComponent(c_Name)          : Component(c_Name) constructor {
 			case "TakeDamage":
 				hp = max(0, hp - _event.params.amount);
 				show_debug_message($"{getParent().entityName} took {_event.params.amount} damage");
+				Console.log($"[Font1][scale,2][{getParent().nameColor}]{getParent().entityName}[c_white][/rainbow] took [c_red]{_event.params.amount}[c_white] damage");
 				
 				_event.params.hp    = hp;
 				_event.params.maxHP = maxHP;
 				
 				//This is temporary but look!
 				if(hp == 0) {
-					var ts = time_source_create(time_source_game, deathTimer, time_source_units_frames, function(){destroyEntity(World.entities[? parent])});
+					var ts = time_source_create(time_source_game, deathTimer, time_source_units_frames, function(){
+						destroyEntity(World.entities[? parent])
+					});
 					time_source_start(ts);
 				}
 				break;
@@ -548,6 +557,7 @@ function LevelComponent(c_Name)           : Component(c_Name) constructor {
 		switch(_event.type) {
 			case "AddExperience":
 				experience   += _event.params.experience;
+				Console.log($"[Font1][scale,2][{getParent().nameColor}]{getParent().entityName}[c_white][/rainbow] gained [c_yellow]{_event.params.experience}[c_white] experience");
 				if experience < experienceReq break;
 				
 				Sound.playSound(SoundTypes.LEVELUP)
@@ -556,6 +566,9 @@ function LevelComponent(c_Name)           : Component(c_Name) constructor {
 					level ++;
 					experience    -= experienceReq;
 					experienceReq += experienceReq;
+					//Console.clear();
+					Console.log($"[Font1][scale,3][rainbow][wave]Level Up ![/rainbow][/wave]"        , 240, 3);		
+					Console.log($"[Font1][scale,2][{getParent().nameColor}]{getParent().entityName}[c_white] has reached [c_yellow]Level {level}", 240, 3);		
 				}
 				
 				break;

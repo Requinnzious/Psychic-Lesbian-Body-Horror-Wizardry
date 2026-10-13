@@ -1,6 +1,12 @@
 font_add_enable_aa(false);
 font = font_add("Silver.ttf", 16, false, false, 32, 128);
 draw_set_font(font);
+scribble_font_set_default("Font1");
+
+//Create a "typist" which holds typewriter state
+typist = scribble_typist();
+typist.in(0.8, 60);
+typist.ease(SCRIBBLE_EASE.ELASTIC, 0, -25, 1, 1, 0, 0.1);
 
 x                    =  SixOfCups.get("Position",  "x");
 y                    =  SixOfCups.get("Position",  "y");
@@ -234,21 +240,22 @@ stateMachine = new SnowState("step", false)
 					var crit = false;
 					var tauntCrit = entity.get("TauntSprite", "taunting");
 					crit = tauntCrit ?? false;
-								
+					
+					if crit {
+						Console.log(@"[Font1][scale,3][rainbow][wave]Critical Hit ![/rainbow][/wave]", 240, 2);
+					}
+					
 					event = new Event("DealMeleeDamage")
 					event = SixOfCups.fireEvent(event);
 					var hitDie = event.params.hitDie;
 					delete event;
 					
 					var damageRoll   = roll(hitDie);
-					var damageAmount = damageRoll + (damageRoll * crit);
-			
-					show_debug_message(tauntCrit)
-					show_debug_message($"Damage Roll: {damageRoll}, Damage Amount: {damageAmount}")
-			
+					var damageAmount = damageRoll + (damageRoll * crit);			
+					
 					var event = new Event("TakeDamage", { amount: damageAmount })
 					event = entity.fireEvent(event);
-					
+										
 					if event.params.hp == 0 {
 						mp_grid_clear_cell(World.aStar, entityX/TileDim, entityY/TileDim);
 					}
@@ -353,8 +360,18 @@ stateMachine = new SnowState("step", false)
 						break;
 				}
 				
-				var collis = tilemap_get_at_pixel(World.coll, x + dX, y + dY);
-				var bump   = collis > 0;
+								
+				var collis  = tilemap_get_at_pixel(World.coll, x + dX, y + dY);
+				var bump    = collis > 0;
+				
+				var xCollis = tilemap_get_at_pixel(World.coll, x + dX, y     ) && (tilemap_get_at_pixel(World.meta, x + dX, y     ) != TileTypes.TREE);
+				var yCollis = tilemap_get_at_pixel(World.coll, x     , y + dY) && (tilemap_get_at_pixel(World.meta, x     , y + dY) != TileTypes.TREE);
+				
+				var componentMove = xCollis xor yCollis;
+				if componentMove {
+					if !xCollis and yCollis { collis = true; bump = true; }
+					if xCollis and !yCollis { collis = true; bump = true; }
+				}
 				
 				var decalParent = noone;
 				var entities = ds_map_keys_to_array(World.entities, []);
@@ -371,7 +388,8 @@ stateMachine = new SnowState("step", false)
 						if !entity.get("Impassable", "bumping") bump = false;
 						decalParent = entityID;
 						collis = true;
-					}
+						continue;
+					}					
 				}
 				
 				if collis {
@@ -447,6 +465,14 @@ stateMachine = new SnowState("step", false)
 				var collis = tilemap_get_at_pixel(World.coll, x + dX, y + dY);
 				var bump   = collis > 0;
 				
+				var xCollis = tilemap_get_at_pixel(World.coll, x + dX, y     ) && (tilemap_get_at_pixel(World.meta, x + dX, y     ) != TileTypes.TREE);
+				var yCollis = tilemap_get_at_pixel(World.coll, x     , y + dY) && (tilemap_get_at_pixel(World.meta, x     , y + dY) != TileTypes.TREE);
+				
+				var componentMove = xCollis xor yCollis;
+				if componentMove {
+					if !xCollis and yCollis { collis = true; bump = true; }
+					if xCollis and !yCollis { collis = true; bump = true; }
+				}
 				var decalParent = noone;
 				var entities = ds_map_keys_to_array(World.entities);
 				for (var i = 0; i < array_length(entities); ++i) {
@@ -576,7 +602,7 @@ stateMachine = new SnowState("step", false)
 	
 			if(GetLookPressed()) {
 				var compundDir = (lookDir + lookDirOffset + 360) mod 360;
-				lookDir = round(compundDir / 90) * 90;
+				lookDir = round(compundDir / 45) * 45;
 				lookDirOffset = compundDir - lookDir;
 		
 				stateMachine.change("input");
@@ -621,6 +647,10 @@ moveFunc  = function() {
 	delete event;
 	
 	//Boing
+	if x / TileDim < 0 || x / TileDim > array_length(World.tiles) - 1 || x / TileDim < 0 || y / TileDim > array_length(World.tiles[0]) - 1 {
+		Sound.playSound(SoundTypes.ILLUSION);
+		return;
+	};
 	var tile = World.tiles[x / TileDim][y / TileDim].tile;
 	if tile != 4 { Sound.playSound(SoundTypes.STEP_DIRT); return;}
 	Sound.playSound(SoundTypes.STEP_STONE);

@@ -61,7 +61,9 @@ entities[? SixOfCups.uuid] = SixOfCups;
 	buildMesh = function(meshes, meshX, meshY, initialize = false) {
 		var uvs, nullUVs = sprite_get_uvs(sNull, 0);
 		var floorNorm = [0,0,1];
-						
+		
+		if meshX > array_length(worldMeshes) - 1 || meshY > array_length(worldMeshes[0]) - 1 return;
+		
 		//Draw meshes
 		var meshW = meshX * meshDim + meshDim;
 		var meshH = meshY * meshDim + meshDim;
@@ -343,8 +345,9 @@ entities[? SixOfCups.uuid] = SixOfCups;
 					}
 					
 					var deadColor = #ffaeae
-					
-					var entity = new Entity("Brick Wall")
+					var _name = "Brick Wall"
+					if coll == 2 _name = "Illusory Wall"
+					var entity = new Entity(_name)
 						.addComponent("Physics")
 						.addComponent("Impassable",   {bumping: true})
 						.addComponent("Health",       {hp: _hp, maxHP: _hp})
@@ -355,9 +358,13 @@ entities[? SixOfCups.uuid] = SixOfCups;
 
 					if coll == 2 {
 						entity.addComponent("DeathParticle", {sprite: sBrickTexture_Illusory})
-							.addComponent("DeathSound",      {sound: SoundTypes.ILLUSION})
-					} else entity.addComponent("DamageSound", {sound: SoundTypes.HIT})
+							.addComponent("DeathSound",      {sound: SoundTypes.ILLUSION});
+						entity.nameColor = "rainbow";
+					} else {
+						entity.addComponent("DamageSound", {sound: SoundTypes.HIT})
 							.addComponent("DeathSound",      {sound: SoundTypes.GRASS});
+						entity.nameColor = "c_gray";
+					}
 
 					entity.fireEvent(EntityCreateEvent);
 
@@ -516,6 +523,8 @@ entities[? SixOfCups.uuid] = SixOfCups;
 	slime.fireEvent(EntityCreateEvent);
 	entities[? slime.uuid] = slime;
 	
+	slime.nameColor = "c_orange";
+	
 	slimeX = 640;
 	slimeY = 416;
 	slimeZ =   0;
@@ -546,6 +555,8 @@ entities[? SixOfCups.uuid] = SixOfCups;
 
 	slime.fireEvent(EntityCreateEvent);
 	entities[? slime.uuid] = slime;
+	
+	slime.nameColor = "c_orange";
 	
 	slimeX = 1088;
 	slimeY =  256;
@@ -578,6 +589,8 @@ entities[? SixOfCups.uuid] = SixOfCups;
 	slime.fireEvent(EntityCreateEvent);
 	entities[? slime.uuid] = slime;
 	
+	slime.nameColor = "c_orange";
+	
 	slimeX = 1152;
 	slimeY =  512;
 	slimeZ =    0;
@@ -608,5 +621,7 @@ entities[? SixOfCups.uuid] = SixOfCups;
 
 	slime.fireEvent(EntityCreateEvent);
 	entities[? slime.uuid] = slime;
+	
+	slime.nameColor = "c_orange";
 #endregion
 
