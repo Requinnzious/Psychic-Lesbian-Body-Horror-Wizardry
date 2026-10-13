@@ -467,14 +467,17 @@ stateMachine = new SnowState("step", false)
 				var collis = tilemap_get_at_pixel(World.coll, x + dX, y + dY);
 				var bump   = collis > 0;
 				
-				var xCollis = tilemap_get_at_pixel(World.coll, x + dX, y     ) && (tilemap_get_at_pixel(World.meta, x + dX, y     ) != TileTypes.TREE);
-				var yCollis = tilemap_get_at_pixel(World.coll, x     , y + dY) && (tilemap_get_at_pixel(World.meta, x     , y + dY) != TileTypes.TREE);
+				if lookDir mod 90 != 0 {
+					var xCollis = tilemap_get_at_pixel(World.coll, x + dX, y     ) && (tilemap_get_at_pixel(World.meta, x + dX, y     ) != TileTypes.TREE);
+					var yCollis = tilemap_get_at_pixel(World.coll, x     , y + dY) && (tilemap_get_at_pixel(World.meta, x     , y + dY) != TileTypes.TREE);
 				
-				var componentMove = xCollis xor yCollis;
-				if componentMove {
-					if !xCollis and yCollis { collis = true; bump = true; }
-					if xCollis and !yCollis { collis = true; bump = true; }
+					var componentMove = xCollis xor yCollis;
+					if componentMove {
+						if !xCollis and yCollis { dY = 0; collis = false }
+						if xCollis and !yCollis { dX = 0; collis = false }
+					}
 				}
+				
 				var decalParent = noone;
 				var entities = ds_map_keys_to_array(World.entities);
 				for (var i = 0; i < array_length(entities); ++i) {

@@ -9,10 +9,11 @@ function Init(){
 	
 	#region Event Globals
 		globalvar EventUUIDIncrement;
-		globalvar EntityCreateEvent, EntityDestroyEvent, EntityRenderEvent;
+		globalvar EntityCreateEvent, EntityDestroyEvent, EntityRenderEvent, EndStepEvent;
 	
 		EventUUIDIncrement = 0;
 		EntityCreateEvent  = new Event("Create",  {});
+		EndStepEvent       = new Event("EndStep",  {});
 		EntityDestroyEvent = new Event("Destroy", {});
 		EntityRenderEvent  = new Event("Render",  {x: 0, y: 0, z: 0});
 	#endregion

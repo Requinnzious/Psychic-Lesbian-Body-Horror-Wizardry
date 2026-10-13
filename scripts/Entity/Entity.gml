@@ -42,6 +42,9 @@ function Entity(name = "") constructor {
 	}
 	
 	listen = function(eventName) {
+		for (var i = 0; i < array_length(subscriptions); ++i) {
+		    if subscriptions[i] == eventName return;
+		}
 		subscribe(eventName, self);
 		array_push(subscriptions, eventName);
 	}
@@ -148,23 +151,32 @@ function AttackSubimageComponent(c_Name)    : Component(c_Name) constructor {
 	}
 }
 function BellyComponent(c_Name)     : Component(c_Name) constructor {
-	foodTimer   =   30;
+	foodTimer   =   15;
 	foodAmount  =  100;
 	foodMax     =  100;
-	
-	other.listen("Step");
-	
+	other.listen("EndStep");
 	fireEvent = function(_event) {		
 		switch(_event.type) {
 			case "Create":
 				foodMaxTime = foodTimer;
 				break;
-			case "Step":
+			case "EndStep":
 				foodTimer --;
+				
+				if foodAmount == 0 {
+					var damage = new Event("DirectDamage", { amount: 1 });
+					damage     = getParent().fireEvent(damage)
+					delete damage;
+				}
 				
 				if foodTimer > 0 break;
 				foodAmount = max(foodAmount - 1, 0);				
-				foodTimer = foodMaxTime;
+				foodTimer  = foodMaxTime;
+				
+				if (foodAmount - 1 < foodMax / 2 and foodAmount >= foodMax / 2) Console.log($"[Font1][scale,2][{getParent().nameColor}]{getParent().entityName}[c_white][/rainbow]' belly is [c_green]starting to [c_yellow][wave]grumble[/wave]",        240, 3);
+				if (foodAmount - 1 < foodMax / 3 and foodAmount >= foodMax / 3) Console.log($"[Font1][scale,2][{getParent().nameColor}]{getParent().entityName}[c_white][/rainbow] is [c_yellow] feeling pretty [c_orange][wave]hungry[/wave]",           240, 3);
+				if (foodAmount - 1 < foodMax / 4 and foodAmount >= foodMax / 4) Console.log($"[Font1][scale,2][{getParent().nameColor}]{getParent().entityName}[c_white][/rainbow]' belly is really [c_orange]starting to [c_red][wave]hurt[/wave]",      240, 3);
+				if (foodAmount - 1 == 0)                                        Console.log($"[Font1][scale,2][{getParent().nameColor}]{getParent().entityName}[c_white][/rainbow]' body is [c_red]eating itself from the [rainbow][wave]inside![/wave]", 240, 3);
 				break;
 			case "EatFood":
 				if foodAmount + _event.params.amount > foodMax {
@@ -262,13 +274,14 @@ function BidirectionalCritComponent(c_Name) : Component(c_Name) constructor {
 				_event.params.sound = SoundTypes.CRIT;
 				getParent().removeComponent("BidirectionalCrit");	
 				
+				Console.log(@"[Font1][scale,3][rainbow][wave]Critical Hit ![/rainbow][/wave]", 240, 2);
 				//Console.clear();
 				//Console.log(@"[Font1][scale,3][rainbow][wave]Critical Hit ![/rainbow][/wave]", 240, 1);			
 				break;
-			case "TakeDamage":
-				_event.params.sound = SoundTypes.CRIT;
-				getParent().removeComponent("BidirectionalCrit");
-				break;
+			//case "TakeDamage":
+			//	_event.params.sound = SoundTypes.CRIT;
+			//	getParent().removeComponent("BidirectionalCrit");
+			//	break;
 		}
 		return _event;
 	}
@@ -388,6 +401,21 @@ function HealthComponent(c_Name)          : Component(c_Name) constructor {
 					time_source_start(ts);
 				}
 				break;
+			case "DirectDamage":
+				hp = max(0, hp - _event.params.amount);
+				show_debug_message($"{getParent().entityName} took {_event.params.amount} damage");
+				
+				_event.params.hp    = hp;
+				_event.params.maxHP = maxHP;
+				
+				//This is temporary but look!
+				if(hp == 0) {
+					var ts = time_source_create(time_source_game, deathTimer, time_source_units_frames, function(){
+						destroyEntity(World.entities[? parent])
+					});
+					time_source_start(ts);
+				}
+				break;
 				
 			case "Heal":
 				hp = min(maxHP, hp + _event.params.amount);
@@ -405,14 +433,14 @@ function HealthRegenComponent(c_Name)     : Component(c_Name) constructor {
 	regenAmount  =    1;
 	regenerating = true;
 	
-	other.listen("Step");
+	other.listen("EndStep");
 	
 	fireEvent = function(_event) {		
 		switch(_event.type) {
 			case "Create":
 				regenMaxTime = regenTimer;
 				break;
-			case "Step":
+			case "EndStep":
 				regenTimer --;
 				
 				if regenTimer > 0 || !regenerating break;
@@ -872,6 +900,7 @@ function TauntSpriteComponent(c_Name)      : Component(c_Name) constructor {
 				break;
 			case "Taunt":
 				taunting = true;
+				Console.log($"[Font1][scale,2][{getParent().nameColor}]{getParent().entityName}[c_white][/rainbow] is [c_red][rainbow][wave]smirking[/wave]", 240, 3);
 				_event.params.sprite = sprite;
 				Sound.playSound(SoundTypes.SLIMETAUNT)
 				break;

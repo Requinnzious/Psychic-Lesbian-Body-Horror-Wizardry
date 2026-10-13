@@ -496,7 +496,7 @@ entities[? SixOfCups.uuid] = SixOfCups;
 	var slimeY = 448;
 	var slimeZ =   0;
 
-	var slime = new Entity("Slime")
+	var slime = new Entity("Bite Slime")
 		.addComponent("Physics",      {maxFlash:   24})
 		.addComponent("Impassable",   {bumping: false})
 		.addComponent("Health",       {hp: 12, deathTimer: 24})
@@ -529,7 +529,7 @@ entities[? SixOfCups.uuid] = SixOfCups;
 	slimeY = 416;
 	slimeZ =   0;
 
-	slime = new Entity("Slime")
+	slime = new Entity("Bite Slime")
 		.addComponent("Physics",      {maxFlash:   24})
 		.addComponent("Impassable",   {bumping: false})
 		.addComponent("Health",       {hp: 12, deathTimer: 24})
@@ -562,7 +562,7 @@ entities[? SixOfCups.uuid] = SixOfCups;
 	slimeY =  256;
 	slimeZ =    0;
 
-	slime = new Entity("Slime")
+	slime = new Entity("Bite Slime")
 		.addComponent("Physics",      {maxFlash:   24})
 		.addComponent("Impassable",   {bumping: false})
 		.addComponent("Health",       {hp: 12, deathTimer: 24})
@@ -595,7 +595,7 @@ entities[? SixOfCups.uuid] = SixOfCups;
 	slimeY =  512;
 	slimeZ =    0;
 
-	slime = new Entity("Slime")
+	slime = new Entity("Bite Slime")
 		.addComponent("Physics",      {maxFlash:   24})
 		.addComponent("Impassable",   {bumping: false})
 		.addComponent("Health",       {hp: 12, deathTimer: 24})

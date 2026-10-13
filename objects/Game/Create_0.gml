@@ -171,9 +171,9 @@ GameState = new SnowState("stepPhase")
 			show_debug_message("End Phase\n");
 			GameState.change("stepPhase");
 		},
-		leave: function()  {},
+		leave: function()  {EndStepEvent.fire();},
 		update: function() {
-			GameState.change("stepPhase")
+			//GameState.change("stepPhase")
 		}
 	})
 	

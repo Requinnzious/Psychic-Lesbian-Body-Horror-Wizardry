@@ -5,8 +5,10 @@ textTime     =  60;
 timeTilClose =  60;
 
 log = function(_string, timer = 60, prio = 0) {
-	if array_length(strings) >= 2 and prio > strings[0].prio {
-		clear();
+	if array_length(strings) >= 2 {
+		for (var i = array_length(strings) - 1; i >=0; --i) {
+		    if strings[i].prio < prio array_pop(strings);
+		}
 	}
 	
 	array_push(history, _string);
