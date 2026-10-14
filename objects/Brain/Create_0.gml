@@ -135,7 +135,10 @@ fireEvent = function(_event) {
 			
 			mp_grid_clear_cell(World.aStar, x/TileDim, y/TileDim);
 			
-			if !mp_grid_path(World.aStar, World.path, x + 16, y + 16, _event.params.x + 16, _event.params.y + 16, true) break;
+			if !mp_grid_path(World.aStar, World.path, x + 16, y + 16, _event.params.x + 16, _event.params.y + 16, true) {
+				movePoints = 0;
+				break;
+			}
 			
 			var len         = path_get_length(World.path);
 			var targetCellX = floor(path_get_x(World.path, TileDim/len) / TileDim) * TileDim;
@@ -144,6 +147,7 @@ fireEvent = function(_event) {
 			//If we're not moving, we don't want to enter the move state
 			if targetCellX == _event.params.x and targetCellY == _event.params.y {
 				mp_grid_add_cell(World.aStar, x/TileDim, y/TileDim);
+				movePoints = 0;
 				break;
 			}
 			

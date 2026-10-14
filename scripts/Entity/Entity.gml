@@ -173,10 +173,10 @@ function BellyComponent(c_Name)     : Component(c_Name) constructor {
 				foodAmount = max(foodAmount - 1, 0);				
 				foodTimer  = foodMaxTime;
 				
-				if (foodAmount - 1 < foodMax / 2 and foodAmount >= foodMax / 2) Console.log($"[Font1][scale,2][{getParent().nameColor}]{getParent().entityName}[c_white][/rainbow]' belly is [c_green]starting to [c_yellow][wave]grumble[/wave]",        240, 3);
-				if (foodAmount - 1 < foodMax / 3 and foodAmount >= foodMax / 3) Console.log($"[Font1][scale,2][{getParent().nameColor}]{getParent().entityName}[c_white][/rainbow] is [c_yellow] feeling pretty [c_orange][wave]hungry[/wave]",           240, 3);
-				if (foodAmount - 1 < foodMax / 4 and foodAmount >= foodMax / 4) Console.log($"[Font1][scale,2][{getParent().nameColor}]{getParent().entityName}[c_white][/rainbow]' belly is really [c_orange]starting to [c_red][wave]hurt[/wave]",      240, 3);
-				if (foodAmount - 1 == 0)                                        Console.log($"[Font1][scale,2][{getParent().nameColor}]{getParent().entityName}[c_white][/rainbow]' body is [c_red]eating itself from the [rainbow][wave]inside![/wave]", 240, 3);
+				if (foodAmount - 1 < foodMax / 2 and foodAmount >= foodMax / 2) Console.log($"[Font1][scale,2][{getParent().nameColor}]{getParent().entityName}[c_white][/rainbow]' belly is [c_green]starting to [c_yellow][wave]grumble[/wave]",        120, 3);
+				if (foodAmount - 1 < foodMax / 3 and foodAmount >= foodMax / 3) Console.log($"[Font1][scale,2][{getParent().nameColor}]{getParent().entityName}[c_white][/rainbow] is [c_yellow] feeling pretty [c_orange][wave]hungry[/wave]",           120, 3);
+				if (foodAmount - 1 < foodMax / 4 and foodAmount >= foodMax / 4) Console.log($"[Font1][scale,2][{getParent().nameColor}]{getParent().entityName}[c_white][/rainbow]' belly is really [c_orange]starting to [c_red][wave]hurt[/wave]",      120, 3);
+				if (foodAmount - 1 == 0)                                        Console.log($"[Font1][scale,2][{getParent().nameColor}]{getParent().entityName}[c_white][/rainbow]' body is [c_red]eating itself from the [rainbow][wave]inside![/wave]", 120, 3);
 				break;
 			case "EatFood":
 				if foodAmount + _event.params.amount > foodMax {
@@ -274,9 +274,7 @@ function BidirectionalCritComponent(c_Name) : Component(c_Name) constructor {
 				_event.params.sound = SoundTypes.CRIT;
 				getParent().removeComponent("BidirectionalCrit");	
 				
-				Console.log(@"[Font1][scale,3][rainbow][wave]Critical Hit ![/rainbow][/wave]", 240, 2);
-				//Console.clear();
-				//Console.log(@"[Font1][scale,3][rainbow][wave]Critical Hit ![/rainbow][/wave]", 240, 1);			
+				Console.log(@"[Font1][scale,3][rainbow][wave]Critical Hit ![/rainbow][/wave]", 120, 3);
 				break;
 			//case "TakeDamage":
 			//	_event.params.sound = SoundTypes.CRIT;
@@ -354,7 +352,7 @@ function ExpDropComponent(c_Name)      : Component(c_Name) constructor {
 		switch(_event.type) {
 			case "TakeDamage":
 				if _event.params.hp > 0 break;
-				Console.log($"[Font1][scale,2][{getParent().nameColor}]{getParent().entityName}[c_white][/rainbow] was [c_red]defeated[c_white]", 240, 1);
+				Console.log($"[Font1][scale,2][{getParent().nameColor}]{getParent().entityName}[c_white][/rainbow] was [c_red]defeated[c_white]", 120, 1);
 				
 				_event.params.experience = amount;
 				break;
@@ -387,8 +385,10 @@ function HealthComponent(c_Name)          : Component(c_Name) constructor {
 				break;
 			case "TakeDamage":
 				hp = max(0, hp - _event.params.amount);
-				show_debug_message($"{getParent().entityName} took {_event.params.amount} damage");
-				Console.log($"[Font1][scale,2][{getParent().nameColor}]{getParent().entityName}[c_white][/rainbow] took [c_red]{_event.params.amount}[c_white] damage");
+				//show_debug_message($"{getParent().entityName} took {_event.params.amount} damage");
+				var prio = 0;
+				if (_event.params.crit ?? false) prio = 3;
+				Console.log($"[Font1][scale,2][{getParent().nameColor}]{getParent().entityName}[c_white][/rainbow] took [c_red]{_event.params.amount}[c_white] damage", 30, prio);
 				
 				_event.params.hp    = hp;
 				_event.params.maxHP = maxHP;
@@ -595,8 +595,8 @@ function LevelComponent(c_Name)           : Component(c_Name) constructor {
 					experience    -= experienceReq;
 					experienceReq += experienceReq;
 					//Console.clear();
-					Console.log($"[Font1][scale,3][rainbow][wave]Level Up ![/rainbow][/wave]"        , 240, 3);		
-					Console.log($"[Font1][scale,2][{getParent().nameColor}]{getParent().entityName}[c_white] has reached [c_yellow]Level {level}", 240, 3);		
+					Console.log($"[Font1][scale,3][rainbow][wave]Level Up ![/rainbow][/wave]"        , 120, 3);		
+					Console.log($"[Font1][scale,2][{getParent().nameColor}]{getParent().entityName}[c_white] has reached [c_yellow]Level {level}", 120, 3);		
 				}
 				
 				break;
@@ -900,7 +900,7 @@ function TauntSpriteComponent(c_Name)      : Component(c_Name) constructor {
 				break;
 			case "Taunt":
 				taunting = true;
-				Console.log($"[Font1][scale,2][{getParent().nameColor}]{getParent().entityName}[c_white][/rainbow] is [c_red][rainbow][wave]smirking[/wave]", 240, 3);
+				Console.log($"[Font1][scale,2][{getParent().nameColor}]{getParent().entityName}[c_white][/rainbow] is [c_red][rainbow][wave]smirking[/wave]", 120, 3);
 				_event.params.sprite = sprite;
 				Sound.playSound(SoundTypes.SLIMETAUNT)
 				break;

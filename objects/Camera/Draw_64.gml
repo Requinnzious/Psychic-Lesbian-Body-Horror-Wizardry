@@ -16,6 +16,13 @@ surface_set_target(screenSurf)
 //    draw_sprite(sTurnIcon, _subimg, 36 + 72 * i, 64)
 //}
 
+draw_set_color(c_dkgray);
+draw_set_alpha(.5);
+draw_rectangle(32, 8, view_get_wport(view_current) - 168, 64, false)
+draw_set_color(c_white);
+draw_rectangle(32, 8, view_get_wport(view_current) - 168, 64, true)
+draw_set_alpha(1);
+
 var socHP    = SixOfCups.get("Health", "hp");
 var socMaxHP = SixOfCups.get("Health", "maxHP");
 
@@ -28,13 +35,13 @@ var socMaxFG = SixOfCups.get("Belly", "foodMax");
 
 var dungeonFloor = "-";
 dungeonFloor = 1;
-draw_text_transformed_colour(24,                               16, $"   {dungeonFloor}  ",    3, 3, 0, c_white, c_white, c_white, c_white, 1);
-draw_text_transformed_colour(24 + string_width($"   -  ") * 3, 16, "F",          3, 3, 0, c_aqua, c_aqua, c_aqua, c_aqua, 1);
+draw_text_transformed_colour(24,                               8, $"   {dungeonFloor}  ",    3, 3, 0, c_white, c_white, c_white, c_white, 1);
+draw_text_transformed_colour(24 + string_width($"   -  ") * 3, 8, "F",          3, 3, 0, c_aqua, c_aqua, c_aqua, c_aqua, 1);
 
 
 draw_text_transformed_colour(210,                               4, $"LV",        2, 2, 0,  c_aqua,  c_aqua,  c_aqua,  c_aqua, 1);
 draw_text_transformed_colour(256,                               4, level,        2, 2, 0, c_white, c_white, c_white, c_white, 1);
-draw_healthbar(208, 40, 320, 56, socXP / socMaxXP * 100, c_dkgray, c_yellow, c_yellow, 0, true, true);
+draw_healthbar(208, 40, 320, 58, socXP / socMaxXP * 100, c_dkgray, c_yellow, c_yellow, 0, true, true);
 
 
 

@@ -45,7 +45,7 @@ function BrainTryAttack(actingBrain) {
 				
 				var damageRoll = roll(hitDie)
 				
-				event = new Event("TakeDamage", {amount: damageRoll + (damageRoll * crit)})
+				event = new Event("TakeDamage", {amount: damageRoll + (damageRoll * crit), crit: crit})
 				event = SixOfCups.fireEvent(event);
 				delete event;
 				

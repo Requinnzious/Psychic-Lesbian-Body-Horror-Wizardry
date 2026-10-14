@@ -15,7 +15,7 @@ void main()
 	
 	float baseZ = 0.;
 	
-	if(object_space_pos.z > baseZ) {
+	if(object_space_pos.z != baseZ) {
 		vec2 wind            = vec2(sin(windSpeed + object_space_pos.x), cos(windSpeed + object_space_pos.y));
 		object_space_pos.xy += wind;
 		object_space_pos.z  -= wind;

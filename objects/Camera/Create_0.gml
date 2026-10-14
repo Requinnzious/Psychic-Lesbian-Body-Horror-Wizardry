@@ -242,7 +242,7 @@ stateMachine = new SnowState("step", false)
 					crit = tauntCrit ?? false;
 					
 					if crit {
-						Console.log(@"[Font1][scale,3][rainbow][wave]Critical Hit ![/rainbow][/wave]", 240, 2);
+						Console.log(@"[Font1][scale,3][rainbow][wave]Critical Hit ![/rainbow][/wave]", 120, 3);
 					}
 					
 					event = new Event("DealMeleeDamage")
@@ -253,7 +253,7 @@ stateMachine = new SnowState("step", false)
 					var damageRoll   = roll(hitDie);
 					var damageAmount = damageRoll + (damageRoll * crit);			
 					
-					var event = new Event("TakeDamage", { amount: damageAmount })
+					var event = new Event("TakeDamage", { amount: damageAmount, crit: crit })
 					event = entity.fireEvent(event);
 										
 					if event.params.hp == 0 {
@@ -674,7 +674,7 @@ bumpFunc  = function() {
 
 //Various methods for the player
 createBloodDecal = function(parentEntity = noone) {
-	var event = new Event("TakeDamage", {amount: 1});
+	var event = new Event("TakeDamage", {amount: 1, crit: false});
 	event = SixOfCups.fireEvent(event);
 	var spr = sBloodDecal;
 	if event.params.hp <= 0 spr = sBloodDecal_Death;

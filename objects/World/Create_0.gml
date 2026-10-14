@@ -76,7 +76,8 @@ entities[? SixOfCups.uuid] = SixOfCups;
 		    worldMeshes[meshX][meshY][? meshName]  = vertex_create_buffer();
 			vertex_begin(  worldMeshes[meshX][meshY][? meshName], vFormat );
 		}
-		
+		var wateruvs = sprite_get_uvs(sWaterTexture, 0/*irandom_range(0, sprite_get_number(spr) - 1)*/);
+		var waterBackuvs = sprite_get_uvs(sWaterTexture_Back, 0/*irandom_range(0, sprite_get_number(spr) - 1)*/);
 		for (var i = meshX * meshDim; i < meshW and i < array_length(World.tiles); ++i) {
 		    for (var j = meshY * meshDim; j < meshH and j < array_length(World.tiles[0]); ++j) {				
 				var tile   = tiles[i][j].tile;
@@ -119,6 +120,10 @@ entities[? SixOfCups.uuid] = SixOfCups;
 							eWall = true;
 							wWall = true;
 							break;
+						case TileTypes.WATER:
+							spr = sNull;
+							zz  = -TileDim / 2;
+							break;
 					}
 					
 					//Get our uvs
@@ -139,6 +144,67 @@ entities[? SixOfCups.uuid] = SixOfCups;
 							addVertex(worldMeshes[meshX][meshY][? "floorMesh"], [x1, y1, zz], floorNorm, [uvs[0], uvs[1]], c_white, 1);
 							addVertex(worldMeshes[meshX][meshY][? "floorMesh"], [x2, y2, zz], floorNorm, [uvs[2], uvs[3]], c_white, 1);
 							addVertex(worldMeshes[meshX][meshY][? "floorMesh"], [x1, y2, zz], floorNorm, [uvs[0], uvs[3]], c_white, 1);
+							break;
+							
+						case "water":
+							if tile != TileTypes.WATER break;
+							addVertex(worldMeshes[meshX][meshY][? "floorMesh"], [x1, y1, zz], floorNorm, [uvs[0], uvs[1]], c_white, 1);
+							addVertex(worldMeshes[meshX][meshY][? "floorMesh"], [x2, y1, zz], floorNorm, [uvs[2], uvs[1]], c_white, 1);
+							addVertex(worldMeshes[meshX][meshY][? "floorMesh"], [x2, y2, zz], floorNorm, [uvs[2], uvs[3]], c_white, 1);
+							addVertex(worldMeshes[meshX][meshY][? "floorMesh"], [x1, y1, zz], floorNorm, [uvs[0], uvs[1]], c_white, 1);
+							addVertex(worldMeshes[meshX][meshY][? "floorMesh"], [x2, y2, zz], floorNorm, [uvs[2], uvs[3]], c_white, 1);
+							addVertex(worldMeshes[meshX][meshY][? "floorMesh"], [x1, y2, zz], floorNorm, [uvs[0], uvs[3]], c_white, 1);
+							
+							addVertex(worldMeshes[meshX][meshY][? "waterMesh"], [x1, y1, zz + TileDim / 2 - 4], floorNorm, [wateruvs[0], wateruvs[1]], c_white, 1);
+							addVertex(worldMeshes[meshX][meshY][? "waterMesh"], [x2, y1, zz + TileDim / 2 - 4], floorNorm, [wateruvs[2], wateruvs[1]], c_white, 1);
+							addVertex(worldMeshes[meshX][meshY][? "waterMesh"], [x2, y2, zz + TileDim / 2 - 4], floorNorm, [wateruvs[2], wateruvs[3]], c_white, 1);
+							addVertex(worldMeshes[meshX][meshY][? "waterMesh"], [x1, y1, zz + TileDim / 2 - 4], floorNorm, [wateruvs[0], wateruvs[1]], c_white, 1);
+							addVertex(worldMeshes[meshX][meshY][? "waterMesh"], [x2, y2, zz + TileDim / 2 - 4], floorNorm, [wateruvs[2], wateruvs[3]], c_white, 1);
+							addVertex(worldMeshes[meshX][meshY][? "waterMesh"], [x1, y2, zz + TileDim / 2 - 4], floorNorm, [wateruvs[0], wateruvs[3]], c_white, 1);
+							
+							addVertex(worldMeshes[meshX][meshY][? "waterMesh"], [x1, y1, zz + TileDim / 2 - 4.5], floorNorm, [waterBackuvs[0], waterBackuvs[1]], c_white, 1);
+							addVertex(worldMeshes[meshX][meshY][? "waterMesh"], [x2, y1, zz + TileDim / 2 - 4.5], floorNorm, [waterBackuvs[2], waterBackuvs[1]], c_white, 1);
+							addVertex(worldMeshes[meshX][meshY][? "waterMesh"], [x2, y2, zz + TileDim / 2 - 4.5], floorNorm, [waterBackuvs[2], waterBackuvs[3]], c_white, 1);
+							addVertex(worldMeshes[meshX][meshY][? "waterMesh"], [x1, y1, zz + TileDim / 2 - 4.5], floorNorm, [waterBackuvs[0], waterBackuvs[1]], c_white, 1);
+							addVertex(worldMeshes[meshX][meshY][? "waterMesh"], [x2, y2, zz + TileDim / 2 - 4.5], floorNorm, [waterBackuvs[2], waterBackuvs[3]], c_white, 1);
+							addVertex(worldMeshes[meshX][meshY][? "waterMesh"], [x1, y2, zz + TileDim / 2 - 4.5], floorNorm, [waterBackuvs[0], waterBackuvs[3]], c_white, 1);
+							
+							if i > 0 and tiles[i - 1][j].tile != TileTypes.WATER {
+								norm = [-1, 0, 0];
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x1, y1, zz + TileDim / 2], norm, [uvs[0], uvs[1]], color, 1);
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x1, y2, zz + TileDim / 2], norm, [uvs[2], uvs[1]], color, 1);
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x1, y2, zz],               norm, [uvs[2], uvs[3]], color, 1);
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x1, y1, zz + TileDim / 2], norm, [uvs[0], uvs[1]], color, 1);
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x1, y2, zz],               norm, [uvs[2], uvs[3]], color, 1);
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x1, y1, zz],               norm, [uvs[0], uvs[3]], color, 1);
+							}							
+							if i < array_length(tiles) - 1 and tiles[i + 1][j].tile != TileTypes.WATER {
+								norm = [1, 0, 0];
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x2, y2, zz + TileDim / 2], norm, [uvs[0], uvs[1]], color, 1);
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x2, y1, zz + TileDim / 2], norm, [uvs[2], uvs[1]], color, 1);
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x2, y1, zz],               norm, [uvs[2], uvs[3]], color, 1);
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x2, y2, zz + TileDim / 2], norm, [uvs[0], uvs[1]], color, 1);
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x2, y1, zz],               norm, [uvs[2], uvs[3]], color, 1);
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x2, y2, zz],               norm, [uvs[0], uvs[3]], color, 1);
+							}
+							if j > 0 and tiles[i][j - 1].tile != TileTypes.WATER {
+								norm = [0, -1, 0];
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x2, y1, zz + TileDim / 2], norm, [uvs[0], uvs[1]], color, 1);
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x1, y1, zz + TileDim / 2], norm, [uvs[2], uvs[1]], color, 1);
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x1, y1, zz],               norm, [uvs[2], uvs[3]], color, 1);
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x2, y1, zz + TileDim / 2], norm, [uvs[0], uvs[1]], color, 1);
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x1, y1, zz],               norm, [uvs[2], uvs[3]], color, 1);
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x2, y1, zz],               norm, [uvs[0], uvs[3]], color, 1);
+							}							
+							if j < array_length(tiles[0]) - 1 and tiles[i][j + 1].tile != TileTypes.WATER {
+								norm = [0, 1, 0];
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x1, y2, zz + TileDim / 2], norm, [uvs[0], uvs[1]], color, 1);
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x2, y2, zz + TileDim / 2], norm, [uvs[2], uvs[1]], color, 1);
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x2, y2, zz],               norm, [uvs[2], uvs[3]], color, 1);
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x1, y2, zz + TileDim / 2], norm, [uvs[0], uvs[1]], color, 1);
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x2, y2, zz],               norm, [uvs[2], uvs[3]], color, 1);
+								addVertex(worldMeshes[meshX][meshY][? "wallMesh"], [x1, y2, zz],               norm, [uvs[0], uvs[3]], color, 1);
+							}
 							break;
 					
 						case "wall":
@@ -455,7 +521,7 @@ entities[? SixOfCups.uuid] = SixOfCups;
 		}
 	}
 	
-	var meshes = ["floor", "wall", "canopy"];	
+	var meshes = ["floor", "wall", "canopy", "water"];	
 	for (var i = 0; i < array_length(worldMeshes); ++i) {
 	    for (var j = 0; j < array_length(worldMeshes[0]); ++j) {
 			buildMesh(meshes, i, j, true);
@@ -475,6 +541,7 @@ entities[? SixOfCups.uuid] = SixOfCups;
 					vertex_submit(worldMeshes[i][j][? "wallMesh"],  pr_trianglelist, DefaultTexture);
 				shader_set(shWind);
 					vertex_submit(worldMeshes[i][j][? "canopyMesh"], pr_trianglelist, DefaultTexture);
+					vertex_submit(worldMeshes[i][j][? "waterMesh"], pr_trianglelist,  DefaultTexture);
 			}
 		}
 		
