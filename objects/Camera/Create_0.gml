@@ -362,7 +362,7 @@ stateMachine = new SnowState("step", false)
 				
 								
 				var collis  = tilemap_get_at_pixel(World.coll, x + dX, y + dY);
-				var bump    = collis > 0;
+				var bump    = collis == CollisionTypes.BLOCKING;
 				
 				if lookDir mod 90 != 0 {
 					var xCollis = tilemap_get_at_pixel(World.coll, x + dX, y     );
@@ -374,6 +374,7 @@ stateMachine = new SnowState("step", false)
 						if xCollis { dX = 0; collis = false }
 					}
 					if xCollis and yCollis { collis = true; bump = true; }
+					if xCollis == CollisionTypes.HALF_HEIGHT and yCollis == CollisionTypes.HALF_HEIGHT { bump = false; }
 				}
 				
 				var decalParent = noone;
@@ -466,7 +467,7 @@ stateMachine = new SnowState("step", false)
 				}
 				
 				var collis = tilemap_get_at_pixel(World.coll, x + dX, y + dY);
-				var bump   = collis > 0;
+				var bump   = collis == CollisionTypes.BLOCKING;
 				
 				if lookDir mod 90 != 0 {
 					var xCollis = tilemap_get_at_pixel(World.coll, x + dX, y     );
