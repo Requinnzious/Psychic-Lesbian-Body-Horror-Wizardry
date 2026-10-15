@@ -365,14 +365,15 @@ stateMachine = new SnowState("step", false)
 				var bump    = collis > 0;
 				
 				if lookDir mod 90 != 0 {
-					var xCollis = tilemap_get_at_pixel(World.coll, x + dX, y     ) && (tilemap_get_at_pixel(World.meta, x + dX, y     ) != TileTypes.TREE);
-					var yCollis = tilemap_get_at_pixel(World.coll, x     , y + dY) && (tilemap_get_at_pixel(World.meta, x     , y + dY) != TileTypes.TREE);
+					var xCollis = tilemap_get_at_pixel(World.coll, x + dX, y     );
+					var yCollis = tilemap_get_at_pixel(World.coll, x     , y + dY);
 				
 					var componentMove = xCollis xor yCollis;
 					if componentMove {
-						if !xCollis and yCollis { dY = 0; collis = false }
-						if xCollis and !yCollis { dX = 0; collis = false }
+						if yCollis { dY = 0; collis = false }
+						if xCollis { dX = 0; collis = false }
 					}
+					if xCollis and yCollis { collis = true; bump = true; }
 				}
 				
 				var decalParent = noone;
@@ -468,14 +469,15 @@ stateMachine = new SnowState("step", false)
 				var bump   = collis > 0;
 				
 				if lookDir mod 90 != 0 {
-					var xCollis = tilemap_get_at_pixel(World.coll, x + dX, y     ) && (tilemap_get_at_pixel(World.meta, x + dX, y     ) != TileTypes.TREE);
-					var yCollis = tilemap_get_at_pixel(World.coll, x     , y + dY) && (tilemap_get_at_pixel(World.meta, x     , y + dY) != TileTypes.TREE);
+					var xCollis = tilemap_get_at_pixel(World.coll, x + dX, y     );
+					var yCollis = tilemap_get_at_pixel(World.coll, x     , y + dY);
 				
 					var componentMove = xCollis xor yCollis;
 					if componentMove {
-						if !xCollis and yCollis { dY = 0; collis = false }
-						if xCollis and !yCollis { dX = 0; collis = false }
+						if yCollis { dY = 0; collis = false }
+						if xCollis { dX = 0; collis = false }
 					}
+						if xCollis and yCollis { collis = true; bump = true; }
 				}
 				
 				var decalParent = noone;
