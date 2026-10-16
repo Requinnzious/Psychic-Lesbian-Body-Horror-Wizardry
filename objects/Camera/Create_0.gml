@@ -362,21 +362,24 @@ stateMachine = new SnowState("step", false)
 						dY *= 32 * -dsin(lookDir);
 						break;
 				}
-				
-								
+												
 				var collis  = tilemap_get_at_pixel(World.coll, x + dX, y + dY);
 				var bump    = collis == CollisionTypes.BLOCKING;
+				
+				var componentMove = false;
+				var xTile         = false;
+				var yTile         = false;
 				
 				if lookDir mod 90 != 0 {
 					var xCollis = tilemap_get_at_pixel(World.coll, x + dX, y     );
 					var yCollis = tilemap_get_at_pixel(World.coll, x     , y + dY);
 				
-					var componentMove = xCollis xor yCollis;
+					componentMove = xCollis xor yCollis;
 					if componentMove {
-						if yCollis { dY = 0; collis = false }
-						if xCollis { dX = 0; collis = false }
+						if yCollis { dY = 0; collis = false; xTile = true; }
+						if xCollis { dX = 0; collis = false; yTile = true; }
 					}
-					if xCollis and yCollis { collis = true; bump = true; }
+					if xCollis == 1 and yCollis == 1 { collis = true; bump = true; xTile = choose(true, false); yTile = !xTile; }
 					if xCollis == CollisionTypes.HALF_HEIGHT and yCollis == CollisionTypes.HALF_HEIGHT { bump = false; }
 				}
 				
@@ -391,12 +394,23 @@ stateMachine = new SnowState("step", false)
 					var entityX  = entity.get("Position", "x");
 					var entityY  = entity.get("Position", "y");
 			
-					if (entityX == x + dX && entityY == y + dY) {
+					if !componentMove and (entityX == x + dX && entityY == y + dY) {
 						if !entity.get("Impassable", "bumping") bump = false;
 						decalParent = entityID;
 						collis = true;
-						continue;
-					}					
+						break;
+					}
+					if !componentMove continue;
+					if xTile and (entityX == x + dX && entityY == y) {
+						if !entity.get("Impassable", "bumping") bump = false;
+						decalParent = entityID;
+						break;
+					}
+					if yTile and (entityY == x && entityY == y + dY) {
+						if !entity.get("Impassable", "bumping") bump = false;
+						decalParent = entityID;
+						break;
+					}
 				}
 				
 				if collis {
@@ -407,7 +421,7 @@ stateMachine = new SnowState("step", false)
 					var ts = time_source_create(time_source_game, MoveFrames, time_source_units_frames, bumpFunc);
 					time_source_start(ts);
 					
-					if lookDir mod 90 == 0 createBloodDecal(decalParent);
+					createBloodDecal(decalParent);
 					stateMachine.change("bump");
 					
 					Sound.playSound(SoundTypes.HIT1);
@@ -472,16 +486,21 @@ stateMachine = new SnowState("step", false)
 				var collis = tilemap_get_at_pixel(World.coll, x + dX, y + dY);
 				var bump   = collis == CollisionTypes.BLOCKING;
 				
+				var componentMove = false;
+				var xTile         = false;
+				var yTile         = false;
+				
 				if lookDir mod 90 != 0 {
 					var xCollis = tilemap_get_at_pixel(World.coll, x + dX, y     );
 					var yCollis = tilemap_get_at_pixel(World.coll, x     , y + dY);
 				
-					var componentMove = xCollis xor yCollis;
+					componentMove = xCollis xor yCollis;
 					if componentMove {
-						if yCollis { dY = 0; collis = false }
-						if xCollis { dX = 0; collis = false }
+						if yCollis { dY = 0; collis = false; xTile = true; }
+						if xCollis { dX = 0; collis = false; yTile = true; }
 					}
-						if xCollis and yCollis { collis = true; bump = true; }
+					if xCollis == 1 and yCollis == 1 { collis = true; bump = true; xTile = choose(true, false); yTile = !xTile; }
+					if xCollis == CollisionTypes.HALF_HEIGHT and yCollis == CollisionTypes.HALF_HEIGHT { bump = false; }
 				}
 				
 				var decalParent = noone;
@@ -495,9 +514,20 @@ stateMachine = new SnowState("step", false)
 					var entityX  = entity.get("Position", "x");
 					var entityY  = entity.get("Position", "y");
 			
-					if (entityX == x + dX && entityY == y + dY) {
+					if !componentMove and (entityX == x + dX && entityY == y + dY) {
 						if !entity.get("Impassable", "bumping") bump = false;
+						decalParent = entityID;
 						collis = true;
+						break;
+					}
+					if !componentMove continue;
+					if xTile and (entityX == x + dX && entityY == y) {
+						if !entity.get("Impassable", "bumping") bump = false;
+						decalParent = entityID;
+						break;
+					}
+					if yTile and (entityY == x && entityY == y + dY) {
+						if !entity.get("Impassable", "bumping") bump = false;
 						decalParent = entityID;
 						break;
 					}
@@ -511,7 +541,7 @@ stateMachine = new SnowState("step", false)
 					var ts = time_source_create(time_source_game, MoveFrames, time_source_units_frames, bumpFunc);
 					time_source_start(ts);
 					
-					if lookDir mod 90 == 0 createBloodDecal(decalParent);
+					createBloodDecal(decalParent);
 					
 					stateMachine.change("bump");
 					
@@ -680,6 +710,7 @@ bumpFunc  = function() {
 
 //Various methods for the player
 createBloodDecal = function(parentEntity = noone) {
+	if parentEntity == noone return;
 	var event = new Event("TakeDamage", {amount: 1, crit: false});
 	event = SixOfCups.fireEvent(event);
 	var spr = sBloodDecal;

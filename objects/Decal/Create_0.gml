@@ -21,6 +21,23 @@ buildMesh  = function() {
 	norm = [0, 0, 0];
 
 	switch(lookDir) {
+		case 45:
+			x1 = x + 32 + realWidth;
+			x2 = x1 + width;
+			x3 = x2;
+			x4 = x1;
+		
+			y1 = y + epsilon;
+			y2 = y1;
+			y3 = y1;
+			y4 = y1;
+		
+			z1 = z + realHeight;
+			z2 = z1 + height;
+		
+			norm = [0, -1, 0];
+			break;
+			
 		case 90:
 			x1 = x + realWidth;
 			x2 = x1 + width;
@@ -36,9 +53,25 @@ buildMesh  = function() {
 			z2 = z1 + height;
 		
 			norm = [0, -1, 0];
-		
 			break;
 	
+		case 135:
+			x1 = x + random(1);
+			x2 = x1;
+			x3 = x1;
+			x4 = x1;
+		
+			y1 = y - realWidth;
+			y2 = y1 - width;
+			y3 = y2;
+			y4 = y1;
+		
+			z1 = z + realHeight;
+			z2 = z1 + height;
+		
+			norm = [1, 0, 0];
+			break;
+			
 		case 180:
 			x1 = x + random(1);
 			x2 = x1;
@@ -57,6 +90,23 @@ buildMesh  = function() {
 		
 			break;
 		
+		case 225:
+			x1 = x - realWidth;
+			x2 = x1 - width;
+			x3 = x2;
+			x4 = x1;
+		
+			y1 = y + TileDim - epsilon;
+			y2 = y1;
+			y3 = y1;
+			y4 = y1;
+		
+			z1 = z + realHeight;
+			z2 = z1 + height;
+		
+			norm = [0, 1, 0];
+			break;
+		
 		case 270:
 			x1 = x + TileDim - realWidth;
 			x2 = x1 - width;
@@ -72,7 +122,23 @@ buildMesh  = function() {
 			z2 = z1 + height;
 		
 			norm = [0, 1, 0];
+			break;
+	
+		case 315: //case 0:
+			x1 = x + TileDim - epsilon;
+			x2 = x1;
+			x3 = x1;
+			x4 = x1;
 		
+			y1 = y + TileDim + realWidth;
+			y2 = y1 + width;
+			y3 = y2;
+			y4 = y1;
+		
+			z1 = z + realHeight;
+			z2 = z1 + height;
+		
+			norm = [-1, 0, 0];
 			break;
 	
 		default: //case 0:
