@@ -66,6 +66,9 @@ application_surface_draw_enable(false);
 
 #region CRT Shader Parameters
 	screenSurf = surface_create(surface_get_width(application_surface), surface_get_height(application_surface));
+	normalSurf = surface_create(surface_get_width(application_surface), surface_get_height(application_surface));
+	depthSurf  = surface_create(surface_get_width(application_surface), surface_get_height(application_surface));
+	
 	surface1   = surface_create(surface_get_width(application_surface), surface_get_height(application_surface));
 	surface2   = surface_create(surface_get_width(application_surface), surface_get_height(application_surface));
 	surface3   = surface_create(surface_get_width(application_surface), surface_get_height(application_surface));

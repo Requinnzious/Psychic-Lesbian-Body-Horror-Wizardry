@@ -3,6 +3,8 @@ identityMatrix = matrix_build( 0,   0, 0, 0, 0,  0,  1,  1,  1);
 entities = ds_map_create();
 entities[? SixOfCups.uuid] = SixOfCups;
 
+model = smf_model_load("dodecahedron.smf")
+
 #region Store the tilemap
 	tiles = [];
 	meta  = layer_tilemap_get_id("Meta");
@@ -552,6 +554,7 @@ entities[? SixOfCups.uuid] = SixOfCups;
 
 #region World Methods
 	render = function() {
+		
 		matrix_set(matrix_world, identityMatrix);
 		
 		for (var i = 0; i < array_length(worldMeshes); ++i) {
@@ -591,6 +594,16 @@ entities[? SixOfCups.uuid] = SixOfCups;
 			with Mountain    render();
 
 		EntityRenderEvent.fire();
+		
+		//Draw things that have outlines
+		shader_set(sh_smf_static);
+		matrix_set(matrix_world, matrix_build(368, 848, 8 + sin(current_time / 1000), 0, 0, sin(current_time / 5000) * 360, 5, 5, 5));
+			surface_set_target_ext(0, Camera.screenSurf);
+			surface_set_target_ext(1, Camera.normalSurf);
+			surface_set_target_ext(2, Camera.depthSurf);
+			model.submit();
+			surface_reset_target();
+		shader_reset();
 	}
 #endregion
 

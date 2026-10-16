@@ -15,6 +15,10 @@ surface_set_target(screenSurf)
 //	
 //    draw_sprite(sTurnIcon, _subimg, 36 + 72 * i, 64)
 //}
+shader_set(sh_sobel);
+shader_set_uniform_f(shader_get_uniform(sh_sobel, "texSize"), surface_get_width(normalSurf), surface_get_height(normalSurf))
+draw_surface(normalSurf, 0, 0);
+shader_reset();
 
 draw_set_color(c_dkgray);
 draw_set_alpha(.5);
