@@ -25,8 +25,8 @@
   "nineSlice":null,
   "origin":0,
   "parent":{
-    "name":"Psychic Lesbian Body Horror Wizardry",
-    "path":"Psychic Lesbian Body Horror Wizardry.yyp",
+    "name":"Forest",
+    "path":"folders/03 Textures/Forest.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",

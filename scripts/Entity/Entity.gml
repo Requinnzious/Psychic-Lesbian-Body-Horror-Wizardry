@@ -119,7 +119,6 @@ function constructComponent(componentName, args = {}) {
 	}
 	return struct;
 }
-
 function ArmorComponent(c_Name) : Component(c_Name) constructor {
 	armorValue = 2;
 	fireEvent = function(_event) {
@@ -384,6 +383,12 @@ function HealthComponent(c_Name)          : Component(c_Name) constructor {
 				maxHP = hp;
 				break;
 			case "TakeDamage":
+				if hp == infinity {
+					_event.handled = true;
+					_event.params.hp = infinity;
+					break;
+				}			
+			
 				hp = max(0, hp - _event.params.amount);
 				//show_debug_message($"{getParent().entityName} took {_event.params.amount} damage");
 				var prio = 0;
@@ -680,9 +685,30 @@ function PositionComponent(c_Name)        : Component(c_Name) constructor {
 				self.z = _event.params.z;
 				break;
 			case "Render":
-				_event.params.x = self.x;
-				_event.params.y = self.y;
-				_event.params.z = self.z;
+				var xMethod = is_method(x);
+				if  xMethod	_event.params.x = self.x();
+				if !xMethod	_event.params.x = self.x;
+				
+				var yMethod = is_method(y);
+				if  yMethod	_event.params.y = self.y();
+				if !yMethod	_event.params.y = self.y;
+				
+				var zMethod = is_method(z);
+				if  zMethod	_event.params.z = self.z();
+				if !zMethod	_event.params.z = self.z;
+				break;
+			case "RenderSMF":
+				var xMethod = is_method(x);
+				if  xMethod	_event.params.x = self.x();
+				if !xMethod	_event.params.x = self.x;
+				
+				var yMethod = is_method(y);
+				if  yMethod	_event.params.y = self.y();
+				if !yMethod	_event.params.y = self.y;
+				
+				var zMethod = is_method(z);
+				if  zMethod	_event.params.z = self.z();
+				if !zMethod	_event.params.z = self.z;
 				break;
 			case "Step":
 				variable_struct_set(_event.params, "steppedOn", false);
@@ -735,6 +761,41 @@ function SpriteComponent(c_Name)          : Component(c_Name) constructor {
 		return _event;
 	}
 }
+function SMFModelComponent(c_Name)        : Component(c_Name) constructor {
+	other.listen("RenderSMF");
+	
+	model = World.dodecahedron;
+	
+	fireEvent = function(_event) {		
+		switch(_event.type) {
+			case "RenderSMF":
+				matrix_set(matrix_world, matrix_build(_event.params.x, _event.params.y, _event.params.z, _event.params.xRotation, _event.params.yRotation, _event.params.zRotation, _event.params.xScale, _event.params.yScale, _event.params.zScale));
+				model.submit();
+				break;
+		}
+		
+		return _event;
+	}
+}
+function StaticSMFComponent(c_Name)       : Component(c_Name) constructor {
+	fireEvent = function(_event) {		
+		switch(_event.type) {
+			case "RenderSMF":
+				matrix_set(
+					matrix_world,
+					matrix_build(
+						_event.params.x,         _event.params.y,         _event.params.z,
+						_event.params.xRotation, _event.params.yRotation, _event.params.zRotation,
+						_event.params.xScale,    _event.params.yScale,    _event.params.zScale
+					)
+				);
+				model.submit();
+				break;
+		}
+		
+		return _event;
+	}
+}
 function SteppedOnComponent(c_Name)       : Component(c_Name) constructor {
 	sprite = sBBGrass_Stepped;
 	steppedOn = false;
@@ -756,23 +817,97 @@ function SteppedOnComponent(c_Name)       : Component(c_Name) constructor {
 	}
 }
 function TransformComponent(c_Name)       : Component(c_Name) constructor {
-	x = 0;
-	y = 0;
-	z = 0;
+	x         = 0;
+	y         = 0;
+	z         = 0;
 	
-	xScale = 1;
-	yScale = 1;
-	zScale = 1;
-		
+	xScale    = 1;
+	yScale    = 1;
+	zScale    = 1;
+	
+	xRotation = 0;
+	yRotation = 0;
+	zRotation = 0;
+	
 	fireEvent = function(_event) {		
 		switch(_event.type) {
 			case "Render":
-				_event.params.x += self.x;
-				_event.params.y += self.y;
-				_event.params.z += self.z;
-				_event.params.xScale = xScale;
-				_event.params.yScale = yScale;
-				_event.params.zScale = zScale;
+				var xMethod = is_method(x);
+				if  xMethod	_event.params.x += self.x();
+				if !xMethod	_event.params.x += self.x;
+				
+				var yMethod = is_method(y);
+				if  yMethod	_event.params.y += self.y();
+				if !yMethod	_event.params.y += self.y;
+				
+				var zMethod = is_method(z);
+				if  zMethod	_event.params.z += self.z();
+				if !zMethod	_event.params.z += self.z;
+				
+				
+				var xMethod = is_method(xScale);
+				if  xMethod	_event.params.xScale = self.xScale();
+				if !xMethod	_event.params.xScale = self.xScale;
+				
+				var yMethod = is_method(yScale);
+				if  yMethod	_event.params.yScale = self.yScale();
+				if !yMethod	_event.params.yScale = self.yScale;
+				
+				var zMethod = is_method(zScale);
+				if  zMethod	_event.params.zScale = self.zScale();
+				if !zMethod	_event.params.zScale = self.zScale;
+				
+				
+				var xMethod = is_method(xRotation);
+				if  xMethod	_event.params.xRotation = self.xRotation();
+				if !xMethod	_event.params.xRotation = self.xRotation;
+				
+				var yMethod = is_method(yRotation);
+				if  yMethod	_event.params.yRotation = self.yRotation();
+				if !yMethod	_event.params.yRotation = self.yRotation;
+				
+				var zMethod = is_method(zRotation);
+				if  zMethod	_event.params.zRotation = self.zRotation();
+				if !zMethod	_event.params.zRotation = self.zRotation;
+				break;
+			case "RenderSMF":
+				var xMethod = is_method(x);
+				if  xMethod	_event.params.x += self.x();
+				if !xMethod	_event.params.x += self.x;
+				
+				var yMethod = is_method(y);
+				if  yMethod	_event.params.y += self.y();
+				if !yMethod	_event.params.y += self.y;
+				
+				var zMethod = is_method(z);
+				if  zMethod	_event.params.z += self.z();
+				if !zMethod	_event.params.z += self.z;
+				
+				
+				var xMethod = is_method(xScale);
+				if  xMethod	_event.params.xScale = self.xScale();
+				if !xMethod	_event.params.xScale = self.xScale;
+				
+				var yMethod = is_method(yScale);
+				if  yMethod	_event.params.yScale = self.yScale();
+				if !yMethod	_event.params.yScale = self.yScale;
+				
+				var zMethod = is_method(zScale);
+				if  zMethod	_event.params.zScale = self.zScale();
+				if !zMethod	_event.params.zScale = self.zScale;
+				
+				
+				var xMethod = is_method(xRotation);
+				if  xMethod	_event.params.xRotation = self.xRotation();
+				if !xMethod	_event.params.xRotation = self.xRotation;
+				
+				var yMethod = is_method(yRotation);
+				if  yMethod	_event.params.yRotation = self.yRotation();
+				if !yMethod	_event.params.yRotation = self.yRotation;
+				
+				var zMethod = is_method(zRotation);
+				if  zMethod	_event.params.zRotation = self.zRotation();
+				if !zMethod	_event.params.zRotation = self.zRotation;
 				break;
 		}
 		
@@ -884,7 +1019,6 @@ function WorldTileComponent(c_Name)       : Component(c_Name) constructor {
 		return _event;
 	}
 }
-
 function TauntSpriteComponent(c_Name)      : Component(c_Name) constructor {
 	sprite   = sSlime_Taunt;
 	subimage = 0;

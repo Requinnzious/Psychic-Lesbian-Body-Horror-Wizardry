@@ -3,7 +3,10 @@ identityMatrix = matrix_build( 0,   0, 0, 0, 0,  0,  1,  1,  1);
 entities = ds_map_create();
 entities[? SixOfCups.uuid] = SixOfCups;
 
-model = smf_model_load("dodecahedron.smf")
+dodecahedron = smf_model_load("dodecahedron.smf")
+cube         = smf_model_load("cube.smf")
+pyramid      = smf_model_load("pyramid.smf")
+sphere       = smf_model_load("sphere.smf")
 
 #region Store the tilemap
 	tiles = [];
@@ -597,11 +600,14 @@ model = smf_model_load("dodecahedron.smf")
 		
 		//Draw things that have outlines
 		shader_set(sh_smf_static);
-		matrix_set(matrix_world, matrix_build(368, 848, 8 + sin(current_time / 1000), 0, 0, sin(current_time / 5000) * 360, 5, 5, 5));
 			surface_set_target_ext(0, Camera.screenSurf);
 			surface_set_target_ext(1, Camera.normalSurf);
 			surface_set_target_ext(2, Camera.depthSurf);
-			model.submit();
+			
+				//Devices?
+				EntityRenderSMFEvent.fire();
+				//with DeviceRenderer render(); 
+				
 			surface_reset_target();
 		shader_reset();
 	}
@@ -741,3 +747,51 @@ model = smf_model_load("dodecahedron.smf")
 	slime.nameColor = "c_orange";
 #endregion
 
+
+var entity = new Entity("Dodecahedron")
+	.addComponent("Health",    {hp: infinity})
+	.addComponent("Position",  {x: 64, y: 64, z: 0})
+	.addComponent("Transform", {
+		x:        16, y:        16, z:         function() { return 8 + sin(current_time / 1000) },
+		xScale:  2.5, yScale:  2.5, zScale:  2.5,
+		xRotation: 0, yRotation: 0, zRotation: function() { return sin(current_time / 5000) * 360 }
+	})
+	.addComponent("SMFModel")
+entity.fireEvent(EntityCreateEvent);
+entities[? entity.uuid] = entity;
+
+entity = new Entity("Cube")
+	.addComponent("Health",    {hp: infinity})
+	.addComponent("Position",  {x: 96, y: 64, z: 0})
+	.addComponent("Transform", {
+		x:        16, y:        16, z:         function() { return 8 + sin(current_time / 1000) },
+		xScale:  2.5, yScale:  2.5, zScale:  2.5,
+		xRotation: 0, yRotation: 0, zRotation: function() { return sin(current_time / 5000) * 360 }
+	})
+	.addComponent("SMFModel",  {model: cube})
+entity.fireEvent(EntityCreateEvent);
+entities[? entity.uuid] = entity;
+
+entity = new Entity("Pyramid")
+	.addComponent("Health",    {hp: infinity})
+	.addComponent("Position",  {x: 96, y: 96, z: 0})
+	.addComponent("Transform", {
+		x:        16, y:        16, z:         function() { return 8 + sin(current_time / 1000) },
+		xScale:  2.5, yScale:  2.5, zScale:  2.5,
+		xRotation: 0, yRotation: 0, zRotation: function() { return sin(current_time / 5000) * 360 }
+	})
+	.addComponent("SMFModel",  {model: pyramid})
+entity.fireEvent(EntityCreateEvent);
+entities[? entity.uuid] = entity;
+
+entity = new Entity("Sphere")
+	.addComponent("Health",    {hp: infinity})
+	.addComponent("Position",  {x: 64, y: 96, z: 0})
+	.addComponent("Transform", {
+		x:        16, y:        16, z:         function() { return 8 + sin(current_time / 1000) },
+		xScale:  3.5, yScale:  3.5, zScale:  3.5,
+		xRotation: 0, yRotation: 0, zRotation: function() { return sin(current_time / 5000) * 360 }
+	})
+	.addComponent("SMFModel",  {model: sphere})
+entity.fireEvent(EntityCreateEvent);
+entities[? entity.uuid] = entity;

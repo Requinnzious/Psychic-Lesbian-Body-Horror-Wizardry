@@ -9,13 +9,14 @@ function Init(){
 	
 	#region Event Globals
 		globalvar EventUUIDIncrement;
-		globalvar EntityCreateEvent, EntityDestroyEvent, EntityRenderEvent, EndStepEvent;
+		globalvar EntityCreateEvent, EntityDestroyEvent, EntityRenderEvent, EntityRenderSMFEvent, EndStepEvent;
 	
-		EventUUIDIncrement = 0;
-		EntityCreateEvent  = new Event("Create",  {});
-		EndStepEvent       = new Event("EndStep",  {});
-		EntityDestroyEvent = new Event("Destroy", {});
-		EntityRenderEvent  = new Event("Render",  {x: 0, y: 0, z: 0});
+		EventUUIDIncrement    = 0;
+		EntityCreateEvent     = new Event("Create",     {});
+		EndStepEvent          = new Event("EndStep",    {});
+		EntityDestroyEvent    = new Event("Destroy",    {});
+		EntityRenderEvent     = new Event("Render",     {x: 0, y: 0, z: 0});
+		EntityRenderSMFEvent  = new Event("RenderSMF",  {x: 0, y: 0, z: 0, xScale: 1, yScale: 1, zScale: 1, xRotation: 0, yRotation: 0, zRotation: 0});
 	#endregion
 	
 	#region Entity Globals

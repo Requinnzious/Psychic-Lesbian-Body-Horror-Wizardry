@@ -27,6 +27,7 @@
     {"name":"inst_736B6D67","path":"rooms/TestMap/TestMap.yy",},
     {"name":"inst_320B584E","path":"rooms/TestMap/TestMap.yy",},
     {"name":"inst_62D7B0C1","path":"rooms/TestMap/TestMap.yy",},
+    {"name":"inst_2CE13467","path":"rooms/TestMap/TestMap.yy",},
   ],
   "isDnd":false,
   "layers":[
@@ -52,9 +53,10 @@
         {"$GMRInstance":"v4","%Name":"inst_736B6D67","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"name":"inst_736B6D67","objectId":{"name":"Mountain","path":"objects/Mountain/Mountain.yy",},"properties":[],"resourceType":"GMRInstance","resourceVersion":"2.0","rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":2080.0,"y":960.0,},
         {"$GMRInstance":"v4","%Name":"inst_320B584E","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"name":"inst_320B584E","objectId":{"name":"Mountain","path":"objects/Mountain/Mountain.yy",},"properties":[],"resourceType":"GMRInstance","resourceVersion":"2.0","rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":704.0,"y":2240.0,},
         {"$GMRInstance":"v4","%Name":"inst_62D7B0C1","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"name":"inst_62D7B0C1","objectId":{"name":"Mountain","path":"objects/Mountain/Mountain.yy",},"properties":[],"resourceType":"GMRInstance","resourceVersion":"2.0","rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":-384.0,"y":2464.0,},
+        {"$GMRInstance":"v4","%Name":"inst_2CE13467","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"name":"inst_2CE13467","objectId":{"name":"DeviceRenderer","path":"objects/DeviceRenderer/DeviceRenderer.yy",},"properties":[],"resourceType":"GMRInstance","resourceVersion":"2.0","rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":320.0,"y":480.0,},
       ],"layers":[],"name":"Instances","properties":[],"resourceType":"GMRInstanceLayer","resourceVersion":"2.0","userdefinedDepth":false,"visible":true,},
     {"$GMRTileLayer":"","%Name":"Collisions","depth":100,"effectEnabled":true,"effectType":null,"gridX":32,"gridY":32,"hierarchyFrozen":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"layers":[],"name":"Collisions","properties":[],"resourceType":"GMRTileLayer","resourceVersion":"2.0","tiles":{"SerialiseHeight":30,"SerialiseWidth":41,"TileCompressedData":[
-          -84,1,-3,0,-5,1,-3,0,-8,1,-9,0,-14,1,-3,0,3,2,0,2,-7,0,-3,1,-11,0,-2,1,-5,0,-6,1,-3,0,-5,1,-6,0,-3,1,
+          -84,1,-3,0,-5,1,-3,0,-8,1,-9,0,-13,1,-4,0,3,2,0,2,-7,0,-3,1,-11,0,-2,1,-5,0,-6,1,-3,0,-5,1,-6,0,-3,1,
           -11,0,-2,1,-6,0,-5,1,-6,0,-5,1,-3,0,-4,1,-10,0,-2,1,-6,0,-5,1,2,0,1,-3,0,-2,1,-3,3,1,1,-3,0,4,1,0,1,
           1,-10,0,-2,1,-5,0,-6,1,-6,0,5,1,0,0,3,1,-3,0,1,1,-13,0,-2,1,-5,0,-6,1,-2,0,1,1,-6,0,2,3,1,-3,0,1,1,-13,
           0,-2,1,-6,0,-5,1,2,0,1,-4,0,-2,1,3,0,1,1,-3,0,1,1,-11,0,-4,1,-6,0,-5,1,2,0,1,-4,0,1,1,-3,0,5,1,0,0,1,
@@ -67,7 +69,7 @@
           -5,0,1,1,-7,0,-6,1,-14,0,1,1,-6,0,1,1,-5,0,1,1,-7,0,-6,1,-14,0,-2,1,-4,0,-2,1,-5,0,-52,1,
         ],"TileDataFormat":1,},"tilesetId":{"name":"tCollisions","path":"tilesets/tCollisions/tCollisions.yy",},"userdefinedDepth":false,"visible":true,"x":0,"y":0,},
     {"$GMRTileLayer":"","%Name":"Meta","depth":200,"effectEnabled":true,"effectType":null,"gridX":32,"gridY":32,"hierarchyFrozen":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"layers":[],"name":"Meta","properties":[],"resourceType":"GMRTileLayer","resourceVersion":"2.0","tiles":{"SerialiseHeight":30,"SerialiseWidth":41,"TileCompressedData":[
-          -42,0,-29,2,-10,1,6,2,0,2,0,0,4,-4,1,1,2,-3,5,-8,2,-2,0,-4,3,-3,0,-10,1,10,2,0,2,2,0,4,0,1,0,1,-7,5,
+          -42,0,-29,2,-10,1,6,2,0,2,0,0,4,-4,1,1,2,-3,5,-8,2,-2,0,-4,3,-3,0,-10,1,10,2,0,2,3,0,4,0,1,0,1,-7,5,
           -3,2,-3,0,-2,3,-2,5,-2,3,-2,0,-2,1,-5,0,9,2,1,1,2,0,2,0,0,4,-4,1,1,2,-6,5,-3,2,4,0,4,0,3,-4,5,5,4,0,
           0,1,1,-4,0,13,3,0,1,1,2,0,2,0,0,4,3,5,5,-5,1,-3,5,-4,2,-2,0,1,3,-4,5,23,3,0,0,1,1,0,0,3,3,0,0,1,1,2,
           0,2,0,2,4,3,5,2,1,-3,8,1,1,-3,5,8,2,0,2,2,0,0,3,3,-3,5,-2,3,3,0,1,1,-5,0,-3,1,14,2,0,2,0,0,4,4,3,3,1,
