@@ -78,7 +78,29 @@ function GetConfirmHeld() {
 	return GetInputHeld(inputs);
 }
 
+function GetCancelPressed() {
+	var inputs = Config.CONTROLS.CANCEL;
+	return GetInputPressed(inputs);
+}
+function GetCancelHeld() {
+	var inputs = Config.CONTROLS.CANCEL;
+	return GetInputHeld(inputs);
+}
 
+function GetMenuPressed() {
+	var inputs = Config.CONTROLS.MENU;
+	return GetInputPressed(inputs);
+}
+function GetMenuHeld() {
+	var inputs = Config.CONTROLS.MENU;
+	return GetInputHeld(inputs);
+}
+
+
+function GetAttackPressed() {
+	var inputs = Config.CONTROLS.ATTACK;
+	return GetInputPressed(inputs);
+}
 function GetAttackHeld() {
 	var inputs = Config.CONTROLS.ATTACK;
 	return GetInputHeld(inputs);

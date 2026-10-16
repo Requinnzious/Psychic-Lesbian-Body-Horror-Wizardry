@@ -1,5 +1,10 @@
 globalvar SoundTypes;
 enum SoundTypes {
+	CURSOR,
+	USE_ITEM,
+	MENU_OPEN,
+	MENU_CLOSE,
+	
 	LEVELUP,
 	
 	SWING,
@@ -24,6 +29,29 @@ audio_play_sound(ostCity, 0, true);
 playSound = function(soundType = -1) {
 	var sound, gainMult = 1;
 	switch(soundType) {
+		case SoundTypes.MENU_OPEN:
+			sound = audio_play_sound(seWings,   6,  false, 1, 0, 1);
+			audio_sound_gain(sound, Config.SOUND.SFXVOLUME / 100 * .5, 0);
+			sound = audio_play_sound(seJump, 6,  false, 1, 0, 2);
+			gainMult = 1
+			break;
+		case SoundTypes.MENU_CLOSE:
+			sound = audio_play_sound(seWings,   6,  false, 1, 0, .8);
+			audio_sound_gain(sound, Config.SOUND.SFXVOLUME / 100 * .5, 0);
+			sound = audio_play_sound(seJump, 6,  false, 1, 0, 1.5);
+			gainMult = .5
+			break;
+		case SoundTypes.USE_ITEM:
+			sound = audio_play_sound(seCursor, 6,  false, 1, 0, 2);
+			audio_sound_gain(sound, Config.SOUND.SFXVOLUME / 100 * .75, 0);
+			sound = audio_play_sound(seWings,   6,  false, 1, 0, .8);
+			gainMult = .5
+			break;
+		case SoundTypes.CURSOR:
+			sound = audio_play_sound(seCursor, 6,  false, 1, 0, 2);
+			gainMult = 2
+			break;
+			
 		case SoundTypes.LEVELUP:
 			sound = audio_play_sound(seLevelUp,   6,  false, 1, 0, 1);
 			audio_sound_gain(sound, Config.SOUND.SFXVOLUME / 100 * .5, 0);

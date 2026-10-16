@@ -171,6 +171,13 @@ stateMachine = new SnowState("step", false)
 		}
 	})
 
+	.add("menu", {
+		enter:  function() {},
+		update: function() {
+		},
+		leave:  function() {}
+	})
+
 	.add("step", {
 		enter: function() {
 			movePoints = maxMovePoints;
@@ -185,8 +192,14 @@ stateMachine = new SnowState("step", false)
 	.add("input", {
 		enter: function() {},
 		update: function() {
+			if GetMenuPressed() {
+				instance_create_layer(64, 96, "Instances", Menu);
+				stateMachine.change("menu");
+				Sound.playSound(SoundTypes.MENU_OPEN)
+				return;
+			}
 			
-			var attackInput = GetAttackHeld();
+			var attackInput = GetAttackPressed();
 			var lookInput   = GetLookPressed();
 			var turnInput   = GetLeftHeld() - GetRightHeld();
 			var moveInput   = GetUpHeld() - GetDownHeld();

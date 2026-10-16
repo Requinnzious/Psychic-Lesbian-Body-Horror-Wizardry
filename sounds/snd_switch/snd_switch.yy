@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.405333,
+  "duration":0.40535146,
   "exportDir":"",
   "name":"snd_switch",
   "parent":{

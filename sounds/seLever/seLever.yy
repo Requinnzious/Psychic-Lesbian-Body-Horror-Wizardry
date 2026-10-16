@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.064958,
+  "duration":0.23047619,
   "exportDir":"",
   "name":"seLever",
   "parent":{

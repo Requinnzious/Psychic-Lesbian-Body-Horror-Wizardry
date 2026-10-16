@@ -1,20 +1,6 @@
 surface_set_target(screenSurf)
 
-//var sprW = sprite_get_width(Sprite39);
-//var sprH = sprite_get_height(Sprite39);
-//
-//var viewW = view_get_wport(view_current);
-//var viewH = view_get_hport(view_current);
-//
-//draw_sprite_ext(Sprite39, 0, 0, 0, viewW/sprW, viewH/sprH, 0, c_white, 1);
-
-//for (var i = 0; i < maxMovePoints; ++i) {
-//	var _subimg = (animPos / MoveFrames) * sprite_get_number(sTurnIcon);
-//	if i >= movePoints _subimg = sprite_get_number(sTurnIcon) - 1;
-//	if i <= movePoints - 1 _subimg = 0;
-//	
-//    draw_sprite(sTurnIcon, _subimg, 36 + 72 * i, 64)
-//}
+//Draw outlined objects
 shader_set(sh_sobel);
 shader_set_uniform_f(shader_get_uniform(sh_sobel, "texSize"), surface_get_width(normalSurf), surface_get_height(normalSurf))
 draw_surface(normalSurf, 0, 0);
@@ -27,6 +13,8 @@ draw_set_color(c_white);
 draw_rectangle(32, 8, view_get_wport(view_current) - 168, 64, true)
 draw_set_alpha(1);
 
+
+//UI Widget
 var socHP    = SixOfCups.get("Health", "hp");
 var socMaxHP = SixOfCups.get("Health", "maxHP");
 
@@ -69,9 +57,8 @@ draw_healthbar(healthbarX, 40, healthbarX + 12 + maxFood * 2, 58,    socFG / soc
 draw_set_halign(fa_right);
 draw_text_transformed_colour(view_get_wport(view_current) - 192, 8, $"$      ", 3, 3, 0, c_aqua, c_aqua, c_aqua, c_aqua, 1);
 
-var money = 12
+var money = "???";
 draw_text_transformed_colour(view_get_wport(view_current) - 192, 8,      money, 3, 3, 0, c_white, c_white, c_white, c_white, 1);
-
 
 draw_set_halign(fa_left);
 draw_set_valign(fa_top);
@@ -127,6 +114,8 @@ draw_set_valign(fa_top);
 #endregion
 
 Console.render();
+
+if stateMachine.state_is("menu") with Menu render();
 
 surface_reset_target();
 

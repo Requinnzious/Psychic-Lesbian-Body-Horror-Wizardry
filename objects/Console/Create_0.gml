@@ -2,7 +2,7 @@ history = []
 strings = []
 
 textTime     =  60;
-timeTilClose =  60;
+timeTilClose =   0;
 
 log = function(_string, timer = 60, prio = 0) {
 	if array_length(strings) >= 2 {
@@ -32,7 +32,7 @@ render = function() {
 	var viewH = view_get_hport(view_current);
 	
 	var consoleHeight = 128;
-	var paddingH      = 128;
+	var paddingH      =  64;
 	var paddingV      =  64;
 	
 	var consoleX = paddingH
@@ -71,5 +71,4 @@ render = function() {
 	}
 }
 
-log(@"[scale,2][Font1][c_aqua]Hello World");
-log(@"[scale,2][Font1][wave]This[/wave] is some [rainbow]text[/rainbow] that [fnt_riffic_sdf][scale,.75]will be drawn[Font1][scale,2] to the game console");
+//log(@"[scale,2][Font1][rainbow][wave]H e l l o  W o r l d !");

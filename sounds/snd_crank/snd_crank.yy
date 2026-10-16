@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.661333,
+  "duration":0.66133785,
   "exportDir":"",
   "name":"snd_crank",
   "parent":{

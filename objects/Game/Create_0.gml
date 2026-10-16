@@ -176,8 +176,7 @@ GameState = new SnowState("stepPhase")
 			//GameState.change("stepPhase")
 		}
 	})
-	
-	
+		
 subscribe("PlayerTurn", id);
 fireEvent = function(_event) {
 	switch _event.type {

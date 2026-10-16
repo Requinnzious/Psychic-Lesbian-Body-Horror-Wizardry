@@ -748,6 +748,7 @@ sphere       = smf_model_load("sphere.smf")
 #endregion
 
 
+/* Polyhedral Devices
 var entity = new Entity("Dodecahedron")
 	.addComponent("Health",    {hp: infinity})
 	.addComponent("Position",  {x: 64, y: 64, z: 0})

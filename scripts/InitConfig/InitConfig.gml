@@ -6,6 +6,21 @@ function configData(dataType, data) constructor {
 function init_config(){
 	#region Controls
 		#region General	
+			var menuInput = [
+				{controlType: "Keyboard", binds: [vk_shift]},
+				{controlType: "Mouse",    binds: []},
+				{controlType: "Gamepad",  binds: [gp_face4]}
+			]
+			var confirmInput = [
+				{controlType: "Keyboard", binds: [vk_enter, vk_space]},
+				{controlType: "Mouse",    binds: []},
+				{controlType: "Gamepad",  binds: [gp_face1]}
+			]
+			var cancelInput = [
+				{controlType: "Keyboard", binds: [vk_delete, vk_escape, vk_backspace]},
+				{controlType: "Mouse",    binds: []},
+				{controlType: "Gamepad",  binds: [gp_face2]}
+			]
 			var attackInput = [
 				{controlType: "Keyboard", binds: [vk_space]},
 				{controlType: "Mouse",    binds: [mb_left]},
@@ -68,6 +83,9 @@ function init_config(){
 		
 		var controls = {
 			CONTROLTYPE: "Mouse",
+			MENU:         menuInput,
+			CONFIRM:      confirmInput,
+			CANCEL:       cancelInput,
 			ATTACK:       attackInput,
 			LOOK:         lookInput,
 			NOD:          nodInput,
