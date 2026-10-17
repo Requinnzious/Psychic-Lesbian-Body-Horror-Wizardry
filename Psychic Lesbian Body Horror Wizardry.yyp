@@ -73,6 +73,7 @@
     {"link":"io.gamemaker.sdfshaders-1.0.0","name":"io.gamemaker.sdfshaders-1.0.0","path":"io.gamemaker.sdfshaders-1.0.0.yyp",},
   ],
   "IncludedFiles":[
+    {"$GMIncludedFile":"","%Name":"arms.smf","CopyToMask":-1,"filePath":"datafiles","name":"arms.smf","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"blip.ogg","CopyToMask":-1,"filePath":"datafiles","name":"blip.ogg","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"cube.smf","CopyToMask":-1,"filePath":"datafiles","name":"cube.smf","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"dodecahedron.smf","CopyToMask":-1,"filePath":"datafiles","name":"dodecahedron.smf","resourceType":"GMIncludedFile","resourceVersion":"2.0",},

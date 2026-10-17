@@ -8,6 +8,10 @@ cube         = smf_model_load("cube.smf")
 pyramid      = smf_model_load("pyramid.smf")
 sphere       = smf_model_load("sphere.smf")
 
+arms         = new smf_instance(smf_model_load("arms.smf"));
+animName     = "ArmsRig|guard_idle";
+
+
 #region Store the tilemap
 	tiles = [];
 	meta  = layer_tilemap_get_id("Meta");
@@ -557,6 +561,8 @@ sphere       = smf_model_load("sphere.smf")
 
 #region World Methods
 	render = function() {
+		arms.play(animName, 0.02, 0.1, false);
+		arms.step(1);
 		
 		matrix_set(matrix_world, identityMatrix);
 		
@@ -603,11 +609,19 @@ sphere       = smf_model_load("sphere.smf")
 			surface_set_target_ext(0, Camera.screenSurf);
 			surface_set_target_ext(1, Camera.normalSurf);
 			surface_set_target_ext(2, Camera.depthSurf);
-			
 				//Devices?
 				EntityRenderSMFEvent.fire();
 				//with DeviceRenderer render(); 
 				
+			surface_reset_target();
+		shader_reset();
+		
+		shader_set(sh_smf_animate);
+			surface_set_target_ext(0, Camera.screenSurf);
+			surface_set_target_ext(1, Camera.normalSurf);
+			surface_set_target_ext(2, Camera.depthSurf);
+				matrix_set(matrix_world, matrix_build(Camera.x + Camera.xOffset, Camera.y + Camera.yOffset, Camera.z - 10, 0, 0, Camera.lookDir + 90 + Camera.lookDirOffset, 6, 6, 6));
+				arms.draw();
 			surface_reset_target();
 		shader_reset();
 	}
@@ -781,16 +795,19 @@ sphere       = smf_model_load("sphere.smf")
 
 var entity = new Entity("Potion")
 	.addComponent("Health",    {hp: infinity})
-	.addComponent("Position",  {x: 32, y: 32, z: 0})
+	.addComponent("Position",  {x: 64, y: 64, z: 0})
 	.addComponent("Transform", {
 		x:       16, y:       16, z: function() { return 4 + sin(current_time / 1000) },
 		xScale: .25, yScale: .25, zScale: .25
 	})
 	.addComponent("DefaultShader")
-	.addComponent("BillboardLayers", { layers: [{sprite: sPotionBottle_1, color: c_white}, {sprite: sPotionFilling_1, color: c_silver}, {sprite: sPotion_1Effect_1, color: #ffff80}]})
+	.addComponent("BillboardLayers", { layers: [{sprite: sPotionBottle_1, color: c_white}, {sprite: sPotionFilling_1, color: c_aqua}, {sprite: sPotion_1Effect_1, color: c_fuchsia}]})
 entity.fireEvent(EntityCreateEvent);
 entities[? entity.uuid] = entity;
 
+
+
+/*
 // Polyhedral Devices
 entity = new Entity("Dodecahedron")
 	.addComponent("Health",    {hp: infinity})
@@ -803,7 +820,6 @@ entity = new Entity("Dodecahedron")
 	.addComponent("SMFModel")
 entity.fireEvent(EntityCreateEvent);
 entities[? entity.uuid] = entity;
-/*
 entity = new Entity("Cube")
 	.addComponent("Health",    {hp: infinity})
 	.addComponent("Position",  {x: 96, y: 64, z: 0})
