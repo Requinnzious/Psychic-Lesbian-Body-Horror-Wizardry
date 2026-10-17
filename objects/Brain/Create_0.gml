@@ -98,11 +98,7 @@ stateMachine = new SnowState("wait")
 		leave: function() {
 			
 		},
-		update: function() {
-			var event = new Event("Subimage", {subimage: image_index});
-			event = parentEntity.fireEvent(event);
-			delete event;
-		}
+		update: function() {}
 	})
 update = function() {
 	stateMachine.update();

@@ -618,18 +618,48 @@ sphere       = smf_model_load("sphere.smf")
 	var slimeY = 448;
 	var slimeZ =   0;
 
-	var slime = new Entity("Bite Slime")
-		.addComponent("Physics",      {maxFlash:   24})
-		.addComponent("Impassable",   {bumping: false})
-		.addComponent("Health",       {hp: 12, deathTimer: 24})
-		.addComponent("ShakeScreen",  {screenShake: 12, screenShakeIntensity: .1})
-		.addComponent("Position",     {x: slimeX, y: slimeY, z: slimeZ})
-		.addComponent("Transform",    {x: 16,  y: 16})
-		.addComponent("Sprite",       {sprite: sSlime})
-		.addComponent("HurtSubimage", {hurtTimer: 24, subimage: 1})
-		.addComponent("TauntSprite")		
-		.addComponent("AttackSubimage")
-		.addComponent("HurtColor",    {hurtTimer: 24})
+	//var slime = new Entity("Bite Slime")
+	//	.addComponent("Physics",      {maxFlash:   24})
+	//	.addComponent("Impassable",   {bumping: false})
+	//	.addComponent("Health",       {hp: 12, deathTimer: 24})
+	//	.addComponent("ShakeScreen",  {screenShake: 12, screenShakeIntensity: .1})
+	//	.addComponent("Position",     {x: slimeX, y: slimeY, z: slimeZ})
+	//	.addComponent("Transform",    {x: 16,  y: 16})
+	//	.addComponent("Sprite",       {sprite: sSlime})
+	//	.addComponent("HurtSubimage", {hurtTimer: 24, subimage: 1})
+	//	.addComponent("TauntSprite")		
+	//	.addComponent("AttackSubimage")
+	//	.addComponent("HurtColor",    {hurtTimer: 24})
+	//	.addComponent("DefaultShader")
+	//	.addComponent("BillboardMesh")
+	//	
+	//	.addComponent("MiniMapSprite")
+	//	.addComponent("DeathParticle")
+	//	.addComponent("DamageSound")
+	//	.addComponent("DeathSound")
+	//	
+	//	.addComponent("ExpDrop")
+	//
+	//var brain = instance_create_layer(slimeX, slimeY, "Instances", Brain, {parentEntity: slime});
+	//
+	//slime.fireEvent(EntityCreateEvent);
+	//entities[? slime.uuid] = slime;
+	//
+	//slime.nameColor = "c_orange";
+	
+	
+	var ibis = new Entity("Ibis")
+		.addComponent("Physics",       {maxFlash:   24, hitDie: "1d4+1"})
+		.addComponent("Impassable",    {bumping: false})
+		.addComponent("Health",        {hp: 18, deathTimer: 24})
+		.addComponent("ShakeScreen",   {screenShake: 12, screenShakeIntensity: .1})
+		.addComponent("Position",      {x: slimeX, y: slimeY, z: slimeZ})
+		.addComponent("Transform",     {x: 16,  y: 16, xScale: .5, yScale: .5, zScale: .5})
+		.addComponent("DancingSprite", {sprite: sIbis_Dance})
+		.addComponent("HurtSprite",    {sprite: sIbis_Hit, hurtTimer: 24})
+		.addComponent("TauntSprite",   {sprite: sIbis_Taunt, loops: true})
+		.addComponent("AttackSprite",  {sprite: sIbis_Atk})
+		.addComponent("HurtColor",     {hurtTimer: 24})
 		.addComponent("DefaultShader")
 		.addComponent("BillboardMesh")
 		
@@ -640,111 +670,113 @@ sphere       = smf_model_load("sphere.smf")
 		
 		.addComponent("ExpDrop")
 
-	var brain = instance_create_layer(slimeX, slimeY, "Instances", Brain, {parentEntity: slime});
+	var brain = instance_create_layer(slimeX, slimeY, "Instances", Brain, {parentEntity: ibis});
 
-	slime.fireEvent(EntityCreateEvent);
-	entities[? slime.uuid] = slime;
+	ibis.fireEvent(EntityCreateEvent);
+	entities[? ibis.uuid] = ibis;
 	
-	slime.nameColor = "c_orange";
+	ibis.nameColor = "c_fuchsia";
 	
-	slimeX = 640;
-	slimeY = 416;
-	slimeZ =   0;
+	#region Slimes
+		slimeX = 640;
+		slimeY = 416;
+		slimeZ =   0;
 
-	slime = new Entity("Bite Slime")
-		.addComponent("Physics",      {maxFlash:   24})
-		.addComponent("Impassable",   {bumping: false})
-		.addComponent("Health",       {hp: 12, deathTimer: 24})
-		.addComponent("ShakeScreen",  {screenShake: 12, screenShakeIntensity: .1})
-		.addComponent("Position",     {x: slimeX, y: slimeY, z: slimeZ})
-		.addComponent("Transform",    {x: 16,  y: 16})
-		.addComponent("Sprite",       {sprite: sSlime})
-		.addComponent("HurtSubimage", {hurtTimer: 24, subimage: 1})
-		.addComponent("TauntSprite")		
-		.addComponent("AttackSubimage")
-		.addComponent("HurtColor",    {hurtTimer: 24})
-		.addComponent("DefaultShader")
-		.addComponent("BillboardMesh")
+		slime = new Entity("Bite Slime")
+			.addComponent("Physics",      {maxFlash:   24})
+			.addComponent("Impassable",   {bumping: false})
+			.addComponent("Health",       {hp: 12, deathTimer: 24})
+			.addComponent("ShakeScreen",  {screenShake: 12, screenShakeIntensity: .1})
+			.addComponent("Position",     {x: slimeX, y: slimeY, z: slimeZ})
+			.addComponent("Transform",    {x: 16,  y: 16})
+			.addComponent("Sprite",       {sprite: sSlime})
+			.addComponent("HurtSubimage", {hurtTimer: 24, subimage: 1})
+			.addComponent("TauntSprite")		
+			.addComponent("AttackSubimage")
+			.addComponent("HurtColor",    {hurtTimer: 24})
+			.addComponent("DefaultShader")
+			.addComponent("BillboardMesh")
 		
-		.addComponent("MiniMapSprite")
-		.addComponent("DeathParticle")
-		.addComponent("DamageSound")
-		.addComponent("DeathSound")
+			.addComponent("MiniMapSprite")
+			.addComponent("DeathParticle")
+			.addComponent("DamageSound")
+			.addComponent("DeathSound")
 		
-		.addComponent("ExpDrop")
+			.addComponent("ExpDrop")
 
-	brain = instance_create_layer(slimeX, slimeY, "Instances", Brain, {parentEntity: slime});
+		brain = instance_create_layer(slimeX, slimeY, "Instances", Brain, {parentEntity: slime});
 
-	slime.fireEvent(EntityCreateEvent);
-	entities[? slime.uuid] = slime;
+		slime.fireEvent(EntityCreateEvent);
+		entities[? slime.uuid] = slime;
 	
-	slime.nameColor = "c_orange";
+		slime.nameColor = "c_orange";
 	
-	slimeX = 1088;
-	slimeY =  256;
-	slimeZ =    0;
+		slimeX = 1088;
+		slimeY =  256;
+		slimeZ =    0;
 
-	slime = new Entity("Bite Slime")
-		.addComponent("Physics",      {maxFlash:   24})
-		.addComponent("Impassable",   {bumping: false})
-		.addComponent("Health",       {hp: 12, deathTimer: 24})
-		.addComponent("ShakeScreen",  {screenShake: 12, screenShakeIntensity: .1})
-		.addComponent("Position",     {x: slimeX, y: slimeY, z: slimeZ})
-		.addComponent("Transform",    {x: 16,  y: 16})
-		.addComponent("Sprite",       {sprite: sSlime})
-		.addComponent("HurtSubimage", {hurtTimer: 24, subimage: 1})
-		.addComponent("TauntSprite")		
-		.addComponent("AttackSubimage")
-		.addComponent("HurtColor",    {hurtTimer: 24})
-		.addComponent("DefaultShader")
-		.addComponent("BillboardMesh")
+		slime = new Entity("Bite Slime")
+			.addComponent("Physics",      {maxFlash:   24})
+			.addComponent("Impassable",   {bumping: false})
+			.addComponent("Health",       {hp: 12, deathTimer: 24})
+			.addComponent("ShakeScreen",  {screenShake: 12, screenShakeIntensity: .1})
+			.addComponent("Position",     {x: slimeX, y: slimeY, z: slimeZ})
+			.addComponent("Transform",    {x: 16,  y: 16})
+			.addComponent("Sprite",       {sprite: sSlime})
+			.addComponent("HurtSubimage", {hurtTimer: 24, subimage: 1})
+			.addComponent("TauntSprite")		
+			.addComponent("AttackSubimage")
+			.addComponent("HurtColor",    {hurtTimer: 24})
+			.addComponent("DefaultShader")
+			.addComponent("BillboardMesh")
 		
-		.addComponent("MiniMapSprite")
-		.addComponent("DeathParticle")
-		.addComponent("DamageSound")
-		.addComponent("DeathSound")
+			.addComponent("MiniMapSprite")
+			.addComponent("DeathParticle")
+			.addComponent("DamageSound")
+			.addComponent("DeathSound")
 		
-		.addComponent("ExpDrop")
+			.addComponent("ExpDrop")
 
-	brain = instance_create_layer(slimeX, slimeY, "Instances", Brain, {parentEntity: slime});
+		brain = instance_create_layer(slimeX, slimeY, "Instances", Brain, {parentEntity: slime});
 
-	slime.fireEvent(EntityCreateEvent);
-	entities[? slime.uuid] = slime;
+		slime.fireEvent(EntityCreateEvent);
+		entities[? slime.uuid] = slime;
 	
-	slime.nameColor = "c_orange";
+		slime.nameColor = "c_orange";
 	
-	slimeX = 1152;
-	slimeY =  512;
-	slimeZ =    0;
+		slimeX = 1152;
+		slimeY =  512;
+		slimeZ =    0;
 
-	slime = new Entity("Bite Slime")
-		.addComponent("Physics",      {maxFlash:   24})
-		.addComponent("Impassable",   {bumping: false})
-		.addComponent("Health",       {hp: 12, deathTimer: 24})
-		.addComponent("ShakeScreen",  {screenShake: 12, screenShakeIntensity: .1})
-		.addComponent("Position",     {x: slimeX, y: slimeY, z: slimeZ})
-		.addComponent("Transform",    {x: 16,  y: 16})
-		.addComponent("Sprite",       {sprite: sSlime})
-		.addComponent("HurtSubimage", {hurtTimer: 24, subimage: 1})
-		.addComponent("TauntSprite")		
-		.addComponent("AttackSubimage")
-		.addComponent("HurtColor",    {hurtTimer: 24})
-		.addComponent("DefaultShader")
-		.addComponent("BillboardMesh")
+		slime = new Entity("Bite Slime")
+			.addComponent("Physics",      {maxFlash:   24})
+			.addComponent("Impassable",   {bumping: false})
+			.addComponent("Health",       {hp: 12, deathTimer: 24})
+			.addComponent("ShakeScreen",  {screenShake: 12, screenShakeIntensity: .1})
+			.addComponent("Position",     {x: slimeX, y: slimeY, z: slimeZ})
+			.addComponent("Transform",    {x: 16,  y: 16})
+			.addComponent("Sprite",       {sprite: sSlime})
+			.addComponent("HurtSubimage", {hurtTimer: 24, subimage: 1})
+			.addComponent("TauntSprite")		
+			.addComponent("AttackSubimage")
+			.addComponent("HurtColor",    {hurtTimer: 24})
+			.addComponent("DefaultShader")
+			.addComponent("BillboardMesh")
 		
-		.addComponent("MiniMapSprite")
-		.addComponent("DeathParticle")
-		.addComponent("DamageSound")
-		.addComponent("DeathSound")
+			.addComponent("MiniMapSprite")
+			.addComponent("DeathParticle")
+			.addComponent("DamageSound")
+			.addComponent("DeathSound")
 		
-		.addComponent("ExpDrop")
+			.addComponent("ExpDrop")
 
-	brain = instance_create_layer(slimeX, slimeY, "Instances", Brain, {parentEntity: slime});
+		brain = instance_create_layer(slimeX, slimeY, "Instances", Brain, {parentEntity: slime});
 
-	slime.fireEvent(EntityCreateEvent);
-	entities[? slime.uuid] = slime;
+		slime.fireEvent(EntityCreateEvent);
+		entities[? slime.uuid] = slime;
 	
-	slime.nameColor = "c_orange";
+		slime.nameColor = "c_orange";
+	#endregion
 #endregion
 
 

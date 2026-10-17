@@ -25,8 +25,8 @@
   "nineSlice":null,
   "origin":0,
   "parent":{
-    "name":"Psychic Lesbian Body Horror Wizardry",
-    "path":"Psychic Lesbian Body Horror Wizardry.yyp",
+    "name":"FullSize",
+    "path":"folders/03 Textures/Enemies/FullSize.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",

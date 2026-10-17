@@ -27,8 +27,8 @@
   "nineSlice":null,
   "origin":9,
   "parent":{
-    "name":"Enemies",
-    "path":"folders/03 Textures/Enemies.yy",
+    "name":"FullSize",
+    "path":"folders/03 Textures/Enemies/FullSize.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",

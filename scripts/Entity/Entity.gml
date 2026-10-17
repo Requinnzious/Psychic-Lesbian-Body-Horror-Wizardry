@@ -130,6 +130,25 @@ function ArmorComponent(c_Name) : Component(c_Name) constructor {
 		return _event;
 	}
 }
+function AttackSpriteComponent(c_Name)    : Component(c_Name) constructor {
+	sprite    = sIbis_Atk;
+	attacking = false;
+	
+	fireEvent = function(_event) {		
+		switch(_event.type) {			
+			case "Attacking":
+				attacking = true;
+				break;
+			case "EndAttack":
+				attacking = false;
+				break;
+			case "Render":
+				if attacking _event.params.sprite = self.sprite;
+				break;
+		}
+		return _event;
+	}
+}
 function AttackSubimageComponent(c_Name)    : Component(c_Name) constructor {
 	subimage  =     2;
 	attacking = false;
@@ -236,7 +255,7 @@ function BillboardMeshComponent(c_Name)   : Component(c_Name) constructor {
 				}
 				
 				var zRot = Camera.lookDir + Camera.lookDirOffset + 90;
-				matrix_set(matrix_world, matrix_build(_event.params.x, _event.params.y, _event.params.z, 0, 0, zRot, 1, 1, 1));
+				matrix_set(matrix_world, matrix_build(_event.params.x, _event.params.y, _event.params.z, 0, 0, zRot, _event.params.xScale, _event.params.yScale, _event.params.zScale));
 				vertex_submit(mesh, pr_trianglelist, sprite_get_texture(_event.params.sprite, _event.params.subimage));
 				shader_reset();
 				
@@ -761,6 +780,38 @@ function SpriteComponent(c_Name)          : Component(c_Name) constructor {
 		return _event;
 	}
 }
+function DancingSpriteComponent(c_Name)   : Component(c_Name) constructor {
+	sprite         = sIbis_Dance;
+	subimage       =           0;
+	randomSubimage =       false;
+	
+	setRandomSubImage = function() {
+		subimage = irandom(sprite_get_number(sprite) - 1);
+	}
+	
+	other.listen("EndStep")
+	
+	fireEvent = function(_event) {		
+		switch(_event.type) {
+			case "Create":
+				_event.params.sprite   = self.sprite;
+				_event.params.subimage = self.subimage;
+				if randomSubimage setRandomSubImage();
+				break;
+			
+			case "Render":
+				_event.params.sprite   = self.sprite;
+				_event.params.subimage = self.subimage;
+				break;
+				
+			case "EndStep":
+				self.subimage = (self.subimage + 1) mod (sprite_get_number(sprite));
+				break;
+		}
+		
+		return _event;
+	}
+}
 function SMFModelComponent(c_Name)        : Component(c_Name) constructor {
 	other.listen("RenderSMF");
 	
@@ -1020,12 +1071,13 @@ function WorldTileComponent(c_Name)       : Component(c_Name) constructor {
 	}
 }
 function TauntSpriteComponent(c_Name)      : Component(c_Name) constructor {
-	sprite   = sSlime_Taunt;
-	subimage = 0;
+	sprite    = sSlime_Taunt;
+	subimage  = 0;
+	sound     = SoundTypes.SLIMETAUNT;
 	
-	sound    = SoundTypes.SLIMETAUNT;
-	
-	taunting = false;
+	taunting  = false;
+	loops     = false;
+	animSpeed = 3/60;
 	
 	fireEvent = function(_event) {		
 		switch(_event.type) {
@@ -1044,11 +1096,16 @@ function TauntSpriteComponent(c_Name)      : Component(c_Name) constructor {
 			case "Step":
 				taunting = false;
 				break;
-			case "Subimage":
-				subimage = _event.params.subimage;
-				break;
 			case "Render":
-				if !taunting break;
+				if !taunting { subimage = 0; break; }
+				
+				subimage += animSpeed;
+				if loops {
+					subimage = subimage mod sprite_get_number(sprite);
+				}
+				
+				subimage = min(subimage, sprite_get_number(sprite));
+				
 				_event.params.sprite   = sprite;
 				_event.params.subimage = subimage;
 				break;

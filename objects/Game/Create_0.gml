@@ -14,7 +14,6 @@ function BrainTryAttack(actingBrain) {
 		
 			var ts = time_source_create(time_source_game, AttackFrames, time_source_units_frames, bumpFunc);
 			time_source_start(ts);
-			
 			return;
 		}
 		
