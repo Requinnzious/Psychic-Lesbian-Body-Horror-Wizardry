@@ -651,13 +651,13 @@ sphere       = smf_model_load("sphere.smf")
 	var ibis = new Entity("Ibis")
 		.addComponent("Physics",       {maxFlash:   24, hitDie: "1d4+1"})
 		.addComponent("Impassable",    {bumping: false})
-		.addComponent("Health",        {hp: 18, deathTimer: 24})
+		.addComponent("Health",        {hp: 16, deathTimer: 24})
 		.addComponent("ShakeScreen",   {screenShake: 12, screenShakeIntensity: .1})
 		.addComponent("Position",      {x: slimeX, y: slimeY, z: slimeZ})
 		.addComponent("Transform",     {x: 16,  y: 16, xScale: .5, yScale: .5, zScale: .5})
 		.addComponent("DancingSprite", {sprite: sIbis_Dance})
 		.addComponent("HurtSprite",    {sprite: sIbis_Hit, hurtTimer: 24})
-		.addComponent("TauntSprite",   {sprite: sIbis_Taunt, loops: true})
+		.addComponent("TauntSprite",   {sprite: sIbis_Taunt, loops: true, animSpeed: 3/60})
 		.addComponent("AttackSprite",  {sprite: sIbis_Atk})
 		.addComponent("HurtColor",     {hurtTimer: 24})
 		.addComponent("DefaultShader")
@@ -779,9 +779,20 @@ sphere       = smf_model_load("sphere.smf")
 	#endregion
 #endregion
 
+var entity = new Entity("Potion")
+	.addComponent("Health",    {hp: infinity})
+	.addComponent("Position",  {x: 32, y: 32, z: 0})
+	.addComponent("Transform", {
+		x:       16, y:       16, z: function() { return 4 + sin(current_time / 1000) },
+		xScale: .25, yScale: .25, zScale: .25
+	})
+	.addComponent("DefaultShader")
+	.addComponent("BillboardLayers", { layers: [{sprite: sPotionBottle_1, color: c_white}, {sprite: sPotionFilling_1, color: c_silver}, {sprite: sPotion_1Effect_1, color: #ffff80}]})
+entity.fireEvent(EntityCreateEvent);
+entities[? entity.uuid] = entity;
 
-/* Polyhedral Devices
-var entity = new Entity("Dodecahedron")
+// Polyhedral Devices
+entity = new Entity("Dodecahedron")
 	.addComponent("Health",    {hp: infinity})
 	.addComponent("Position",  {x: 64, y: 64, z: 0})
 	.addComponent("Transform", {
@@ -792,7 +803,7 @@ var entity = new Entity("Dodecahedron")
 	.addComponent("SMFModel")
 entity.fireEvent(EntityCreateEvent);
 entities[? entity.uuid] = entity;
-
+/*
 entity = new Entity("Cube")
 	.addComponent("Health",    {hp: infinity})
 	.addComponent("Position",  {x: 96, y: 64, z: 0})

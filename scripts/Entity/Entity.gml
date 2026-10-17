@@ -207,6 +207,88 @@ function BellyComponent(c_Name)     : Component(c_Name) constructor {
 		return _event;
 	}
 }
+function BillboardLayersComponent(c_Name)   : Component(c_Name) constructor {
+	other.listen("Render");
+	
+	baseColor = c_white;
+	layers    =      [];
+	meshes    =      [];
+	
+	buildMeshes = function() {
+		for (var i = 0; i < array_length(layers); ++i) {
+		    var _layer = layers[i];
+			var mesh = buildMesh(_layer.color);
+			array_push(meshes, mesh);
+		}
+	}
+	
+	buildMesh = function(color) {
+		var mesh = vertex_create_buffer();
+		
+		vertex_begin(mesh, vFormat);
+		addVertex(mesh, [-width/2, 0, height], [0, 1, 0], [0, 0], color, 1);
+		addVertex(mesh, [ width/2, 0, height], [0, 1, 0], [1, 0], color, 1);
+		addVertex(mesh, [ width/2, 0,      0], [0, 1, 0], [1, 1], color, 1);
+		addVertex(mesh, [-width/2, 0, height], [0, 1, 0], [0, 0], color, 1);
+		addVertex(mesh, [ width/2, 0,      0], [0, 1, 0], [1, 1], color, 1);
+		addVertex(mesh, [-width/2, 0,      0], [0, 1, 0], [0, 1], color, 1);
+		vertex_end(mesh);
+		
+		return mesh;
+	}
+	
+	rebuildMeshes = function() {
+		for (var i = array_length(meshes) - 1; i >= 0; --i) {
+			vertex_delete_buffer(meshes[i]);
+			array_pop(meshes);
+		}
+		buildMeshes()
+	}
+	
+	fireEvent = function(_event) {		
+		switch(_event.type) {
+			case "Create":
+				width  = 0;
+				height = 0;
+				
+				for (var i = 0; i < array_length(layers); ++i) {
+				    var _layer = layers[i];
+					width  = max(width,  sprite_get_width( _layer.sprite));
+					height = max(height, sprite_get_height(_layer.sprite));
+				}
+				buildMeshes()
+				break;
+			
+			case "Render":
+				if(variable_struct_exists(_event.params, "flash")) {
+					var flash = variable_struct_get(_event.params, "flash");
+					if(flash mod 6) > 1 {
+						_event.params.flash = 0;
+						_event.params.color = baseColor;
+						break;
+					}
+				}
+				
+				if(_event.params.color != baseColor) {
+					baseColor = _event.params.color;
+					rebuildMeshes();
+				}
+				
+				var zRot = Camera.lookDir + Camera.lookDirOffset + 90;
+				matrix_set(matrix_world, matrix_build(_event.params.x, _event.params.y, _event.params.z, 0, 0, zRot, _event.params.xScale, _event.params.yScale, _event.params.zScale));
+				
+				for (var i = 0; i < array_length(layers); ++i) {
+				    vertex_submit(meshes[i], pr_trianglelist, sprite_get_texture(layers[i].sprite, 0));
+				}
+				
+				shader_reset();		
+				
+				_event.params.color = c_white;
+				break;
+		}
+		return _event;
+	}
+}
 function BillboardMeshComponent(c_Name)   : Component(c_Name) constructor {
 	other.listen("Render");
 	
@@ -261,29 +343,33 @@ function BillboardMeshComponent(c_Name)   : Component(c_Name) constructor {
 				
 				_event.params.color = c_white;
 				break;
-		}
-		return _event;
-	}
-}
-function BillboardSpriteComponent(c_Name) : Component(c_Name) constructor {
-	other.listen("Render");
-	
-	fireEvent = function(_event) {		
-		switch(_event.type) {
-			case "Render":
-				if(variable_struct_exists(_event.params, "flash")) {
-					var flash = variable_struct_get(_event.params, "flash");
-					if(flash mod 6) > 1 {
-						break;
-					}
-					
-				}
-				draw_sprite_billboard(_event.params.sprite, _event.params.subimage, _event.params.x, _event.params.y, _event.params.z, _event.params.color)
+				
+			case "Destroy":
+				vertex_delete_buffer(mesh);
 				break;
 		}
 		return _event;
 	}
 }
+//function BillboardSpriteComponent(c_Name) : Component(c_Name) constructor {
+//	other.listen("Render");
+//	
+//	fireEvent = function(_event) {		
+//		switch(_event.type) {
+//			case "Render":
+//				if(variable_struct_exists(_event.params, "flash")) {
+//					var flash = variable_struct_get(_event.params, "flash");
+//					if(flash mod 6) > 1 {
+//						break;
+//					}
+//					
+//				}
+//				draw_sprite_billboard(_event.params.sprite, _event.params.subimage, _event.params.x, _event.params.y, _event.params.z, _event.params.color)
+//				break;
+//		}
+//		return _event;
+//	}
+//}
 function BidirectionalCritComponent(c_Name) : Component(c_Name) constructor {
 	fireEvent = function(_event) {
 		switch(_event.type) {
@@ -780,6 +866,23 @@ function SpriteComponent(c_Name)          : Component(c_Name) constructor {
 		return _event;
 	}
 }
+function SpriteOverlayComponent(c_Name)   : Component(c_Name) constructor {
+	layers = [];
+	
+	fireEvent = function(_event) {		
+		switch(_event.type) {
+			case "Create":
+				_event.params.layers = self.layers;
+				break;
+			
+			case "Render":
+				_event.params.layers = self.layers;
+				break;
+		}
+		
+		return _event;
+	}
+}
 function DancingSpriteComponent(c_Name)   : Component(c_Name) constructor {
 	sprite         = sIbis_Dance;
 	subimage       =           0;
@@ -1077,7 +1180,7 @@ function TauntSpriteComponent(c_Name)      : Component(c_Name) constructor {
 	
 	taunting  = false;
 	loops     = false;
-	animSpeed = 3/60;
+	animSpeed = 8/60;
 	
 	fireEvent = function(_event) {		
 		switch(_event.type) {
@@ -1104,7 +1207,7 @@ function TauntSpriteComponent(c_Name)      : Component(c_Name) constructor {
 					subimage = subimage mod sprite_get_number(sprite);
 				}
 				
-				subimage = min(subimage, sprite_get_number(sprite));
+				subimage = min(subimage, sprite_get_number(sprite) - animSpeed);
 				
 				_event.params.sprite   = sprite;
 				_event.params.subimage = subimage;
